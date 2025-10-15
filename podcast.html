@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Radio - Revolutionary Podcasts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./CSS/podcast.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+
+    <!-- Audio Players (hidden) -->
+    <audio id="audio-player" class="audio-player"></audio>
+
+    <!-- Social Share Modal -->
+    <div class="share-modal" id="shareModal">
+      <div class="share-content">
+        <div class="share-header">
+          <h3 class="share-title">Share This Podcast</h3>
+          <button class="close-share" id="closeShare">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="share-platforms">
+          <div class="share-platform" data-platform="facebook">
+            <i class="fab fa-facebook-f platform-icon" style="color: #1877f2;"></i>
+            <span class="platform-name">Facebook</span>
+          </div>
+          <div class="share-platform" data-platform="twitter">
+            <i class="fab fa-twitter platform-icon" style="color: #1da1f2;"></i>
+            <span class="platform-name">Twitter</span>
+          </div>
+          <div class="share-platform" data-platform="instagram">
+            <i class="fab fa-instagram platform-icon" style="color: #e4405f;"></i>
+            <span class="platform-name">Instagram</span>
+          </div>
+          <div class="share-platform" data-platform="whatsapp">
+            <i class="fab fa-whatsapp platform-icon" style="color: #25d366;"></i>
+            <span class="platform-name">WhatsApp</span>
+          </div>
+          <div class="share-platform" data-platform="linkedin">
+            <i class="fab fa-linkedin-in platform-icon" style="color: #0a66c2;"></i>
+            <span class="platform-name">LinkedIn</span>
+          </div>
+          <div class="share-platform" data-platform="reddit">
+            <i class="fab fa-reddit-alien platform-icon" style="color: #ff4500;"></i>
+            <span class="platform-name">Reddit</span>
+          </div>
+          <div class="share-platform" data-platform="telegram">
+            <i class="fab fa-telegram-plane platform-icon" style="color: #0088cc;"></i>
+            <span class="platform-name">Telegram</span>
+          </div>
+          <div class="share-platform" data-platform="email">
+            <i class="fas fa-envelope platform-icon" style="color: #ea4335;"></i>
+            <span class="platform-name">Email</span>
+          </div>
+        </div>
+        <div class="share-link">
+          <input type="text" id="shareUrl" value="https://darlingfm.com/podcasts/future-of-ai" readonly>
+          <button class="copy-link" id="copyLink">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+          </div>
+
+          <button class="mobile-menu" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <nav class="desktop-nav">
+            <ul>
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./live-stream.html">Live Stream</a></li>
+              <li><a href="./shows.html">Shows</a></li>
+              <li><a href="./djs.html">DJs</a></li>
+              <li><a href="./playlist.html">Playlist</a></li>
+              <li><a href="./podcast.html" class="active">Podcasts</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./live-stream.html">Live Stream</a></li>
+        <li><a href="./shows.html">Shows</a></li>
+        <li><a href="./djs.html">DJs</a></li>
+        <li><a href="./playlist.html">Playlist</a></li>
+        <li><a href="./podcast.html" class="active">Podcasts</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1>DARLING FM PODCASTS</h1>
+          <p>
+            Immerse yourself in cutting-edge conversations, interviews, and stories. 
+            Experience both audio and video podcasts in a revolutionary way.
+          </p>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-toggle">
+            <button class="toggle-btn active" id="videoToggle">
+              <i class="fas fa-video"></i> Video Podcast
+            </button>
+            <button class="toggle-btn" id="audioToggle">
+              <i class="fas fa-headphones"></i> Audio Podcast
+            </button>
+          </div>
+          
+          <div class="hero-content">
+            <div class="hero-media">
+              <!-- Video Player (default) -->
+              <video id="heroVideo" poster="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80">
+                <source src="VIDEOS/vMbuJi9yg7_jV01c.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              
+              <!-- Audio Player (hidden by default) -->
+              <div class="hero-audio" id="heroAudio" style="display: none;">
+                <div class="audio-visualizer" id="audioVisualizer">
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                  <div class="audio-bar"></div>
+                </div>
+                <h3>Audio Podcast Playing</h3>
+                <p>Listen to the full episode with immersive sound</p>
+              </div>
+              
+              <div class="media-overlay">
+                <div class="play-hero-btn" id="playHeroBtn">
+                  <i class="fas fa-play"></i>
+                </div>
+              </div>
+            </div>
+            <div class="hero-info">
+              <span class="podcast-type" id="heroType">VIDEO PODCAST</span>
+              <h2 class="hero-title">The Future of AI in Music Production</h2>
+              <p class="hero-description">
+                Join our host Nova as she explores how artificial intelligence is revolutionizing 
+                music creation, from algorithmic composition to AI-powered mastering. Special guests 
+                include leading AI researchers and Grammy-winning producers.
+              </p>
+              <div class="hero-meta">
+                <div class="meta-item">
+                  <i class="fas fa-clock"></i>
+                  <span>58 min</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-calendar"></i>
+                  <span>Oct 15, 2023</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-eye" id="heroViewsIcon"></i>
+                  <span id="heroViews">24.5K views</span>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="action-btn primary-btn" id="heroPlayBtn">
+                  <i class="fas fa-play"></i> Play Now
+                </button>
+                <button class="action-btn secondary-btn" id="heroLikeBtn">
+                  <i class="fas fa-heart"></i> <span id="heroLikes">1.2K</span>
+                </button>
+                <button class="action-btn secondary-btn" id="heroShareBtn">
+                  <i class="fas fa-share"></i> Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Podcast Categories -->
+        <section class="podcast-categories">
+          <h2 class="section-title">BROWSE CATEGORIES</h2>
+          <div class="categories-grid">
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-music"></i>
+              </div>
+              <h3 class="category-title">Music</h3>
+              <div class="category-count">42 podcasts</div>
+            </div>
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <h3 class="category-title">Interviews</h3>
+              <div class="category-count">28 podcasts</div>
+            </div>
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-laptop-code"></i>
+              </div>
+              <h3 class="category-title">Technology</h3>
+              <div class="category-count">35 podcasts</div>
+            </div>
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-brain"></i>
+              </div>
+              <h3 class="category-title">Science</h3>
+              <div class="category-count">19 podcasts</div>
+            </div>
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-theater-masks"></i>
+              </div>
+              <h3 class="category-title">Entertainment</h3>
+              <div class="category-count">31 podcasts</div>
+            </div>
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3 class="category-title">Business</h3>
+              <div class="category-count">22 podcasts</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Audio Podcasts -->
+        <section class="podcast-grid">
+          <div class="grid-header">
+            <h2 class="grid-title">TRENDING AUDIO PODCASTS</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="podcasts">
+            <!-- Podcast 1 -->
+            <div class="podcast-card">
+              <div
+                class="podcast-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="podcast-overlay">
+                  <div class="play-podcast" data-podcast-id="1">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="podcast-content">
+                <h3 class="podcast-title">Sound Design Masterclass</h3>
+                <p class="podcast-host">By Audio Alchemy</p>
+                <div class="podcast-stats">
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">42</div>
+                    <div class="podcast-stat-label">Episodes</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">18K</div>
+                    <div class="podcast-stat-label">Plays</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">4.8</div>
+                    <div class="podcast-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="podcast-tags">
+                  <span class="podcast-tag">Music</span>
+                  <span class="podcast-tag">Education</span>
+                </div>
+                <div class="podcast-actions">
+                  <button class="podcast-action-btn play-podcast-btn" data-podcast-id="1">
+                    <i class="fas fa-play"></i> Play
+                  </button>
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="1">
+                    <i class="fas fa-heart"></i> <span class="like-count">245</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Podcast 2 -->
+            <div class="podcast-card">
+              <div
+                class="podcast-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="podcast-overlay">
+                  <div class="play-podcast" data-podcast-id="2">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="podcast-content">
+                <h3 class="podcast-title">Digital Nomad Diaries</h3>
+                <p class="podcast-host">By Global Voices</p>
+                <div class="podcast-stats">
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">36</div>
+                    <div class="podcast-stat-label">Episodes</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">24K</div>
+                    <div class="podcast-stat-label">Plays</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">4.9</div>
+                    <div class="podcast-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="podcast-tags">
+                  <span class="podcast-tag">Lifestyle</span>
+                  <span class="podcast-tag">Travel</span>
+                </div>
+                <div class="podcast-actions">
+                  <button class="podcast-action-btn play-podcast-btn" data-podcast-id="2">
+                    <i class="fas fa-play"></i> Play
+                  </button>
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="2">
+                    <i class="fas fa-heart"></i> <span class="like-count">189</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Podcast 3 -->
+            <div class="podcast-card">
+              <div
+                class="podcast-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1554260570-9140fd3b7614?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="podcast-overlay">
+                  <div class="play-podcast" data-podcast-id="3">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="podcast-content">
+                <h3 class="podcast-title">Cyber Security Today</h3>
+                <p class="podcast-host">By Tech Guardians</p>
+                <div class="podcast-stats">
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">58</div>
+                    <div class="podcast-stat-label">Episodes</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">32K</div>
+                    <div class="podcast-stat-label">Plays</div>
+                  </div>
+                  <div class="podcast-stat">
+                    <div class="podcast-stat-value">4.7</div>
+                    <div class="podcast-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="podcast-tags">
+                  <span class="podcast-tag">Technology</span>
+                  <span class="podcast-tag">Security</span>
+                </div>
+                <div class="podcast-actions">
+                  <button class="podcast-action-btn play-podcast-btn" data-podcast-id="3">
+                    <i class="fas fa-play"></i> Play
+                  </button>
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="3">
+                    <i class="fas fa-heart"></i> <span class="like-count">312</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Video Podcasts -->
+        <section class="video-podcasts">
+          <div class="grid-header">
+            <h2 class="grid-title">TRENDING VIDEO PODCASTS</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="video-grid">
+            <!-- Video 1 -->
+            <div class="video-card">
+              <div
+                class="video-thumbnail"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1593377201811-4516986cbe41?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="video-overlay-small">
+                  <div class="play-video-small" data-video-id="1">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="video-content">
+                <h3 class="video-title">Studio Sessions Live</h3>
+                <p class="video-host">With DJ Nova</p>
+                <div class="video-meta">
+                  <span><i class="fas fa-clock"></i> 42 min</span>
+                  <span><i class="fas fa-eye"></i> 15.2K views</span>
+                </div>
+                <div class="podcast-actions" style="margin-top: 15px;">
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="4">
+                    <i class="fas fa-heart"></i> <span class="like-count">421</span>
+                  </button>
+                  <button class="podcast-action-btn share-podcast-btn" data-podcast-id="4">
+                    <i class="fas fa-share"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-card">
+              <div
+                class="video-thumbnail"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="video-overlay-small">
+                  <div class="play-video-small" data-video-id="2">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="video-content">
+                <h3 class="video-title">Future of Festivals</h3>
+                <p class="video-host">With Event Masters</p>
+                <div class="video-meta">
+                  <span><i class="fas fa-clock"></i> 56 min</span>
+                  <span><i class="fas fa-eye"></i> 22.7K views</span>
+                </div>
+                <div class="podcast-actions" style="margin-top: 15px;">
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="5">
+                    <i class="fas fa-heart"></i> <span class="like-count">278</span>
+                  </button>
+                  <button class="podcast-action-btn share-podcast-btn" data-podcast-id="5">
+                    <i class="fas fa-share"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-card">
+              <div
+                class="video-thumbnail"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="video-overlay-small">
+                  <div class="play-video-small" data-video-id="3">
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="video-content">
+                <h3 class="video-title">Mixing & Mastering</h3>
+                <p class="video-host">With Sound Engineers</p>
+                <div class="video-meta">
+                  <span><i class="fas fa-clock"></i> 38 min</span>
+                  <span><i class="fas fa-eye"></i> 18.9K views</span>
+                </div>
+                <div class="podcast-actions" style="margin-top: 15px;">
+                  <button class="podcast-action-btn like-podcast-btn" data-podcast-id="6">
+                    <i class="fas fa-heart"></i> <span class="like-count">156</span>
+                  </button>
+                  <button class="podcast-action-btn share-podcast-btn" data-podcast-id="6">
+                    <i class="fas fa-share"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Podcast Player -->
+    <div class="podcast-player" id="podcastPlayer">
+      <div class="container">
+        <div class="player-content">
+          <div class="player-image" id="playerImage"></div>
+          <div class="player-info">
+            <div class="player-title" id="playerTitle">Select a podcast to play</div>
+            <div class="player-host" id="playerHost">Host</div>
+          </div>
+          <div class="player-controls">
+            <button class="player-btn" id="prevBtn">
+              <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="play-pause-btn" id="playPauseBtn">
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="nextBtn">
+              <i class="fas fa-step-forward"></i>
+            </button>
+          </div>
+          <div class="player-progress">
+            <div class="progress-bar" id="progressBar">
+              <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-display">
+              <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+           <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+            <p>
+              The future of radio streaming. Experience sound in a whole new
+              dimension.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <div class="footer-links">
+              <a href="./index.html">Home</a>
+              <a href="./live-stream.html">Live Stream</a>
+              <a href="./shows.html">Shows</a>
+              <a href="./djs.html">DJs</a>
+              <a href="./playlist.html">Playlist</a>
+              <a href="./podcast.html">Podcasts</a>
+              <a href="./contact.html">Contact</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <div class="footer-links">
+              <a href="#">Help Center</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Community Guidelines</a>
+              <a href="#">FAQ</a>
+              <a href="#">Report Issue</a>
+              <a href="#">Feedback</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Subscribe</h3>
+            <p>Get the latest updates and exclusive content.</p>
+            <div class="footer-input">
+              <input type="email" placeholder="Your email" />
+              <button><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2025 Darling FM. All rights reserved | ERIBS TECH
+        </div>
+      </div>
+    </footer>
+
+    <script src="./JAVASCRIPT/podcast.js"></script>
+</body>
+</html>

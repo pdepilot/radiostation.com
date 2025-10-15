@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darling FM - Shows</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./CSS/shows.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../images/lo.png" alt="darling FM Logo" />
+                </div>
+
+                <button class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <nav class="desktop-nav">
+                    <ul>
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./live-stream.html">Live Stream</a></li>
+                        <li><a href="./shows.html" class="active">Shows</a></li>
+                        <li><a href="./djs.html">DJs</a></li>
+                        <li><a href="./playlist.html">Playlist</a></li>
+                        <li><a href="./podcast.html">Podcasts</a></li>
+                        <li><a href="./contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="./index.html" class="active">Home</a></li>
+            <li><a href="./live-stream.html">Live Stream</a></li>
+            <li><a href="./shows.html">Shows</a></li>
+            <li><a href="./djs.html">DJs</a></li>
+            <li><a href="./playlist.html">Playlist</a></li>
+            <li><a href="./podcast.html">Podcasts</a></li>
+            <li><a href="./contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Discover Our Shows</h1>
+                <p>Explore our diverse collection of radio shows, from music mixes to talk shows and everything in between.</p>
+            </div>
+            
+            <!-- Featured Show -->
+            <div class="featured-show">
+                <div class="featured-image" style="background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')"></div>
+                <div class="featured-content">
+                    <div class="featured-badge">Featured Show</div>
+                    <h2 class="featured-title">Future Beats with DJ Nova</h2>
+                    <p class="featured-description">A journey through the latest electronic music trends, featuring exclusive mixes, artist interviews, and underground discoveries. Join DJ Nova every Friday night for a sonic adventure.</p>
+                    <div class="featured-meta">
+                        <div class="meta-item">
+                            <div class="meta-value">24K</div>
+                            <div class="meta-label">Listeners</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-value">156</div>
+                            <div class="meta-label">Episodes</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-value">4.9</div>
+                            <div class="meta-label">Rating</div>
+                        </div>
+                    </div>
+                    <div class="show-actions">
+                        <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/0r0xa792kwzuv">
+                            <i class="fas fa-play"></i>
+                            Play Latest
+                        </button>
+                        <button class="action-btn follow-btn" data-host="DJ Nova">
+                            <i class="fas fa-heart"></i>
+                            Follow
+                        </button>
+                        <button class="action-btn share-btn" data-show="Future Beats with DJ Nova">
+                            <i class="fas fa-share-alt"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Show Filters -->
+            <div class="show-filters">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-category="all">All Shows</button>
+                    <button class="filter-btn" data-category="music">Music</button>
+                    <button class="filter-btn" data-category="talk">Talk</button>
+                    <button class="filter-btn" data-category="news">News</button>
+                    <button class="filter-btn" data-category="sports">Sports</button>
+                    <button class="filter-btn" data-category="culture">Culture</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" placeholder="Search shows...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <!-- Shows Grid -->
+            <div class="shows-grid">
+                <!-- Show 1 - Music -->
+                <div class="show-card" data-category="music">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-live">LIVE</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">
+                            <span>Morning Vibes</span>
+                            <div class="live-indicator"></div>
+                        </div>
+                        <div class="show-host">
+                            <div class="host-avatar">SM</div>
+                            <span class="host-name">Sarah Miles</span>
+                        </div>
+                        <p class="show-description">Start your day with the perfect blend of chill beats and positive energy. The ultimate morning soundtrack.</p>
+                        <div class="show-meta">
+                            <span>Weekdays 6-10AM</span>
+                            <span>18K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/f3wvbbqmd68uv">
+                                <i class="fas fa-play"></i>
+                                Listen Live
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Sarah Miles">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Morning Vibes">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 2 - Music -->
+                <div class="show-card" data-category="music">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-popular">POPULAR</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Retro Rewind</div>
+                        <div class="show-host">
+                            <div class="host-avatar">DM</div>
+                            <span class="host-name">DJ Marco</span>
+                        </div>
+                        <p class="show-description">Take a nostalgic journey through the greatest hits of the 70s, 80s, and 90s. Classic tracks, forgotten gems, and the stories behind them.</p>
+                        <div class="show-meta">
+                            <span>Saturdays 2-6PM</span>
+                            <span>22K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/0r0xa792kwzuv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="DJ Marco">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Retro Rewind">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 3 - Music -->
+                <div class="show-card" data-category="music">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-new">NEW</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Night Beats</div>
+                        <div class="show-host">
+                            <div class="host-avatar">LC</div>
+                            <span class="host-name">Lena Cruz</span>
+                        </div>
+                        <p class="show-description">Deep house, ambient, and experimental electronic music for your late nights. An immersive audio experience.</p>
+                        <div class="show-meta">
+                            <span>Weeknights 10PM-2AM</span>
+                            <span>15K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/f3wvbbqmd68uv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Lena Cruz">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Night Beats">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 4 - Music -->
+                <div class="show-card" data-category="music">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1554260570-9140fd3b7614?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-popular">POPULAR</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">The Urban Sound</div>
+                        <div class="show-host">
+                            <div class="host-avatar">JR</div>
+                            <span class="host-name">Jamal Roberts</span>
+                        </div>
+                        <p class="show-description">Hip-hop, R&B, and urban culture. The latest tracks, artist interviews, and underground discoveries.</p>
+                        <div class="show-meta">
+                            <span>Weekdays 3-7PM</span>
+                            <span>20K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/0r0xa792kwzuv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Jamal Roberts">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="The Urban Sound">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 5 - Talk -->
+                <div class="show-card" data-category="talk">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-new">NEW</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Sound Therapy</div>
+                        <div class="show-host">
+                            <div class="host-avatar">EM</div>
+                            <span class="host-name">Elena Martinez</span>
+                        </div>
+                        <p class="show-description">Ambient, classical, and therapeutic sounds to relax, focus, and heal. Your audio sanctuary.</p>
+                        <div class="show-meta">
+                            <span>Sundays 10AM-12PM</span>
+                            <span>12K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/f3wvbbqmd68uv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Elena Martinez">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Sound Therapy">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 6 - Music -->
+                <div class="show-card" data-category="music">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-popular">POPULAR</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Bass Culture</div>
+                        <div class="show-host">
+                            <div class="host-avatar">TK</div>
+                            <span class="host-name">Tyler Knight</span>
+                        </div>
+                        <p class="show-description">Drum & bass, dubstep, and electronic bass music. The heaviest drops and most innovative sound design.</p>
+                        <div class="show-meta">
+                            <span>Fridays 8PM-12AM</span>
+                            <span>25K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/0r0xa792kwzuv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Tyler Knight">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Bass Culture">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 7 - News -->
+                <div class="show-card" data-category="news">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-popular">POPULAR</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Morning Briefing</div>
+                        <div class="show-host">
+                            <div class="host-avatar">JR</div>
+                            <span class="host-name">James Richardson</span>
+                        </div>
+                        <p class="show-description">Your daily dose of news, analysis, and insights on global events. Stay informed with our comprehensive coverage.</p>
+                        <div class="show-meta">
+                            <span>Weekdays 7-8AM</span>
+                            <span>30K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/f3wvbbqmd68uv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="James Richardson">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Morning Briefing">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 8 - Sports -->
+                <div class="show-card" data-category="sports">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-live">LIVE</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">
+                            <span>Sports Central</span>
+                            <div class="live-indicator"></div>
+                        </div>
+                        <div class="show-host">
+                            <div class="host-avatar">MS</div>
+                            <span class="host-name">Mike Stevens</span>
+                        </div>
+                        <p class="show-description">Live commentary, expert analysis, and interviews with top athletes. Your home for all things sports.</p>
+                        <div class="show-meta">
+                            <span>Daily 6-8PM</span>
+                            <span>35K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/0r0xa792kwzuv">
+                                <i class="fas fa-play"></i>
+                                Listen Live
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Mike Stevens">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Sports Central">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 9 - Culture -->
+                <div class="show-card" data-category="culture">
+                    <div class="show-image" style="background-image: url('https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')">
+                        <div class="show-badge badge-new">NEW</div>
+                    </div>
+                    <div class="show-content">
+                        <div class="show-title">Cultural Currents</div>
+                        <div class="show-host">
+                            <div class="host-avatar">AP</div>
+                            <span class="host-name">Amara Patel</span>
+                        </div>
+                        <p class="show-description">Exploring art, literature, film, and the ideas shaping our world. Deep conversations with cultural innovators.</p>
+                        <div class="show-meta">
+                            <span>Sundays 2-4PM</span>
+                            <span>18K listeners</span>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn primary play-btn" data-audio="https://stream.zeno.fm/f3wvbbqmd68uv">
+                                <i class="fas fa-play"></i>
+                                Play Latest
+                            </button>
+                            <button class="action-btn follow-btn" data-host="Amara Patel">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn" data-show="Cultural Currents">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Schedule Section -->
+            <div class="schedule-section">
+                <div class="section-header">
+                    <h2 class="section-title">Today's Schedule</h2>
+                    <a href="#" class="view-all">
+                        View Full Schedule
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="schedule-tabs">
+                    <div class="schedule-tab active" data-schedule="today">Today</div>
+                    <div class="schedule-tab" data-schedule="tomorrow">Tomorrow</div>
+                    <div class="schedule-tab" data-schedule="week">This Week</div>
+                </div>
+                
+                <div class="schedule-list" id="scheduleList">
+                    <!-- Schedule items will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Hosts Section -->
+            <div class="hosts-section">
+                <div class="section-header">
+                    <h2 class="section-title">Our Hosts</h2>
+                    <a href="#" class="view-all">
+                        View All Hosts
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="hosts-grid">
+                    <!-- Host 1 -->
+                    <div class="host-card">
+                        <div class="host-avatar-large" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="host-name-large">DJ Alex</div>
+                        <div class="host-role">Morning Show Host</div>
+                        <div class="host-stats">
+                            <div class="host-stat">
+                                <div class="stat-value">24K</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="host-stat">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn follow-btn" data-host="DJ Alex">
+                                <i class="fas fa-user-plus"></i>
+                                Follow
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Host 2 -->
+                    <div class="host-card">
+                        <div class="host-avatar-large" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="host-name-large">Sarah Miles</div>
+                        <div class="host-role">Afternoon Drive Host</div>
+                        <div class="host-stats">
+                            <div class="host-stat">
+                                <div class="stat-value">18K</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="host-stat">
+                                <div class="stat-value">120</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn follow-btn" data-host="Sarah Miles">
+                                <i class="fas fa-user-plus"></i>
+                                Follow
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Host 3 -->
+                    <div class="host-card">
+                        <div class="host-avatar-large" style="background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')"></div>
+                        <div class="host-name-large">DJ Marco</div>
+                        <div class="host-role">Retro Specialist</div>
+                        <div class="host-stats">
+                            <div class="host-stat">
+                                <div class="stat-value">22K</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="host-stat">
+                                <div class="stat-value">85</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn follow-btn" data-host="DJ Marco">
+                                <i class="fas fa-user-plus"></i>
+                                Follow
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Host 4 -->
+                    <div class="host-card">
+                        <div class="host-avatar-large" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="host-name-large">Lena Cruz</div>
+                        <div class="host-role">Night Beats Curator</div>
+                        <div class="host-stats">
+                            <div class="host-stat">
+                                <div class="stat-value">15K</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="host-stat">
+                                <div class="stat-value">65</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                        </div>
+                        <div class="show-actions">
+                            <button class="action-btn follow-btn" data-host="Lena Cruz">
+                                <i class="fas fa-user-plus"></i>
+                                Follow
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+             <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+            <p>
+              The future of radio streaming. Experience sound in a whole new
+              dimension.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <div class="footer-links">
+              <a href="./index.html">Home</a>
+              <a href="./live-stream.html">Live Stream</a>
+              <a href="./shows.html">Shows</a>
+              <a href="./djs.html">DJs</a>
+              <a href="./playlist.html">Playlist</a>
+              <a href="./podcast.html">Podcasts</a>
+              <a href="./contact.html">Contact</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <div class="footer-links">
+              <a href="#">Help Center</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Community Guidelines</a>
+              <a href="#">FAQ</a>
+              <a href="#">Report Issue</a>
+              <a href="#">Feedback</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Subscribe</h3>
+            <p>Get the latest updates and exclusive content.</p>
+            <div class="footer-input">
+              <input type="email" placeholder="Your email" />
+              <button><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2025 Darling FM. All rights reserved | ERIBS TECH
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- Social Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Share Show</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="shareShowText">Share this amazing show with your friends!</p>
+                <div class="social-share-buttons">
+                    <button class="social-share-btn facebook" data-platform="facebook">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                    <button class="social-share-btn twitter" data-platform="twitter">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </button>
+                    <button class="social-share-btn whatsapp" data-platform="whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="social-share-btn telegram" data-platform="telegram">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </button>
+                    <button class="social-share-btn reddit" data-platform="reddit">
+                        <i class="fab fa-reddit"></i> Reddit
+                    </button>
+                    <button class="social-share-btn linkedin" data-platform="linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </button>
+                    <button class="social-share-btn email" data-platform="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <script src="./JAVASCRIPT/shows.js"></script>
+</body>
+</html>

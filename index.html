@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Darling FM</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+   <link rel="stylesheet" href="../CSS/style.css">
+  </head>
+  <body>
+    <div class="cyber-grid"></div>
+
+    <!-- Header -->
+    <header id="main-header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+          </div>
+
+          <div class="mobile-menu">
+            <i class="fas fa-bars"></i>
+          </div>
+
+          <nav class="desktop-nav">
+            <ul>
+              <li><a href="./index.html" class="active">Home</a></li>
+              <li><a href="./live-stream.html">Live Stream</a></li>
+              <li><a href="./shows.html">Shows</a></li>
+              <li><a href="./djs.html">DJs</a></li>
+              <li><a href="./playlist.html">Playlist</a></li>
+              <li><a href="./podcast.html">Podcasts</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h2>DARLING FM <br> IS HERE</h2>
+          <p>
+            Immerse yourself in a revolutionary audio experience. <br> Darling FM
+            brings you cutting-edge sound technology with your favorite on-air
+            personalities.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Revolutionary Live OAP Display -->
+        <div class="live-oap-display">
+            <div class="live-oap-header">
+                <div class="live-oap-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                <div class="live-oap-info">
+                    <div class="live-oap-name">DJ ALEX</div>
+                    <div class="live-oap-show">Morning Show</div>
+                    <div class="live-status">
+                        <div class="live-dot"></div>
+                        <span>LIVE NOW</span>
+                    </div>
+                    <div class="live-time">10:15 AM - 11:00 AM</div>
+                </div>
+            </div>
+            <button class="listen-btn">
+                <i class="fas fa-headphones"></i>
+                LISTEN LIVE
+            </button>
+        </div>
+    </section>
+
+    <!-- Upcoming Shows Section -->
+    <section class="upcoming-shows">
+        <div class="container">
+            <h2 class="section-title">UPCOMING SHOWS</h2>
+            
+            <div class="shows-grid">
+                <!-- Show 1 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="show-info">
+                            <div class="show-name">SARAH MILES</div>
+                            <div class="show-title">Afternoon Drive</div>
+                        </div>
+                    </div>
+                    <div class="show-time">
+                        <i class="far fa-clock"></i>
+                        <span>Today, 3:00 PM - 7:00 PM</span>
+                    </div>
+                    <button class="remind-btn">
+                        <i class="far fa-bell"></i>
+                        Set Reminder
+                    </button>
+                </div>
+                
+                <!-- Show 2 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-avatar" style="background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')"></div>
+                        <div class="show-info">
+                            <div class="show-name">DJ MARCO</div>
+                            <div class="show-title">Retro Rewind</div>
+                        </div>
+                    </div>
+                    <div class="show-time">
+                        <i class="far fa-clock"></i>
+                        <span>Tomorrow, 2:00 PM - 6:00 PM</span>
+                    </div>
+                    <button class="remind-btn">
+                        <i class="far fa-bell"></i>
+                        Set Reminder
+                    </button>
+                </div>
+                
+                <!-- Show 3 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-avatar" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="show-info">
+                            <div class="show-name">LENA CRUZ</div>
+                            <div class="show-title">Night Beats</div>
+                        </div>
+                    </div>
+                    <div class="show-time">
+                        <i class="far fa-clock"></i>
+                        <span>Today, 10:00 PM - 2:00 AM</span>
+                    </div>
+                    <button class="remind-btn">
+                        <i class="far fa-bell"></i>
+                        Set Reminder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Live Streaming Section -->
+            <button class="stream-btnn" id="startStreamBtn">
+            </button>
+            <button class="stream-btn secondary" id="stopStreamBtn" disabled>
+            <button class="stream-btnn" id="joinStreamBtn">
+            </button>
+            <button class="stream-btn secondary" id="leaveStreamBtn" disabled>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stream Info (visible when live) -->
+        <div class="stream-innfo" id="streamInfo" style="display: none">
+          <h3 class="stream-title" id="streamTitle">Stream Title</h3>
+          <p class="stream-description" id="streamDescription">
+            Stream description will appear here.
+          </p>
+          <div class="listener-count">
+            <i class="fas fa-users listener-icon"></i>
+            <span id="listenerCount">0</span> listeners
+          </div>
+        </div>
+
+        <!-- OAP Stream Controls (visible only to OAPs when streaming) -->
+        <div class="oap-stream-controls" id="oapControls" style="display: none">
+          <h3>Stream Settings</h3>
+          <div class="stream-settings">
+            <div class="setting-group">
+              <label class="setting-label" for="streamTitleInput"
+                >Stream Title</label
+              >
+              <input
+                type="text"
+                id="streamTitleInput"
+                class="setting-input"
+                placeholder="Enter stream title"
+              />
+            </div>
+            <div class="setting-group">
+              <label class="setting-label" for="streamDescriptionInput"
+                >Description</label
+              >
+              <textarea
+                id="streamDescriptionInput"
+                class="setting-input"
+                placeholder="Describe your stream"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+          <button class="stream-btn secondary" id="updateStreamBtn">
+            <i class="fas fa-sync-alt"></i> Update Stream Info
+          </button>
+        </div>
+
+        <!-- Live Chat (visible when streaming) -->
+        <div class="live-chat-container" id="liveChat" style="display: none">
+          <div class="chat-header">
+            <h3 class="chat-title">Live Chat</h3>
+            <div class="listener-count">
+              <i class="fas fa-users listener-icon"></i>
+              <span id="chatListenerCount">0</span> in chat
+            </div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <!-- Chat messages will appear here -->
+          </div>
+          <div class="chat-input-container">
+            <input
+              type="text"
+              class="chat-input"
+              id="chatInput"
+              placeholder="Type your message..."
+            />
+            <button class="chat-send" id="chatSend">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Posts Section -->
+    <section class="container">
+      <h2 class="section-title">LATEST NEWS & UPDATES</h2>
+
+      <div class="posts-grid">
+        <!-- Post 1 -->
+        <div class="post-card" data-post-id="1">
+          <div
+            class="post-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span><i class="far fa-calendar"></i> Oct 5, 2025</span>
+              <span
+                ><i class="far fa-comment"></i>
+                <span class="comment-count">2</span> Comments</span
+              >
+            </div>
+            <h3 class="post-title">New Music Festival Coming This Summer</h3>
+            <p class="post-excerpt">
+              We're excited to announce our partnership with the City Music
+              Festival happening this August. Get ready for three days of
+              amazing performances!
+            </p>
+
+            <div class="post-actions">
+              <div class="like-comment">
+                <button class="action-btn like-btn">
+                  <i class="far fa-heart"></i>
+                  <span class="like-count">12</span>
+                </button>
+                <button class="action-btn comment-toggle-btn">
+                  <i class="far fa-comment"></i> Comment
+                </button>
+                <button
+                  class="action-btn share-btn"
+                  data-post-title="New Music Festival Coming This Summer"
+                >
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+              </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-author">Sarah Johnson</span>
+                  <span class="comment-date">2 hours ago</span>
+                </div>
+                <p>
+                  Can't wait for this! Will you be broadcasting live from the
+                  festival?
+                </p>
+              </div>
+
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-author">Mike Thompson</span>
+                  <span class="comment-date">1 hour ago</span>
+                </div>
+                <p>
+                  I've been waiting for a festival like this in our city! Hope
+                  to see some international artists too.
+                </p>
+              </div>
+
+              <div class="comment-form">
+                <textarea
+                  class="comment-input"
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button class="comment-submit">Post Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post 2 -->
+        <div class="post-card" data-post-id="2">
+          <div
+            class="post-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span><i class="far fa-calendar"></i> Oct 06, 2025</span>
+              <span
+                ><i class="far fa-comment"></i>
+                <span class="comment-count">1</span> Comments</span
+              >
+            </div>
+            <h3 class="post-title">Interview with Rising Star: Maya Rivers</h3>
+            <p class="post-excerpt">
+              We sat down with the amazing Maya Rivers to talk about her new
+              album, creative process, and what inspires her music.
+            </p>
+
+            <div class="post-actions">
+              <div class="like-comment">
+                <button class="action-btn like-btn">
+                  <i class="far fa-heart"></i> <span class="like-count">8</span>
+                </button>
+                <button class="action-btn comment-toggle-btn">
+                  <i class="far fa-comment"></i> Comment
+                </button>
+                <button
+                  class="action-btn share-btn"
+                  data-post-title="Interview with Rising Star: Maya Rivers"
+                >
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+              </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-author">Lisa Chen</span>
+                  <span class="comment-date">3 hours ago</span>
+                </div>
+                <p>
+                  Maya Rivers is such an inspiration! Her new album is amazing.
+                </p>
+              </div>
+
+              <div class="comment-form">
+                <textarea
+                  class="comment-input"
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button class="comment-submit">Post Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post 3 -->
+        <div class="post-card" data-post-id="3">
+          <div
+            class="post-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1571266028245-0f2e1c37d9cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span><i class="far fa-calendar"></i> Oct 8, 2025</span>
+              <span
+                ><i class="far fa-comment"></i>
+                <span class="comment-count">2</span> Comments</span
+              >
+            </div>
+            <h3 class="post-title">New Weekend Show: "Retro Rewind"</h3>
+            <p class="post-excerpt">
+              Starting this Saturday, join DJ Marco for a journey through the
+              greatest hits of the 80s and 90s. Request your favorites!
+            </p>
+
+            <div class="post-actions">
+              <div class="like-comment">
+                <button class="action-btn like-btn">
+                  <i class="far fa-heart"></i>
+                  <span class="like-count">15</span>
+                </button>
+                <button class="action-btn comment-toggle-btn">
+                  <i class="far fa-comment"></i> Comment
+                </button>
+                <button
+                  class="action-btn share-btn"
+                  data-post-title="New Weekend Show: Retro Rewind"
+                >
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+              </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-author">David Wilson</span>
+                  <span class="comment-date">5 hours ago</span>
+                </div>
+                <p>
+                  Finally! A show dedicated to the classics. Can't wait to
+                  request some 80s rock anthems.
+                </p>
+              </div>
+
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-author">Emma Rodriguez</span>
+                  <span class="comment-date">4 hours ago</span>
+                </div>
+                <p>
+                  This is exactly what we needed. The 90s had the best music!
+                </p>
+              </div>
+
+              <div class="comment-form">
+                <textarea
+                  class="comment-input"
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button class="comment-submit">Post Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Podcasts Section -->
+    <section class="container">
+      <h2 class="section-title">FEATURED PODCASTS</h2>
+
+      <div class="podcasts-grid">
+        <!-- Podcast 1 -->
+        <div class="podcast-card">
+          <div
+            class="podcast-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="podcast-content">
+            <h3 class="podcast-title">Behind the Music</h3>
+            <p class="podcast-description">
+              Dive deep into the stories behind your favorite songs and artists
+              with host DJ Alex.
+            </p>
+            <div class="podcast-meta">
+              <span><i class="fas fa-video"></i> Video Podcast</span>
+              <span><i class="far fa-calendar"></i> Oct 10, 2025</span>
+            </div>
+            <button class="podcast-play-btn" data-podcast="behind-the-music">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+          </div>
+        </div>
+
+        <!-- Podcast 2 -->
+        <div class="podcast-card">
+          <div
+            class="podcast-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="podcast-content">
+            <h3 class="podcast-title">Sound Waves</h3>
+            <p class="podcast-description">
+              Exploring the science and psychology of sound and music with
+              expert guests.
+            </p>
+            <div class="podcast-meta">
+              <span><i class="fas fa-video"></i> Video Podcast</span>
+              <span><i class="far fa-calendar"></i> Oct 5, 2025</span>
+            </div>
+            <button class="podcast-play-btn" data-podcast="sound-waves">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+          </div>
+        </div>
+
+        <!-- Podcast 3 -->
+        <div class="podcast-card">
+          <div
+            class="podcast-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1571974599782-87624638275f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="podcast-content">
+            <h3 class="podcast-title">Artist Spotlight</h3>
+            <p class="podcast-description">
+              Intimate conversations with emerging and established music
+              artists.
+            </p>
+            <div class="podcast-meta">
+              <span><i class="fas fa-video"></i> Video Podcast</span>
+              <span><i class="far fa-calendar"></i> Oct 1, 2025</span>
+            </div>
+            <button class="podcast-play-btn" data-podcast="artist-spotlight">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- On-Air Personalities -->
+    <section class="container">
+      <h2 class="section-title">OUR ON-AIR PERSONALITIES</h2>
+
+      <div class="aops-grid">
+        <!-- AOP 1 -->
+        <div class="aop-card">
+          <div
+            class="aop-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80');
+            "
+          ></div>
+          <div class="aop-info">
+            <h3 class="aop-name">DJ Alex</h3>
+            <div class="aop-show">Morning Show</div>
+            <div class="aop-schedule">Weekdays 6AM - 10AM</div>
+            <button class="aop-profile-btn" data-aop="dj-alex">
+              View Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- AOP 2 -->
+        <div class="aop-card">
+          <div
+            class="aop-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80');
+            "
+          ></div>
+          <div class="aop-info">
+            <h3 class="aop-name">Sarah Miles</h3>
+            <div class="aop-show">Afternoon Drive</div>
+            <div class="aop-schedule">Weekdays 3PM - 7PM</div>
+            <button class="aop-profile-btn" data-aop="sarah-miles">
+              View Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- AOP 3 -->
+        <div class="aop-card">
+          <div
+            class="aop-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            "
+          ></div>
+          <div class="aop-info">
+            <h3 class="aop-name">DJ Marco</h3>
+            <div class="aop-show">Retro Rewind</div>
+            <div class="aop-schedule">Saturdays 2PM - 6PM</div>
+            <button class="aop-profile-btn" data-aop="dj-marco">
+              View Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- AOP 4 -->
+        <div class="aop-card">
+          <div
+            class="aop-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80');
+            "
+          ></div>
+          <div class="aop-info">
+            <h3 class="aop-name">Lena Cruz</h3>
+            <div class="aop-show">Night Beats</div>
+            <div class="aop-schedule">Weeknights 10PM - 2AM</div>
+            <button class="aop-profile-btn" data-aop="lena-cruz">
+              View Profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="feedback-section">
+      <div class="container">
+        <h2 class="section-title">SEND US FEEDBACK</h2>
+
+        <div class="feedback-form">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              placeholder="Enter your name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input
+              type="text"
+              id="subject"
+              class="form-control"
+              placeholder="Subject of your message"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea
+              id="message"
+              class="form-control"
+              placeholder="Tell us what you think..."
+            ></textarea>
+          </div>
+
+          <button class="submit-btn">Send Feedback</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Ads Section -->
+    <section class="ads-section container">
+      <h2 class="section-title">ADVERTISE HERE!</h2>
+
+      <div class="ads-container">
+        <!-- Image Slider Ad 1 - Sony Headphones -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://www.sony.com/electronics/headphones" target="_blank">
+            <div class="image-slider-ad" id="slider1">
+              <div class="image-slides">
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Sony Headphones - Premium Quality"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Sony Headphones - Wireless Freedom"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Sony Headphones - Noise Cancelling"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1521316370238-71445104d3e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Sony Headphones - Studio Quality"
+                  />
+                </div>
+              </div>
+              <div class="slider-controls" id="controls1">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+              </div>
+            </div>
+            <div class="ad-overlay">Sony Headphones - Hear the Difference</div>
+          </a>
+        </div>
+
+        <!-- Video Ad 1 - Apple Music -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://www.apple.com/apple-music" target="_blank">
+            <div class="video-ad-container">
+              <video class="video-ad" id="video1" loop muted playsinline>
+                <source
+                  src="https://assets.mixkit.co/videos/preview/mixkit-audio-equalizer-animation-238-large.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-controls">
+                <button
+                  class="video-control-btn play-pause"
+                  data-video="video1"
+                >
+                  <i class="fas fa-play"></i>
+                </button>
+                <div class="video-progress-container" data-video="video1">
+                  <div class="video-progress-bar" data-video="video1"></div>
+                </div>
+                <div class="video-volume-container">
+                  <button
+                    class="video-control-btn mute-btn"
+                    data-video="video1"
+                  >
+                    <i class="fas fa-volume-up"></i>
+                  </button>
+                  <input
+                    type="range"
+                    class="video-volume-slider"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value="1"
+                    data-video="video1"
+                  />
+                </div>
+                <button
+                  class="video-control-btn fullscreen-btn"
+                  data-video="video1"
+                >
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+            </div>
+            <div class="ad-overlay">Apple Music - Stream Millions of Songs</div>
+          </a>
+        </div>
+
+        <!-- Image Slider Ad 2 - Live Nation -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://www.livenation.com" target="_blank">
+            <div class="image-slider-ad" id="slider2">
+              <div class="image-slides">
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1563013541-2dcc5c28701f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Summer Music Festival - Main Stage"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Summer Music Festival - Crowd"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Summer Music Festival - Performers"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Summer Music Festival - Atmosphere"
+                  />
+                </div>
+              </div>
+              <div class="slider-controls" id="controls2">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+              </div>
+            </div>
+            <div class="ad-overlay">
+              Summer Music Festival - Tickets Available Now
+            </div>
+          </a>
+        </div>
+
+        <!-- Video Ad 2 - Spotify -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://www.spotify.com" target="_blank">
+            <div class="video-ad-container">
+              <video class="video-ad" id="video2" loop muted playsinline>
+                <source
+                  src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-controls">
+                <button
+                  class="video-control-btn play-pause"
+                  data-video="video2"
+                >
+                  <i class="fas fa-play"></i>
+                </button>
+                <div class="video-progress-container" data-video="video2">
+                  <div class="video-progress-bar" data-video="video2"></div>
+                </div>
+                <div class="video-volume-container">
+                  <button
+                    class="video-control-btn mute-btn"
+                    data-video="video2"
+                  >
+                    <i class="fas fa-volume-up"></i>
+                  </button>
+                  <input
+                    type="range"
+                    class="video-volume-slider"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value="1"
+                    data-video="video2"
+                  />
+                </div>
+                <button
+                  class="video-control-btn fullscreen-btn"
+                  data-video="video2"
+                >
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+            </div>
+            <div class="ad-overlay">Spotify - Music for Everyone</div>
+          </a>
+        </div>
+
+        <!-- Image Slider Ad 3 - Beats by Dre -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://www.beatsbydre.com" target="_blank">
+            <div class="image-slider-ad" id="slider3">
+              <div class="image-slides">
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Beats by Dre - Studio Headphones"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1599669454699-248893623440?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Beats by Dre - Wireless Earbuds"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1590658165737-15a047b8b5e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Beats by Dre - Premium Sound"
+                  />
+                </div>
+                <div class="image-slide">
+                  <img
+                    src="https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+                    alt="Beats by Dre - Lifestyle"
+                  />
+                </div>
+              </div>
+              <div class="slider-controls" id="controls3">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+              </div>
+            </div>
+            <div class="ad-overlay">
+              Beats by Dre - Premium Audio Experience
+            </div>
+          </a>
+        </div>
+
+        <!-- Video Ad 3 - YouTube Music -->
+        <div class="ad-banner">
+          <button class="close-ad">&times;</button>
+          <a href="https://music.youtube.com" target="_blank">
+            <div class="video-ad-container">
+              <video class="video-ad" id="video3" loop muted playsinline>
+                <source
+                  src="https://assets.mixkit.co/videos/preview/mixkit-headphones-on-a-white-background-4282-large.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-controls">
+                <button
+                  class="video-control-btn play-pause"
+                  data-video="video3"
+                >
+                  <i class="fas fa-play"></i>
+                </button>
+                <div class="video-progress-container" data-video="video3">
+                  <div class="video-progress-bar" data-video="video3"></div>
+                </div>
+                <div class="video-volume-container">
+                  <button
+                    class="video-control-btn mute-btn"
+                    data-video="video3"
+                  >
+                    <i class="fas fa-volume-up"></i>
+                  </button>
+                  <input
+                    type="range"
+                    class="video-volume-slider"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value="1"
+                    data-video="video3"
+                  />
+                </div>
+                <button
+                  class="video-control-btn fullscreen-btn"
+                  data-video="video3"
+                >
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+            </div>
+            <div class="ad-overlay">YouTube Music - Official Music Videos</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- OAP Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+      <div class="profile-modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="profile-header">
+          <div class="profile-image" id="modalProfileImage"></div>
+          <div class="profile-info">
+            <h2 class="profile-name" id="modalProfileName">DJ Name</h2>
+            <div class="profile-show" id="modalProfileShow">Show Name</div>
+            <div class="profile-schedule" id="modalProfileSchedule">
+              Schedule
+            </div>
+            <div class="profile-social" id="modalProfileSocial">
+              <!-- Social media handles will be inserted here -->
+            </div>
+          </div>
+        </div>
+        <div class="profile-bio">
+          <h3>About</h3>
+          <p id="modalProfileBio">Bio content will be loaded here...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Podcast Player Modal -->
+    <div class="podcast-modal" id="podcastModal">
+      <div class="podcast-modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="podcast-modal-image" id="modalPodcastImage"></div>
+        <h2 class="podcast-modal-title" id="modalPodcastTitle">
+          Podcast Title
+        </h2>
+        <p class="podcast-modal-description" id="modalPodcastDescription">
+          Podcast description will appear here.
+        </p>
+
+        <div class="video-podcast-container">
+          <video class="video-podcast" id="videoPodcast" controls>
+            <source src="" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div class="podcast-player">
+          <div class="podcast-progress">
+            <div class="podcast-progress-bar" id="podcastProgressBar"></div>
+          </div>
+          <div class="podcast-time">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+          <div class="podcast-controls">
+            <button class="podcast-control-btn" id="rewindBtn">
+              <i class="fas fa-backward"></i>
+            </button>
+            <button
+              class="podcast-control-btn podcast-play-pause"
+              id="podcastPlayBtn"
+            >
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="podcast-control-btn" id="forwardBtn">
+              <i class="fas fa-forward"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+      <div class="share-modal-content">
+        <h3>Share This News</h3>
+        <div class="share-options">
+          <div class="share-option" data-platform="facebook">
+            <div class="share-icon facebook">
+              <i class="fab fa-facebook-f"></i>
+            </div>
+            <span>Facebook</span>
+          </div>
+          <div class="share-option" data-platform="twitter">
+            <div class="share-icon twitter">
+              <i class="fab fa-twitter"></i>
+            </div>
+            <span>Twitter</span>
+          </div>
+          <div class="share-option" data-platform="instagram">
+            <div class="share-icon instagram">
+              <i class="fab fa-instagram"></i>
+            </div>
+            <span>Instagram</span>
+          </div>
+          <div class="share-option" data-platform="whatsapp">
+            <div class="share-icon whatsapp">
+              <i class="fab fa-whatsapp"></i>
+            </div>
+            <span>WhatsApp</span>
+          </div>
+        </div>
+        <button class="close-modal">Close</button>
+      </div>
+    </div>
+ 
+  <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+             <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+            <p>
+              The future of radio streaming. Experience sound in a whole new
+              dimension.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <div class="footer-links">
+              <a href="./index.html">Home</a>
+              <a href="./live-stream.html">Live Stream</a>
+              <a href="./shows.html">Shows</a>
+              <a href="./djs.html">DJs</a>
+              <a href="./playlist.html">Playlist</a>
+              <a href="./podcast.html">Podcasts</a>
+              <a href="./contact.html">Contact</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <div class="footer-links">
+              <a href="#">Help Center</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Community Guidelines</a>
+              <a href="#">FAQ</a>
+              <a href="#">Report Issue</a>
+              <a href="#">Feedback</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Subscribe</h3>
+            <p>Get the latest updates and exclusive content.</p>
+            <div class="footer-input">
+              <input type="email" placeholder="Your email" />
+              <button><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2025 Darling FM. All rights reserved | ERIBS TECH
+        </div>
+      </div>
+    </footer>
+
+
+    <script src="../JAVASCRIPT/style.js"></script>
+  </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playlist - Revolutionary Playlist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./CSS/playlist.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+
+    <!-- Audio Players (hidden) -->
+    <audio id="audio-player" class="audio-player"></audio>
+
+    <!-- Header -->
+    <header id="main-header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+           <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+          </div>
+
+          <button class="mobile-menu" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <nav class="desktop-nav">
+            <ul>
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./live-stream.html">Live Stream</a></li>
+              <li><a href="./shows.html">Shows</a></li>
+              <li><a href="./djs.html">DJs</a></li>
+              <li><a href="./playlist.html" class="active">Playlist</a></li>
+              <li><a href="./podcast.html">Podcasts</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./live-stream.html">Live Stream</a></li>
+        <li><a href="./shows.html">Shows</a></li>
+        <li><a href="./djs.html">DJs</a></li>
+        <li><a href="./playlist.html" class="active">Playlist</a></li>
+        <li><a href="./podcast.html">Podcasts</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1>DARLING FM 109.7 PLAYLIST</h1>
+          <p>
+            Experience the future of music curation. AI-powered playlists that
+            adapt to your mood, environment, and listening habits in real-time.
+          </p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search for tracks, artists, or albums..."
+            />
+          </div>
+        </div>
+
+        <!-- Music Library -->
+        <div class="music-library">
+          <div class="library-header">
+            <h2 class="library-title">Music Library</h2>
+            <div class="library-count" id="track-count">6 tracks</div>
+          </div>
+          <div class="tracks-grid" id="tracks-grid">
+            <!-- Tracks will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Now Playing Section -->
+        <div class="now-playing-section">
+          <h2 class="section-title">NOW PLAYING</h2>
+          <div class="current-track">
+            <div
+              class="track-image-large"
+              id="now-playing-image"
+              style="
+                background-image: url('./images/studio.jpg');
+              "
+            ></div>
+            <div class="track-info-large">
+              <h3 class="track-title-large" id="now-playing-title">Select a track to play</h3>
+              <p class="track-artist-large" id="now-playing-artist">Artist</p>
+              <p class="track-album-large" id="now-playing-album">Album</p>
+            </div>
+          </div>
+          
+          <!-- Equalizer in Now Playing -->
+          <div class="now-playing-equalizer" id="now-playing-equalizer">
+            <div class="equalizer-bar" style="height: 5px;"></div>
+            <div class="equalizer-bar" style="height: 15px;"></div>
+            <div class="equalizer-bar" style="height: 10px;"></div>
+            <div class="equalizer-bar" style="height: 20px;"></div>
+            <div class="equalizer-bar" style="height: 8px;"></div>
+            <div class="equalizer-bar" style="height: 18px;"></div>
+            <div class="equalizer-bar" style="height: 12px;"></div>
+            <div class="equalizer-bar" style="height: 7px;"></div>
+          </div>
+          
+          <div class="player-controls">
+            <button class="control-btn" id="shuffle-btn">
+              <i class="fas fa-random"></i>
+            </button>
+            <button class="control-btn" id="prev-btn">
+              <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="play-pause-btn" id="play-pause-btn">
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="control-btn" id="next-btn">
+              <i class="fas fa-step-forward"></i>
+            </button>
+            <button class="control-btn" id="repeat-btn">
+              <i class="fas fa-redo"></i>
+            </button>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar" id="progress-bar">
+              <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-display">
+              <span id="current-time">0:00</span>
+              <span id="total-time">0:00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Queue Section -->
+        <div class="queue-section">
+          <h2 class="section-title">PLAYLIST QUEUE</h2>
+          <div class="queue-list">
+            <div class="queue-header">
+              <h3 class="queue-title">Up Next</h3>
+              <div class="queue-actions">
+                <button class="queue-action-btn" id="shuffle-queue-btn">
+                  <i class="fas fa-random"></i> Shuffle
+                </button>
+                <button class="queue-action-btn" id="clear-queue-btn">
+                  <i class="fas fa-trash"></i> Clear
+                </button>
+              </div>
+            </div>
+            <div class="queue-items" id="queue-items">
+              <!-- Queue items will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+           <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+            <p>
+              The future of radio streaming. Experience sound in a whole new
+              dimension.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <div class="footer-links">
+              <a href="./index.html">Home</a>
+              <a href="./live-stream.html">Live Stream</a>
+              <a href="./shows.html">Shows</a>
+              <a href="./djs.html">DJs</a>
+              <a href="./playlist.html">Playlist</a>
+              <a href="./podcast.html">Podcasts</a>
+              <a href="./contact.html">Contact</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <div class="footer-links">
+              <a href="#">Help Center</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Community Guidelines</a>
+              <a href="#">FAQ</a>
+              <a href="#">Report Issue</a>
+              <a href="#">Feedback</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Subscribe</h3>
+            <p>Get the latest updates and exclusive content.</p>
+            <div class="footer-input">
+              <input type="email" placeholder="Your email" />
+              <button><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2025 Darling FM. All rights reserved | ERIBS TECH
+        </div>
+      </div>
+    </footer>
+
+    <script src="JAVASCRIPT/playlist.js"></script>
+</body>
+</html>

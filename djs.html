@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Darling FM - Revolutionary DJs</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./CSS/djs.css">
+  </head>
+  <body>
+    <div class="cyber-grid"></div>
+
+    <!-- Header -->
+    <header id="main-header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+          </div>
+
+          <button class="mobile-menu" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <nav class="desktop-nav">
+            <ul>
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./live-stream.html">Live Stream</a></li>
+              <li><a href="./shows.html">Shows</a></li>
+              <li><a href="./djs.html" class="active">DJs</a></li>
+              <li><a href="./playlist.html">Playlist</a></li>
+              <li><a href="./podcast.html">Podcasts</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./live-stream.html">Live Stream</a></li>
+        <li><a href="./shows.html">Shows</a></li>
+        <li><a href="./djs.html" class="active">DJs</a></li>
+        <li><a href="./playlist.html">Playlist</a></li>
+        <li><a href="./podcast.html">Podcasts</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1>REVOLUTIONARY DJS</h1>
+          <p>
+            Meet the visionary artists shaping the future of sound. Experience
+            their unique styles and groundbreaking mixes.
+          </p>
+        </div>
+
+        <!-- DJ Spotlight -->
+        <div class="dj-spotlight">
+          <div class="spotlight-bg"></div>
+          <div class="spotlight-content">
+            <div class="spotlight-image">
+              <div class="dj-avatar-hologram floating">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80"
+                  alt="DJ Nova"
+                />
+              </div>
+            </div>
+            <div class="spotlight-info">
+              <h2 class="dj-name">DJ KIZITO</h2>
+              <p class="dj-tagline">Future Bass Pioneer & Sound Designer</p>
+              <div class="dj-stats">
+                <div class="stat">
+                  <div class="stat-value">24K</div>
+                  <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">156</div>
+                  <div class="stat-label">Mixes</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">4.9</div>
+                  <div class="stat-label">Rating</div>
+                </div>
+              </div>
+              <p class="dj-bio">
+                Pushing the boundaries of electronic music with innovative sound
+                design and immersive audio experiences. DJ Nova combines
+                cutting-edge technology with emotional depth to create sonic
+                journeys that transport listeners to new dimensions.
+              </p>
+              <div class="dj-actions">
+                <button
+                  class="action-btn primary play-btn"
+                  data-audio="AUDIO/Nkechi_Abugu_You_Know_The_Way_Soundwela.mp3"
+                >
+                  <i class="fas fa-play"></i>
+                  Play Latest Mix
+                </button>
+                <button
+                  class="action-btn follow-btn"
+                  data-dj="DJ Nova"
+                  data-social="https://www.facebook.com/djnovaofficial"
+                >
+                  <i class="fas fa-heart"></i>
+                  Follow
+                </button>
+                <button class="action-btn share-btn" data-dj="DJ Nova">
+                  <i class="fas fa-share-alt"></i>
+                  Share
+                </button>
+              </div>
+              <!-- Audio Duration Display -->
+              <div class="audio-duration" id="featuredDuration">
+                <span class="current-time">0:00</span> /
+                <span class="total-time">0:00</span>
+              </div>
+              <!-- Audio Visualizer for Featured DJ -->
+              <div class="audio-visualizer" id="featuredVisualizer">
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DJ Grid -->
+        <div class="dj-grid-section">
+          <div class="section-header">
+            <h2 class="section-title">MEET THE ARTISTS</h2>
+            <a href="#" class="view-all">
+              View All DJs
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="dj-filters">
+            <button class="filter-btn active" data-genre="all">All DJs</button>
+            <button class="filter-btn" data-genre="electronic">
+              Electronic
+            </button>
+            <button class="filter-btn" data-genre="hip-hop">Hip-Hop</button>
+            <button class="filter-btn" data-genre="house">House</button>
+            <button class="filter-btn" data-genre="techno">Techno</button>
+            <button class="filter-btn" data-genre="experimental">
+              Experimental
+            </button>
+          </div>
+
+          <div class="dj-grid">
+            <!-- DJ 1 - Electronic -->
+            <div class="dj-card" data-genre="electronic">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-live">LIVE</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">Sarah Miles</h3>
+                <p class="dj-card-role">Deep House Specialist</p>
+                <p class="dj-card-bio">
+                  Crafting immersive deep house journeys that blend organic
+                  elements with electronic textures.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">18K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">120</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.8</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="Sarah Miles"
+                    data-social="https://www.instagram.com/sarahmilesdj"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="Sarah Miles">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DJ 2 - Hip-Hop -->
+            <div class="dj-card" data-genre="hip-hop">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-popular">POPULAR</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">DJ Marco</h3>
+                <p class="dj-card-role">Hip-Hop Fusion</p>
+                <p class="dj-card-bio">
+                  Blending classic hip-hop beats with modern electronic
+                  production for a fresh urban sound.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">22K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">85</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.7</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="DJ Marco"
+                    data-social="https://www.twitter.com/djmarcomusic"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="DJ Marco">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW DJ 3 - Techno -->
+            <div class="dj-card" data-genre="techno">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-new">NEW</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">Kaelen</h3>
+                <p class="dj-card-role">Industrial Techno</p>
+                <p class="dj-card-bio">
+                  Raw, powerful techno with industrial influences. Known for
+                  high-energy sets that push sonic boundaries.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">15K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">67</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.6</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="Kaelen"
+                    data-social="https://www.instagram.com/kaelentechno"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="Kaelen">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW DJ 4 - Experimental -->
+            <div class="dj-card" data-genre="experimental">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-live">LIVE</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">Aura</h3>
+                <p class="dj-card-role">Experimental Soundscapes</p>
+                <p class="dj-card-bio">
+                  Creating immersive audio experiences that blend ambient,
+                  glitch, and world music influences.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">12K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">43</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.9</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="Aura"
+                    data-social="https://www.soundcloud.com/aurasound"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="Aura">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW DJ 5 - House -->
+            <div class="dj-card" data-genre="house">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-popular">POPULAR</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">Leo Vance</h3>
+                <p class="dj-card-role">Soulful House</p>
+                <p class="dj-card-bio">
+                  Bringing soul and emotion back to house music with smooth
+                  transitions and uplifting melodies.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">20K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">98</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.7</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="Leo Vance"
+                    data-social="https://www.mixcloud.com/leovance"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="Leo Vance">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW DJ 6 - Electronic -->
+            <div class="dj-card" data-genre="electronic">
+              <div
+                class="dj-card-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+                "
+              >
+                <div class="dj-card-badge badge-new">NEW</div>
+              </div>
+              <div class="dj-card-content">
+                <h3 class="dj-card-name">Zara</h3>
+                <p class="dj-card-role">Electronic Fusion</p>
+                <p class="dj-card-bio">
+                  Blending IDM, breakbeat, and ambient elements to create
+                  intricate electronic soundscapes.
+                </p>
+                <div class="dj-card-stats">
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">14K</div>
+                    <div class="dj-card-stat-label">Followers</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">52</div>
+                    <div class="dj-card-stat-label">Mixes</div>
+                  </div>
+                  <div class="dj-card-stat">
+                    <div class="dj-card-stat-value">4.8</div>
+                    <div class="dj-card-stat-label">Rating</div>
+                  </div>
+                </div>
+                <div class="dj-card-actions">
+                  <button
+                    class="action-btn play-btn"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button
+                    class="action-btn follow-btn"
+                    data-dj="Zara"
+                    data-social="https://www.instagram.com/zaraelectronica"
+                  >
+                    <i class="fas fa-heart"></i>
+                  </button>
+                  <button class="action-btn share-btn" data-dj="Zara">
+                    <i class="fas fa-share-alt"></i>
+                  </button>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer">
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                  <div class="visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest Mixes -->
+        <div class="mixes-section">
+          <div class="section-header">
+            <h2 class="section-title">LATEST MIXES</h2>
+            <a href="#" class="view-all">
+              View All Mixes
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="mixes-grid">
+            <!-- Mix 1 -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Neon Dreams</h3>
+                <p class="mix-dj">DJ Nova</p>
+                <div class="mix-meta">
+                  <span>2.4K plays</span>
+                  <span>2:45:12</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mix 2 -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Midnight Drive</h3>
+                <p class="mix-dj">Sarah Miles</p>
+                <div class="mix-meta">
+                  <span>1.8K plays</span>
+                  <span>1:52:34</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 3 - Techno -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Factory Rhythms</h3>
+                <p class="mix-dj">Kaelen</p>
+                <div class="mix-meta">
+                  <span>1.2K plays</span>
+                  <span>2:15:45</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 4 - Experimental -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Digital Echoes</h3>
+                <p class="mix-dj">Aura</p>
+                <div class="mix-meta">
+                  <span>890 plays</span>
+                  <span>1:38:22</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 5 - House -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Soul Revival</h3>
+                <p class="mix-dj">Leo Vance</p>
+                <div class="mix-meta">
+                  <span>2.1K plays</span>
+                  <span>2:22:18</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 6 - Electronic -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1487180144351-b8472da7d491?ixlib=rb-4.0.3&auto=format&fit=crop&w=1352&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Circuit Breaker</h3>
+                <p class="mix-dj">Zara</p>
+                <div class="mix-meta">
+                  <span>1.5K plays</span>
+                  <span>1:45:33</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 7 - Hip-Hop -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/f3wvbbqmd68uv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Urban Legends</h3>
+                <p class="mix-dj">DJ Marco</p>
+                <div class="mix-meta">
+                  <span>1.9K plays</span>
+                  <span>2:08:51</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW Mix 8 - Experimental -->
+            <div class="mix-card">
+              <div
+                class="mix-image"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+                "
+              >
+                <div class="mix-overlay">
+                  <div
+                    class="play-mix"
+                    data-audio="https://stream.zeno.fm/0r0xa792kwzuv"
+                  >
+                    <i class="fas fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mix-content">
+                <h3 class="mix-title">Sonic Alchemy</h3>
+                <p class="mix-dj">Aura</p>
+                <div class="mix-meta">
+                  <span>1.1K plays</span>
+                  <span>1:55:47</span>
+                </div>
+                <!-- Audio Duration Display -->
+                <div class="audio-duration">
+                  <span class="current-time">0:00</span> /
+                  <span class="total-time">0:00</span>
+                </div>
+                <!-- Audio Visualizer for Mix Card -->
+                <div class="mix-visualizer">
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                  <div class="mix-visualizer-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+             <img src="../images/lo.png" alt="WaveRadio FM Logo" />
+            <p>
+              The future of radio streaming. Experience sound in a whole new
+              dimension.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <div class="footer-links">
+              <a href="./index.html">Home</a>
+              <a href="./live-stream.html">Live Stream</a>
+              <a href="./shows.html">Shows</a>
+              <a href="./djs.html">DJs</a>
+              <a href="./playlist.html">Playlist</a>
+              <a href="./podcast.html">Podcasts</a>
+              <a href="./contact.html">Contact</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <div class="footer-links">
+              <a href="#">Help Center</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Community Guidelines</a>
+              <a href="#">FAQ</a>
+              <a href="#">Report Issue</a>
+              <a href="#">Feedback</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Subscribe</h3>
+            <p>Get the latest updates and exclusive content.</p>
+            <div class="footer-input">
+              <input type="email" placeholder="Your email" />
+              <button><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2025 Darling FM. All rights reserved | ERIBS TECH
+        </div>
+      </div>
+    </footer>
+
+    <!-- Social Share Modal -->
+    <div class="modal" id="shareModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Share DJ</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="shareDJText">Share this amazing DJ with your friends!</p>
+          <div class="social-share-buttons">
+            <button class="social-share-btn facebook" data-platform="facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </button>
+            <button class="social-share-btn twitter" data-platform="twitter">
+              <i class="fab fa-twitter"></i> Twitter
+            </button>
+            <button class="social-share-btn whatsapp" data-platform="whatsapp">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
+            <button class="social-share-btn telegram" data-platform="telegram">
+              <i class="fab fa-telegram"></i> Telegram
+            </button>
+            <button class="social-share-btn reddit" data-platform="reddit">
+              <i class="fab fa-reddit"></i> Reddit
+            </button>
+            <button class="social-share-btn linkedin" data-platform="linkedin">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </button>
+            <button class="social-share-btn email" data-platform="email">
+              <i class="fas fa-envelope"></i> Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer" style="display: none"></audio>
+
+    <script src="./JAVASCRIPT/djs.js">
+    </script>
+  </body>
+</html>
