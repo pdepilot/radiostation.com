@@ -1859,7 +1859,6 @@ footer {
   }
 }
 
-/* Medium Desktops (1025px - 1439px) */
 @media (max-width: 1439px) and (min-width: 1025px) {
   .hero h2 {
     font-size: 4.5rem;
