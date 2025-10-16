@@ -1870,7 +1870,6 @@ footer {
   }
 }
 
-/* Tablets and Small Desktops (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .container {
     width: 95%;
@@ -1917,7 +1916,6 @@ footer {
     padding: 0 15px;
   }
   
-  /* Header Responsive */
   .header-content {
     flex-direction: row;
     justify-content: space-between;
@@ -1957,7 +1955,6 @@ footer {
     font-size: 1.1rem;
   }
   
-  /* Hero Section Responsive */
   .hero {
     padding: 140px 0 60px;
     overflow: visible;
