@@ -49,4 +49,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const newCount = Math.max(12000, currentCount + randomChange);
     listenerElement.textContent = newCount.toLocaleString();
   }, 5000);
+
+  // NEW: Scroll reveal functionality
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+
+  function checkReveal() {
+    const windowHeight = window.innerHeight;
+    const revealPoint = 150;
+
+    revealElements.forEach((element) => {
+      const elementTop = element.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - revealPoint) {
+        element.classList.add("revealed");
+      }
+    });
+  }
+
+  // Initial check
+  checkReveal();
+
+  // Check on scroll
+  window.addEventListener("scroll", checkReveal);
 });

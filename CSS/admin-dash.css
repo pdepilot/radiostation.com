@@ -1,3 +1,4 @@
+/* Your existing CSS remains the same */
 :root {
   --primary: #000000;
   --secondary: #1a1a1a;
@@ -660,6 +661,19 @@ body {
   }
 }
 
+/* NEW: Scroll reveal styles */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Apply initial animation to stat cards */
 .stat-card,
 .chart-card,
 .activity-card,

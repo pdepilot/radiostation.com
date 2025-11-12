@@ -156,7 +156,7 @@ nav a.active {
       rgba(0, 0, 0, 0.9) 0%,
       rgba(26, 26, 26, 0.8) 100%
     ),
-    url("../images/darling studio.jpg") center/cover no-repeat;
+    url("https://res.cloudinary.com/dl4hjr1p2/image/upload/v1762957221/WhatsApp_Image_2025-11-12_at_11.20.54_77ff1fa8_hbfibv.jpg") center/cover no-repeat;
 }
 
 .hero::before {
