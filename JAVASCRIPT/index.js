@@ -923,3 +923,26 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', revealOnScroll);
 });
+
+
+// Scroll to Top Functionality
+      document.addEventListener("DOMContentLoaded", function() {
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
+        // Show or hide the button based on scroll position
+        window.addEventListener("scroll", function() {
+          if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add("show");
+          } else {
+            scrollToTopBtn.classList.remove("show");
+          }
+        });
+        
+        // Scroll to top when button is clicked
+        scrollToTopBtn.addEventListener("click", function() {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        });
+      });
