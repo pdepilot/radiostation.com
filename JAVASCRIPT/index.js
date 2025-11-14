@@ -1,4 +1,3 @@
-
 // Main radio stream URL (24/7 broadcast)
 const MAIN_STREAM_URL = "https://your-radioserver.com:8000/stream";
 
@@ -356,27 +355,27 @@ document.addEventListener("DOMContentLoaded", function() {
     const profileButtons = document.querySelectorAll('.aop-profile-btn');
     const closeModalButtons = document.querySelectorAll('.close-modal');
     
-    // OAP data with social media handles
+    // OAP data with social media handles - UPDATED BIOS
     const oapData = {
         'dj-alex': {
-            name: 'DJ Alex',
+            name: 'DJ XTREME (Soundboykiller)',
             show: 'Morning Show',
             schedule: 'Weekdays 6AM - 10AM',
-            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80',
-            bio: 'DJ Alex has been revolutionizing morning radio for over 5 years. With his energetic personality and eclectic music taste, he wakes up the city with the perfect blend of hits, humor, and heart. When not on air, Alex produces electronic music and hosts underground parties.',
+            image: 'https://res.cloudinary.com/dl4hjr1p2/image/upload/v1763062522/WhatsApp_Image_2025-11-12_at_15.35.16_d35f6e83_pv497n.jpg',
+            bio: 'DJ XTREME (Soundboykiller)\n\nTitle/Role: Professional DJ | Radio Station DJ | Studio Technician | Event DJ | Darling Fm Head DJ Department\n\nDJ XTREME, popularly known as Soundboykiller, is a dynamic and versatile DJ recognized for his electrifying mixes and technical precision. With a passion for delivering unforgettable sound experiences, he brings an exceptional blend of creativity and skill to every performance — from high-energy club nights to top-tier radio shows.\n\nAs a seasoned studio technician, DJ XTREME\'s deep understanding of sound engineering ensures crisp, powerful audio quality both on and off the stage. His sets are a fusion of innovation and rhythm, designed to captivate audiences and keep the energy flowing.\n\nWith an ever-growing reputation across events and the airwaves, DJ XTREME continues to redefine the DJ scene — proving that true sound mastery lives in the mix.',
             social: [
-                { platform: 'twitter', handle: '@dj_alex', url: 'https://twitter.com/dj_alex' },
-                { platform: 'instagram', handle: '@dj_alex_official', url: 'https://instagram.com/dj_alex_official' },
-                { platform: 'facebook', handle: 'DJ Alex Official', url: 'https://facebook.com/djalexofficial' },
-                { platform: 'youtube', handle: 'DJ Alex', url: 'https://youtube.com/djalex' }
+                { platform: 'twitter', handle: '@dj_xtreme', url: 'https://twitter.com/dj_xtreme' },
+                { platform: 'instagram', handle: '@dj_xtreme_official', url: 'https://instagram.com/dj_xtreme_official' },
+                { platform: 'facebook', handle: 'DJ XTREME Official', url: 'https://facebook.com/djxtremeofficial' },
+                { platform: 'youtube', handle: 'DJ XTREME', url: 'https://youtube.com/djxtreme' }
             ]
         },
         'sarah-miles': {
-            name: 'Sarah Miles',
+            name: 'COSMAS CHUKWUEMEKA PUYAKA',
             show: 'Afternoon Drive',
             schedule: 'Weekdays 3PM - 7PM',
-            image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80',
-            bio: 'Sarah brings her passion for storytelling and music to the afternoon drive. With a background in music journalism, she provides insightful commentary on the latest tracks and artists. Her interviews with musicians are legendary in the industry.',
+            image: 'https://res.cloudinary.com/dl4hjr1p2/image/upload/v1763062522/WhatsApp_Image_2025-11-12_at_15.35.31_e7adcda0_tehu62.jpg',
+            bio: 'Head of Sports at Darling FM Chairman, Sports Writers Association of Nigeria, Imo State Chapter.',
             social: [
                 { platform: 'twitter', handle: '@sarah_miles', url: 'https://twitter.com/sarah_miles' },
                 { platform: 'instagram', handle: '@sarahmiles_radio', url: 'https://instagram.com/sarahmiles_radio' },
@@ -384,12 +383,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 { platform: 'tiktok', handle: '@sarahmiles', url: 'https://tiktok.com/@sarahmiles' }
             ]
         },
-        'dj-marco': {
-            name: 'DJ Marco',
+        'dj-ujah': {
+            name: 'CHIDERA UJAH',
             show: 'Retro Rewind',
             schedule: 'Saturdays 2PM - 6PM',
-            image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
-            bio: 'A walking encyclopedia of music from the 70s to the 90s, DJ Marco takes listeners on a nostalgic journey every Saturday. His extensive vinyl collection and deep knowledge of music history make Retro Rewind a must-listen for music lovers of all generations.',
+            image: 'https://res.cloudinary.com/dl4hjr1p2/image/upload/v1762957223/OAP1_gtmlhf.jpg',
+            bio: 'Chidera Ujah, is a broadcast journalist with years of experience in storytelling and media advocacy.\n\nA rights advocate for women and children.\n\nShe holds a Bachelor\'s degree in English and Literary Studies and has honed her skills in radio presentation, media and communications, and content creation.\n\nShe promotes awareness, empowerment, and community development across various audiences.',
             social: [
                 { platform: 'twitter', handle: '@djmarco_rewind', url: 'https://twitter.com/djmarco_rewind' },
                 { platform: 'instagram', handle: '@djmarco_classics', url: 'https://instagram.com/djmarco_classics' },
@@ -926,23 +925,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Scroll to Top Functionality
-      document.addEventListener("DOMContentLoaded", function() {
-        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-        
-        // Show or hide the button based on scroll position
-        window.addEventListener("scroll", function() {
-          if (window.pageYOffset > 300) {
+document.addEventListener("DOMContentLoaded", function() {
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    
+    // Show or hide the button based on scroll position
+    window.addEventListener("scroll", function() {
+        if (window.pageYOffset > 300) {
             scrollToTopBtn.classList.add("show");
-          } else {
+        } else {
             scrollToTopBtn.classList.remove("show");
-          }
-        });
-        
-        // Scroll to top when button is clicked
-        scrollToTopBtn.addEventListener("click", function() {
-          window.scrollTo({
+        }
+    });
+    
+    // Scroll to top when button is clicked
+    scrollToTopBtn.addEventListener("click", function() {
+        window.scrollTo({
             top: 0,
             behavior: "smooth"
-          });
         });
-      });
+    });
+});
