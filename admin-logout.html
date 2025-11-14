@@ -39,7 +39,9 @@
             color: var(--light);
             font-family: "Exo 2", sans-serif;
             line-height: 1.6;
-            overflow: hidden;
+            /* Remove overflow: hidden to ensure all content is accessible */
+            overflow-x: hidden;
+            overflow-y: auto;
             background: radial-gradient(
                 ellipse at center,
                 var(--secondary) 0%,
@@ -49,6 +51,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .cyber-grid {
@@ -71,12 +74,14 @@
             justify-content: center;
             width: 100%;
             max-width: 500px;
-            padding: 40px;
+            padding: 20px;
             text-align: center;
+            /* Ensure container can grow if needed */
+            min-height: auto;
         }
 
         .logo {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
         }
 
@@ -89,7 +94,7 @@
 
         .logo h1 {
             font-family: "Orbitron", sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             background: linear-gradient(45deg, var(--accent), var(--highlight));
             -webkit-background-clip: text;
             background-clip: text;
@@ -106,12 +111,13 @@
             background: var(--glass);
             backdrop-filter: blur(15px);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 30px 25px;
             border: 1px solid var(--glass-border);
             width: 100%;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Changed from hidden to visible */
+            margin-bottom: 20px;
         }
 
         .logout-card::before {
@@ -139,12 +145,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .user-avatar {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: var(--accent);
             display: flex;
@@ -152,7 +158,7 @@
             justify-content: center;
             margin-right: 15px;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
 
@@ -161,7 +167,7 @@
         }
 
         .user-name {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 5px;
         }
@@ -172,25 +178,26 @@
         }
 
         .logout-message {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .logout-message h2 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin-bottom: 10px;
             color: var(--highlight);
         }
 
         .logout-message p {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .session-info {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border: 1px solid var(--glass-border);
         }
 
@@ -207,20 +214,25 @@
 
         .session-label {
             color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
         }
 
         .session-value {
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .logout-actions {
             display: flex;
             gap: 15px;
             justify-content: center;
+            /* Ensure buttons are always visible */
+            position: relative;
+            z-index: 10;
         }
 
         .btn {
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 10px;
             border: none;
             font-family: "Exo 2", sans-serif;
@@ -229,9 +241,9 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            min-width: 140px;
+            gap: 8px;
+            font-size: 0.95rem;
+            min-width: 130px;
             justify-content: center;
         }
 
@@ -317,7 +329,7 @@
 
         /* Footer */
         .footer {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
             color: rgba(255, 255, 255, 0.5);
             font-size: 0.8rem;
@@ -326,11 +338,11 @@
         /* Media Queries */
         @media (max-width: 576px) {
             .logout-container {
-                padding: 20px;
+                padding: 15px;
             }
             
             .logout-card {
-                padding: 30px 20px;
+                padding: 25px 20px;
             }
             
             .logout-actions {
@@ -342,7 +354,50 @@
             }
             
             .logo h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+            
+            .user-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1rem;
+            }
+            
+            .user-name {
+                font-size: 1.1rem;
+            }
+            
+            .logout-message h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 400px) {
+            .logout-card {
+                padding: 20px 15px;
+            }
+            
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+            
+            .logout-message h2 {
+                font-size: 1.3rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Ensure content is never cut off */
+        @media (max-height: 700px) {
+            body {
+                align-items: flex-start;
+                padding-top: 30px;
+                padding-bottom: 30px;
             }
         }
     </style>
@@ -415,6 +470,23 @@
         const logoutCard = document.querySelector('.logout-card');
         const logo = document.querySelector('.logo');
         const footer = document.querySelector('.footer');
+
+        // Make sure the page is properly scrolled to show all content
+        window.addEventListener('load', function() {
+            // Scroll to top to ensure everything is visible
+            window.scrollTo(0, 0);
+            
+            // Add a slight delay and check if buttons are visible
+            setTimeout(() => {
+                const btnRect = logoutBtn.getBoundingClientRect();
+                const isVisible = (btnRect.top >= 0) && (btnRect.bottom <= window.innerHeight);
+                
+                if (!isVisible) {
+                    // If button is not visible, scroll to it
+                    logoutBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        });
 
         // Cancel button functionality
         cancelBtn.addEventListener('click', function() {
