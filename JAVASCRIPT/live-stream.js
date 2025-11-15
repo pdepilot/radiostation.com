@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =============================================
-// CONFIGURATION - REPLACE THESE WITH YOUR URLs
+// CONFIGURATION - I REPLACE THESE WITH DARLING FM URLs
 // =============================================
 
 // Main radio stream URL (24/7 broadcast)
