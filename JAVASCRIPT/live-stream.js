@@ -127,13 +127,13 @@ document.addEventListener("DOMContentLoaded", function () {
 // =============================================
 
 // Main radio stream URL (24/7 broadcast)
-const MAIN_STREAM_URL = "https://your-radioserver.com:8000/stream";
+const MAIN_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
 
 // OAP Live Stream URL (for special broadcasts)
-const OAP_STREAM_URL = "https://your-radioserver.com:8000/live";
+const OAP_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
 
 // Backup stream URL (optional)
-const BACKUP_STREAM_URL = "https://your-backup-server.com:8000/stream";
+const BACKUP_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
 
 // =============================================
 // MAIN RADIO STREAM FUNCTIONALITY
