@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Update button text if it's a "Listen Live" button
       if (this.textContent.includes("Listen Live")) {
-        this.innerHTML = '<i class="fas fa-pause"></i> Pause Live';
+        this.innerphp = '<i class="fas fa-pause"></i> Pause Live';
       } else {
-        this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        this.innerphp = '<i class="fas fa-pause"></i> Pause';
       }
     });
   });
@@ -109,9 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Reset button text if it was a "Listen Live" button
       if (currentlyPlaying.textContent.includes("Pause Live")) {
-        currentlyPlaying.innerHTML = '<i class="fas fa-play"></i> Listen Live';
+        currentlyPlaying.innerphp = '<i class="fas fa-play"></i> Listen Live';
       } else {
-        currentlyPlaying.innerHTML = '<i class="fas fa-play"></i> Play Latest';
+        currentlyPlaying.innerphp = '<i class="fas fa-play"></i> Play Latest';
       }
 
       currentlyPlaying = null;
@@ -252,12 +252,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const scheduleList = document.getElementById("scheduleList");
 
   function renderSchedule(scheduleType) {
-    scheduleList.innerHTML = "";
+    scheduleList.innerphp = "";
 
     scheduleData[scheduleType].forEach((item) => {
       const scheduleItem = document.createElement("div");
       scheduleItem.className = "schedule-item";
-      scheduleItem.innerHTML = `
+      scheduleItem.innerphp = `
                         <div class="schedule-time">${item.time}</div>
                         <div class="schedule-show">
                             <div class="schedule-image" style="background-image: url('${item.image}')"></div>

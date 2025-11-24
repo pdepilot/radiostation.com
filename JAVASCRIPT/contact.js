@@ -60,16 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show transmission animation
     const submitBtn = contactForm.querySelector(".submit-btn");
-    const originalText = submitBtn.innerHTML;
+    const originalText = submitBtn.innerphp;
 
-    submitBtn.innerHTML =
+    submitBtn.innerphp =
       '<i class="fas fa-satellite-dish"></i> TRANSMITTING...';
     submitBtn.style.background =
       "linear-gradient(45deg, var(--cyber-blue), var(--cyber-purple))";
 
     // Simulate transmission
     setTimeout(() => {
-      submitBtn.innerHTML =
+      submitBtn.innerphp =
         '<i class="fas fa-check"></i> TRANSMISSION COMPLETE';
       submitBtn.style.background =
         "linear-gradient(45deg, var(--success), #00cc00)";
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Reset button after delay
       setTimeout(() => {
-        submitBtn.innerHTML = originalText;
+        submitBtn.innerphp = originalText;
         submitBtn.style.background =
           "linear-gradient(45deg, var(--accent), var(--accent-glow))";
       }, 3000);
@@ -325,9 +325,9 @@ document.addEventListener("DOMContentLoaded", function () {
     messageDiv.className = `message ${isUser ? "user" : "bot"}`;
 
     if (isUser) {
-      messageDiv.innerHTML = `<strong>YOU:</strong> ${message}`;
+      messageDiv.innerphp = `<strong>YOU:</strong> ${message}`;
     } else {
-      messageDiv.innerHTML = `<strong>SYNTH-AI:</strong> ${message}`;
+      messageDiv.innerphp = `<strong>SYNTH-AI:</strong> ${message}`;
     }
 
     chatMessages.appendChild(messageDiv);
@@ -356,7 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const typingIndicator = document.createElement("div");
       typingIndicator.className = "message bot";
       typingIndicator.id = "typingIndicator";
-      typingIndicator.innerHTML =
+      typingIndicator.innerphp =
         '<strong>SYNTH-AI:</strong> <i class="fas fa-ellipsis-h"></i>';
       chatMessages.appendChild(typingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     // Simulate teleportation sequence
-    viewLocation.innerHTML =
+    viewLocation.innerphp =
       '<i class="fas fa-sync fa-spin"></i> TELEPORTING...';
     viewLocation.disabled = true;
 
@@ -414,14 +414,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Open in new tab
       window.open(mapsUrl, "_blank");
 
-      viewLocation.innerHTML = '<i class="fas fa-check"></i> ARRIVAL COMPLETE';
+      viewLocation.innerphp = '<i class="fas fa-check"></i> ARRIVAL COMPLETE';
       showNotification(
         "Welcome to Darling FM Broadcasting Center! Location coordinates: 5.4839° N, 7.0333° E",
         "success"
       );
 
       setTimeout(() => {
-        viewLocation.innerHTML =
+        viewLocation.innerphp =
           '<i class="fas fa-map-marker-alt"></i> INITIATE TELEPORT';
         viewLocation.disabled = false;
       }, 3000);

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE php>
+<php lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -492,19 +492,19 @@
         cancelBtn.addEventListener('click', function() {
             // In a real application, this would redirect back to the dashboard
             // For this demo, we'll just show a message
-            this.innerHTML = '<i class="fas fa-check"></i> Returning...';
+            this.innerphp = '<i class="fas fa-check"></i> Returning...';
             this.disabled = true;
             
             setTimeout(() => {
                 alert('Returning to dashboard... (In a real app, this would redirect)');
-                // window.location.href = 'admin-dash.html';
+                // window.location.href = 'admin-dash.php';
             }, 1000);
         });
 
         // Logout button functionality
         logoutBtn.addEventListener('click', function() {
             // Show loading state
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
+            this.innerphp = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
             this.disabled = true;
             cancelBtn.disabled = true;
             
@@ -528,7 +528,7 @@
                         if (seconds <= 0) {
                             clearInterval(countdownInterval);
                             // In a real application, this would redirect to login page
-                            // window.location.href = 'login.html';
+                            // window.location.href = 'login.php';
                             showLogoutSuccess();
                         }
                     }, 1000);
@@ -539,7 +539,7 @@
         // Show logout success message
         function showLogoutSuccess() {
             // Clear the container
-            document.querySelector('.logout-container').innerHTML = `
+            document.querySelector('.logout-container').innerphp = `
                 <div class="logout-card fade-in">
                     <div style="text-align: center; padding: 40px 20px;">
                         <div style="font-size: 4rem; color: var(--success); margin-bottom: 20px;">
@@ -611,4 +611,4 @@
         setInterval(updateSessionTime, 60000);
     </script>
 </body>
-</html>
+</php>

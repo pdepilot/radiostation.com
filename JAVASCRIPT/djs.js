@@ -162,7 +162,7 @@
               this.classList.contains("play-btn") &&
               this.textContent.includes("Play Latest")
             ) {
-              this.innerHTML = '<i class="fas fa-pause"></i> Pause Mix';
+              this.innerphp = '<i class="fas fa-pause"></i> Pause Mix';
             }
           });
         });
@@ -212,7 +212,7 @@
               currentlyPlaying.classList.contains("play-btn") &&
               currentlyPlaying.textContent.includes("Pause Mix")
             ) {
-              currentlyPlaying.innerHTML =
+              currentlyPlaying.innerphp =
                 '<i class="fas fa-play"></i> Play Latest Mix';
             }
 

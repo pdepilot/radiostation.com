@@ -126,14 +126,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Render the tracks in the library
   function renderTracks() {
-    tracksGrid.innerHTML = "";
+    tracksGrid.innerphp = "";
     filteredTracks.forEach((track) => {
       const trackCard = document.createElement("div");
       trackCard.className = `track-card ${
         track.id === currentTrackId ? "active" : ""
       }`;
       trackCard.setAttribute("data-track-id", track.id);
-      trackCard.innerHTML = `
+      trackCard.innerphp = `
               <div class="track-image" style="background-image: url('${
                 track.imageUrl
               }')"></div>
@@ -189,14 +189,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Render the queue
   function renderQueue() {
-    queueItems.innerHTML = "";
+    queueItems.innerphp = "";
     queue.forEach((trackId, index) => {
       const track = tracks[trackId];
       const queueItem = document.createElement("div");
       queueItem.className = `queue-item ${
         trackId === currentTrackId ? "active" : ""
       }`;
-      queueItem.innerHTML = `
+      queueItem.innerphp = `
               <div class="queue-item-image" style="background-image: url('${
                 track.imageUrl
               }')"></div>
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function playTrack() {
     audioPlayer.play();
     isPlaying = true;
-    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    playPauseBtn.innerphp = '<i class="fas fa-pause"></i>';
 
     // Start equalizer animation
     startEqualizer();
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function pauseTrack() {
     audioPlayer.pause();
     isPlaying = false;
-    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    playPauseBtn.innerphp = '<i class="fas fa-play"></i>';
 
     // Stop equalizer animation
     stopEqualizer();

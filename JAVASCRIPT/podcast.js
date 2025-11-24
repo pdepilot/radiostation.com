@@ -54,27 +54,27 @@ document.addEventListener("DOMContentLoaded", function () {
       // Video playback
       if (heroVideo.paused) {
         heroVideo.play();
-        playHeroBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        heroPlayBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        playHeroBtn.innerphp = '<i class="fas fa-pause"></i>';
+        heroPlayBtn.innerphp = '<i class="fas fa-pause"></i> Pause';
         isHeroPlaying = true;
       } else {
         heroVideo.pause();
-        playHeroBtn.innerHTML = '<i class="fas fa-play"></i>';
-        heroPlayBtn.innerHTML = '<i class="fas fa-play"></i> Play Now';
+        playHeroBtn.innerphp = '<i class="fas fa-play"></i>';
+        heroPlayBtn.innerphp = '<i class="fas fa-play"></i> Play Now';
         isHeroPlaying = false;
       }
     } else {
       // Audio playback
       if (isHeroPlaying) {
         // Pause audio (would be connected to actual audio player)
-        playHeroBtn.innerHTML = '<i class="fas fa-play"></i>';
-        heroPlayBtn.innerHTML = '<i class="fas fa-play"></i> Play Now';
+        playHeroBtn.innerphp = '<i class="fas fa-play"></i>';
+        heroPlayBtn.innerphp = '<i class="fas fa-play"></i> Play Now';
         isHeroPlaying = false;
         stopAudioVisualizer();
       } else {
         // Play audio (would be connected to actual audio player)
-        playHeroBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        heroPlayBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        playHeroBtn.innerphp = '<i class="fas fa-pause"></i>';
+        heroPlayBtn.innerphp = '<i class="fas fa-pause"></i> Pause';
         isHeroPlaying = true;
         startAudioVisualizer();
       }
@@ -308,14 +308,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function playPodcast() {
     audioPlayer.play();
     isPlaying = true;
-    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    playPauseBtn.innerphp = '<i class="fas fa-pause"></i>';
   }
 
   // Pause the current podcast
   function pausePodcast() {
     audioPlayer.pause();
     isPlaying = false;
-    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    playPauseBtn.innerphp = '<i class="fas fa-play"></i>';
   }
 
   // Toggle play/pause
