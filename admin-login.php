@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -565,7 +565,7 @@
                 passwordInput.setAttribute('type', type);
                 
                 // Toggle eye icon
-                this.innerphp = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                this.innerhtml = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
             });
             
             // Form validation
@@ -602,7 +602,7 @@
                 if (isValid) {
                     // Simulate login process
                     const loginBtn = loginForm.querySelector('.login-btn');
-                    loginBtn.innerphp = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
+                    loginBtn.innerhtml = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
                     loginBtn.disabled = true;
                     
                     // Simulate API call
@@ -628,4 +628,4 @@
         });
     </script>
 </body>
-</php>
+</html>

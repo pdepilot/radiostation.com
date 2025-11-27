@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1212,16 +1212,16 @@
                     e.preventDefault();
                     
                     // Show saving indicator
-                    const originalText = this.innerphp;
-                    this.innerphp = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    const originalText = this.innerhtml;
+                    this.innerhtml = '<i class="fas fa-spinner fa-spin"></i> Saving...';
                     this.disabled = true;
                     
                     // Simulate API call
                     setTimeout(() => {
-                        this.innerphp = '<i class="fas fa-check"></i> Saved!';
+                        this.innerhtml = '<i class="fas fa-check"></i> Saved!';
                         
                         setTimeout(() => {
-                            this.innerphp = originalText;
+                            this.innerhtml = originalText;
                             this.disabled = false;
                         }, 1500);
                     }, 1000);
@@ -1230,4 +1230,4 @@
         });
     </script>
 </body>
-</php>
+</html>

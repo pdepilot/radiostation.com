@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1183,12 +1183,12 @@ As we celebrate this achievement, we remain committed to delivering the best pos
 
         // Populate news list
         function populateNewsList() {
-            newsList.innerphp = "";
+            newsList.innerhtml = "";
             
             newsArticles.forEach(article => {
                 const newsItem = document.createElement("div");
                 newsItem.className = "news-item";
-                newsItem.innerphp = `
+                newsItem.innerhtml = `
                     <div class="news-image" style="background-image: url('${article.image}')"></div>
                     <div class="news-info">
                         <div class="news-title">${article.title}</div>
@@ -1236,4 +1236,4 @@ As we celebrate this achievement, we remain committed to delivering the best pos
         });
     </script>
 </body>
-</php>
+</html>

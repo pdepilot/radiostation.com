@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1244,12 +1244,12 @@
 
         // Populate podcast list
         function populatePodcastList() {
-            podcastList.innerphp = "";
+            podcastList.innerhtml = "";
             
             podcasts.forEach(podcast => {
                 const podcastItem = document.createElement("div");
                 podcastItem.className = "podcast-item";
-                podcastItem.innerphp = `
+                podcastItem.innerhtml = `
                     <div class="podcast-cover" style="background-image: url('${podcast.cover}')"></div>
                     <div class="podcast-info">
                         <div class="podcast-title">${podcast.title}</div>
@@ -1296,4 +1296,4 @@
         });
     </script>
 </body>
-</php>
+</html>

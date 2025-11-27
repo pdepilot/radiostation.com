@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1193,17 +1193,17 @@
             
             // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerphp;
-            submitBtn.innerphp = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+            const originalText = submitBtn.innerhtml;
+            submitBtn.innerhtml = '<i class="fas fa-spinner fa-spin"></i> Creating...';
             submitBtn.disabled = true;
             
             // Simulate API call
             setTimeout(() => {
-                submitBtn.innerphp = '<i class="fas fa-check"></i> Created!';
+                submitBtn.innerhtml = '<i class="fas fa-check"></i> Created!';
                 
                 setTimeout(() => {
                     addAdminModal.classList.remove('active');
-                    submitBtn.innerphp = originalText;
+                    submitBtn.innerhtml = originalText;
                     submitBtn.disabled = false;
                     addAdminForm.reset();
                     
@@ -1257,8 +1257,8 @@
                 
                 if (confirm(`Are you sure you want to delete ${adminName}? This action cannot be undone.`)) {
                     // Show deleting state
-                    const originalphp = adminItem.innerphp;
-                    adminItem.innerphp = '<div style="padding: 15px; text-align: center; width: 100%;"><i class="fas fa-spinner fa-spin"></i> Deleting...</div>';
+                    const originalhtml = adminItem.innerhtml;
+                    adminItem.innerhtml = '<div style="padding: 15px; text-align: center; width: 100%;"><i class="fas fa-spinner fa-spin"></i> Deleting...</div>';
                     
                     // Simulate API call
                     setTimeout(() => {
@@ -1304,4 +1304,4 @@
         });
     </script>
 </body>
-</php>
+</html>

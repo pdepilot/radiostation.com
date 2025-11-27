@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1006,19 +1006,19 @@
           actionBtns.forEach((btn) => {
             btn.addEventListener("click", function () {
               if (this.textContent.includes("Respond")) {
-                this.innerphp = '<i class="fas fa-check"></i> Responded';
+                this.innerhtml = '<i class="fas fa-check"></i> Responded';
                 this.classList.add("responded");
                 
                 // Update status
                 const statusElement = this.closest('.feedback-item').querySelector('.feedback-status');
-                statusElement.innerphp = '<i class="fas fa-circle"></i> Responded';
+                statusElement.innerhtml = '<i class="fas fa-circle"></i> Responded';
                 statusElement.className = 'feedback-status status-responded';
               } else if (this.textContent.includes("Archive")) {
                 this.closest('.feedback-item').style.opacity = '0.5';
                 
                 // Update status
                 const statusElement = this.closest('.feedback-item').querySelector('.feedback-status');
-                statusElement.innerphp = '<i class="fas fa-circle"></i> Archived';
+                statusElement.innerhtml = '<i class="fas fa-circle"></i> Archived';
                 statusElement.className = 'feedback-status status-archived';
               }
             });
@@ -1059,4 +1059,4 @@
         });
     </script>
 </body>
-</php>
+</html>

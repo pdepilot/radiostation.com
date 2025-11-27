@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
             alert(`Reminder set for ${showName} at ${showTime}`);
             
             // Change button state
-            this.innerphp = '<i class="fas fa-bell"></i> Reminder Set';
+            this.innerhtml = '<i class="fas fa-bell"></i> Reminder Set';
             this.style.background = 'var(--accent)';
             this.style.color = 'white';
             this.style.borderColor = 'var(--accent)';
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
             listenerCount.textContent = '0';
             chatListenerCount.textContent = '0';
             
-            chatMessages.innerphp = '';
+            chatMessages.innerhtml = '';
             
             if (isListening) {
                 isListening = false;
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const now = new Date();
         const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        messageEl.innerphp = `
+        messageEl.innerhtml = `
             <div class="message-header">
                 <span class="message-author" style="color: ${isUser ? '#ff3333' : '#ffffff'}">${author}</span>
                 <span class="message-time">${timeString}</span>
@@ -426,14 +426,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 // Add social media handles
                 const socialContainer = document.getElementById('modalProfileSocial');
-                socialContainer.innerphp = '';
+                socialContainer.innerhtml = '';
                 
                 oap.social.forEach(social => {
                     const socialLink = document.createElement('a');
                     socialLink.href = social.url;
                     socialLink.target = '_blank';
                     socialLink.className = 'social-handle';
-                    socialLink.innerphp = `
+                    socialLink.innerhtml = `
                         <i class="fab fa-${social.platform}"></i>
                         <span>${social.handle}</span>
                     `;
@@ -501,7 +501,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Reset player
                 podcastProgressBar.style.width = '0%';
                 currentTimeEl.textContent = '0:00';
-                podcastPlayBtn.innerphp = '<i class="fas fa-play"></i>';
+                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
                 isPodcastPlaying = false;
                 
                 podcastModal.style.display = 'flex';
@@ -514,11 +514,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isPodcastPlaying) {
             // Pause podcast
             videoPodcast.pause();
-            podcastPlayBtn.innerphp = '<i class="fas fa-play"></i>';
+            podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
         } else {
             // Play podcast
             videoPodcast.play();
-            podcastPlayBtn.innerphp = '<i class="fas fa-pause"></i>';
+            podcastPlayBtn.innerhtml = '<i class="fas fa-pause"></i>';
         }
         
         isPodcastPlaying = !isPodcastPlaying;
@@ -549,7 +549,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Reset play button when video ends
     videoPodcast.addEventListener('ended', function() {
-        podcastPlayBtn.innerphp = '<i class="fas fa-play"></i>';
+        podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
         isPodcastPlaying = false;
     });
 
@@ -578,7 +578,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
-                newComment.innerphp = `
+                newComment.innerhtml = `
                     <div class="comment-header">
                         <span class="comment-author">You</span>
                         <span class="comment-date">Just now</span>
@@ -800,10 +800,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.stopPropagation(); 
                 if (video.paused) {
                     video.play();
-                    playPauseBtn.innerphp = '<i class="fas fa-pause"></i>';
+                    playPauseBtn.innerhtml = '<i class="fas fa-pause"></i>';
                 } else {
                     video.pause();
-                    playPauseBtn.innerphp = '<i class="fas fa-play"></i>';
+                    playPauseBtn.innerhtml = '<i class="fas fa-play"></i>';
                 }
             });
             
@@ -811,7 +811,7 @@ document.addEventListener("DOMContentLoaded", function() {
             muteBtn.addEventListener("click", (e) => {
                 e.stopPropagation(); 
                 video.muted = !video.muted;
-                muteBtn.innerphp = video.muted ? 
+                muteBtn.innerhtml = video.muted ? 
                     '<i class="fas fa-volume-mute"></i>' : 
                     '<i class="fas fa-volume-up"></i>';
                 volumeSlider.value = video.muted ? 0 : video.volume;
@@ -822,7 +822,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.stopPropagation(); 
                 video.volume = volumeSlider.value;
                 video.muted = (volumeSlider.value == 0);
-                muteBtn.innerphp = video.muted ? 
+                muteBtn.innerhtml = video.muted ? 
                     '<i class="fas fa-volume-mute"></i>' : 
                     '<i class="fas fa-volume-up"></i>';
             });
@@ -855,7 +855,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             // Update play/pause button when video ends (for looping)
             video.addEventListener("ended", () => {
-                playPauseBtn.innerphp = '<i class="fas fa-play"></i>';
+                playPauseBtn.innerhtml = '<i class="fas fa-play"></i>';
             });
             
             // Show controls when hovering over video
@@ -880,7 +880,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (isPodcastPlaying) {
                 videoPodcast.pause();
                 isPodcastPlaying = false;
-                podcastPlayBtn.innerphp = '<i class="fas fa-play"></i>';
+                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
             }
         });
     });
@@ -897,7 +897,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (isPodcastPlaying) {
                 videoPodcast.pause();
                 isPodcastPlaying = false;
-                podcastPlayBtn.innerphp = '<i class="fas fa-play"></i>';
+                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
             }
         }
         if (event.target === shareModal) {

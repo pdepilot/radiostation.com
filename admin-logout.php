@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -492,7 +492,7 @@
         cancelBtn.addEventListener('click', function() {
             // In a real application, this would redirect back to the dashboard
             // For this demo, we'll just show a message
-            this.innerphp = '<i class="fas fa-check"></i> Returning...';
+            this.innerhtml = '<i class="fas fa-check"></i> Returning...';
             this.disabled = true;
             
             setTimeout(() => {
@@ -504,7 +504,7 @@
         // Logout button functionality
         logoutBtn.addEventListener('click', function() {
             // Show loading state
-            this.innerphp = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
+            this.innerhtml = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
             this.disabled = true;
             cancelBtn.disabled = true;
             
@@ -539,7 +539,7 @@
         // Show logout success message
         function showLogoutSuccess() {
             // Clear the container
-            document.querySelector('.logout-container').innerphp = `
+            document.querySelector('.logout-container').innerhtml = `
                 <div class="logout-card fade-in">
                     <div style="text-align: center; padding: 40px 20px;">
                         <div style="font-size: 4rem; color: var(--success); margin-bottom: 20px;">
@@ -611,4 +611,4 @@
         setInterval(updateSessionTime, 60000);
     </script>
 </body>
-</php>
+</html>

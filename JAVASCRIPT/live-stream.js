@@ -461,9 +461,9 @@ document.addEventListener("DOMContentLoaded", function () {
   copyUrlBtn.addEventListener("click", function () {
     shareUrl.select();
     document.execCommand("copy");
-    copyUrlBtn.innerphp = '<i class="fas fa-check"></i> Copied!';
+    copyUrlBtn.innerhtml = '<i class="fas fa-check"></i> Copied!';
     setTimeout(() => {
-      copyUrlBtn.innerphp = '<i class="fas fa-copy"></i> Copy URL';
+      copyUrlBtn.innerhtml = '<i class="fas fa-copy"></i> Copy URL';
     }, 2000);
   });
 });

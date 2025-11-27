@@ -24,7 +24,7 @@
   box-sizing: border-box;
 }
 
-php {
+html {
   font-size: 16px;
 }
 
@@ -1040,7 +1040,7 @@ footer {
 }
 
 @media (max-width: 320px) {
-  php {
+  html {
     font-size: 14px;
   }
 

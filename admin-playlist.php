@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1286,12 +1286,12 @@
 
         // Populate playlist list
         function populatePlaylistList() {
-            playlistList.innerphp = "";
+            playlistList.innerhtml = "";
             
             playlists.forEach(playlist => {
                 const playlistItem = document.createElement("div");
                 playlistItem.className = "playlist-item";
-                playlistItem.innerphp = `
+                playlistItem.innerhtml = `
                     <div class="playlist-cover" style="background-image: url('${playlist.cover}')">
                         <div class="playlist-cover-overlay">
                             <i class="fas fa-play"></i>
@@ -1343,4 +1343,4 @@
         });
     </script>
 </body>
-</php>
+</html>
