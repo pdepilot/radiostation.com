@@ -10,7 +10,7 @@
             <div class="article-body">
                 {!! $post->body !!}
             </div>
-            @if($post->tags)
+            @if(!empty($post->tags) && is_array($post->tags))
                 <p class="tags">
                     @foreach($post->tags as $tag)
                         <span class="tag">{{ $tag }}</span>

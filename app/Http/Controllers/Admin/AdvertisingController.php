@@ -58,5 +58,4 @@ class AdvertisingController extends Controller
         return $validated;
     }
 }
-<?php
 

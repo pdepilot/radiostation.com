@@ -1,3 +1,5 @@
+<?php ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -1117,3 +1119,5 @@
     <script src="./JAVASCRIPT/index.js"></script>
   </body>
 </html>
+
+<?php ?>

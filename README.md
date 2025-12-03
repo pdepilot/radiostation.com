@@ -1,152 +1,348 @@
-# Darling FM Laravel Platform
+# Darling FM - Laravel Platform
 
-Laravel 12.x reimplementation of the Darling FM experience for studio, newsroom and backend operators.  
-The goal is to turn the static prototype into a maintainable application that runs comfortably inside XAMPP on macOS.
+A full-featured radio station management platform built with Laravel 12.x, MySQL, and modern web technologies.
 
-## Requirements
+---
 
-- PHP 8.2+ with required extensions (ships with XAMPP 8.2)
-- Composer 2.x
-- Node 20+ / npm 10+
-- MySQL 8 (bundled with XAMPP)
+## 🚀 Quick Start
 
-## Local Setup (XAMPP)
+### Prerequisites
+- **PHP 8.2+** (XAMPP 8.2+ includes this)
+- **Composer 2.x**
+- **Node.js 20+** / npm 10+
+- **MySQL 8** (bundled with XAMPP)
+- **XAMPP** for local development
 
-1. **Clone or copy** the repo into `/Applications/XAMPP/xamppfiles/htdocs/laravel-projects/DARLING FM`.
-2. **Install PHP dependencies**
-   ```bash
-   composer install
-   ```
-3. **Install & build frontend assets**
-   ```bash
-   npm install
-   npm run build   # npm run dev for hot reloads
-   ```
-4. **Environment**
-   - Duplicate `.env.example` to `.env`.
-   - Update DB credentials (typical XAMPP defaults):
-     ```
-     DB_CONNECTION=mysql
-     DB_HOST=127.0.0.1
-     DB_PORT=3306
-     DB_DATABASE=darling_fm
-     DB_USERNAME=root
-     DB_PASSWORD=
-     ```
-   - Generate an app key: `php artisan key:generate`
-5. **Database**
-   ```bash
-   php artisan migrate --seed
-   ```
-   The seeder provisions demo admins/djs, schedules, playlists, podcasts, audience metrics and revenue records.
-6. **Serve**
-   - Point Apache’s virtual host (or XAMPP’s “Alias”) to `public/`.
-   - Or run `php artisan serve` for quick testing.
+### Installation
 
-## Default Access
+```bash
+# 1. Navigate to project directory
+cd "/Applications/XAMPP/xamppfiles/htdocs/laravel-projects/DARLING FM"
 
-The seeder provisions an administrator:
+# 2. Install PHP dependencies
+composer install
 
-| Role  | Email              | Password      |
-|-------|--------------------|---------------|
-| Admin | admin@darlingfm.ng | Password123!  |
+# 3. Install Node dependencies
+npm install
 
-All newly registered users are created as DJs (role `dj`) and can be promoted from the admin dashboard.
+# 4. Copy environment file
+cp .env.example .env
 
-## Code Structure Highlights
+# 5. Generate application key
+php artisan key:generate
 
-- `app/Models` – Rich models for DJs, Shows, News, Podcasts, Playlists, Live Streams, Advertising Packages, Revenue Records, Site Settings, Audience Metrics & Contact Messages.
-- `app/Http/Controllers/Frontend` – Controllers for visitor-facing pages (`home`, `live`, `shows`, `djs`, `playlist`, `podcasts`, `news`, `contact`).
-- `app/Http/Controllers/Admin` – CRUD controllers powering the admin dashboard, playlist rotation, livestream controls, analytics, advertising and finance modules.
-- `resources/views/frontend` – Blade templates inspired by the static prototype, wired to dynamic data.
-- `resources/views/admin` – Breeze based admin templates (`x-app-layout`) with forms/tables for each module.
-- `legacy_static_site/` – archived copy of the original HTML/CSS/JS for reference.
-- `public/assets` – migrated media (CSS/JS/images/audio/video) reused by the Laravel views.
+# 6. Configure database in .env
+# DB_CONNECTION=mysql
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=darling_fm
+# DB_USERNAME=root
+# DB_PASSWORD=
 
-## Automated Tests
+# 7. Create database (via phpMyAdmin or MySQL CLI)
+# CREATE DATABASE darling_fm;
 
-`php artisan test` runs the Breeze feature suite.  
-Requests that hit frontend layouts emit benign warnings because Vite attempts to read assets during CLI rendering; the suite still exits with status `0`.
+# 8. Run migrations and seeders
+php artisan migrate --seed
 
-## XAMPP Tips
+# 9. Build frontend assets
+npm run build
+# OR for development with hot reload:
+# npm run dev
 
-- Add a vhost similar to:
-  ```
-  <VirtualHost *:80>
-      DocumentRoot "/Applications/XAMPP/xamppfiles/htdocs/laravel-projects/DARLING FM/public"
-      ServerName darlingfm.test
-      <Directory ".../DARLING FM/public">
-          AllowOverride All
-          Require all granted
-      </Directory>
-  </VirtualHost>
-  ```
-- Restart Apache after editing configs.
-- Ensure `storage/` and `bootstrap/cache/` are writable (`chmod -R 775` if needed).
+# 10. Start development server
+php artisan serve
+# Visit http://127.0.0.1:8000
+```
 
-## Next Steps
+---
 
-- Hook Laravel Echo / Pusher for real-time listener counts and chat.
--- Integrate media encoding/workflow for live streaming endpoints.
-- Harden admin auth with MFA + roles/permissions (Spatie).
-- Build REST/GraphQL endpoints for mobile clients.
+## 🔐 Default Credentials
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+After seeding, use these credentials to log in:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@darlingfm.ng` | `Password123!` |
 
-## About Laravel
+**Note**: New user registrations automatically receive the `dj` role.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📁 Project Structure
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+DARLING FM/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Frontend/          # Public-facing controllers
+│   │   ├── Admin/             # Admin dashboard controllers
+│   │   └── Auth/               # Authentication controllers
+│   ├── Models/                # Eloquent models
+│   └── Services/              # Business logic services
+├── database/
+│   ├── migrations/            # Database schema migrations
+│   ├── seeders/               # Database seeders
+│   └── factories/             # Model factories for testing
+├── public/
+│   └── assets/                # Static assets (CSS, JS, images)
+├── resources/
+│   └── views/
+│       ├── frontend/          # Public-facing Blade templates
+│       ├── admin/             # Admin dashboard templates
+│       └── layouts/           # Layout templates
+├── routes/
+│   ├── web.php                # Web routes
+│   └── api.php                # API routes (to be implemented)
+└── tests/                     # PHPUnit tests
+```
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🗺️ Navigation Guide
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Frontend Routes
 
-## Laravel Sponsors
+| Route | Description | Controller |
+|-------|-------------|------------|
+| `/` | Homepage | `HomeController@index` |
+| `/live` | Live stream page | `LiveStreamController@index` |
+| `/shows` | All shows listing | `ShowController@index` |
+| `/shows/{slug}` | Show details | `ShowController@show` |
+| `/djs` | DJs/OAPs listing | `DjController@index` |
+| `/playlist` | Playlist page | `PlaylistController@index` |
+| `/podcasts` | Podcasts listing | `PodcastController@index` |
+| `/podcasts/{slug}` | Podcast episode | `PodcastController@show` |
+| `/news` | News listing | `NewsController@index` |
+| `/news/{slug}` | News article | `NewsController@show` |
+| `/contact` | Contact page | `ContactController@index` |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Admin Routes (Requires Authentication)
 
-### Premium Partners
+All admin routes are prefixed with `/admin` and require authentication:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Route | Description | Controller |
+|-------|-------------|------------|
+| `/admin` | Admin dashboard | `DashboardController@index` |
+| `/admin/shows` | Manage shows | `AdminShowController` |
+| `/admin/djs` | Manage DJs | `AdminDjController` |
+| `/admin/news` | Manage news | `AdminNewsController` |
+| `/admin/podcasts` | Manage podcasts | `AdminPodcastController` |
+| `/admin/playlist` | Manage playlist | `AdminPlaylistController` |
+| `/admin/livestreams` | Manage live streams | `AdminLiveStreamController` |
+| `/admin/audience` | Audience analytics | `AudienceController@index` |
+| `/admin/advertising` | Advertising packages | `AdvertisingController` |
+| `/admin/revenue` | Revenue tracking | `RevenueController` |
+| `/admin/settings` | Site settings | `SettingsController` |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🧪 Testing
 
-## Code of Conduct
+### Running Tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Run all tests
+php artisan test
 
-## Security Vulnerabilities
+# Run specific test file
+php artisan test tests/Feature/ExampleTest.php
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Run with coverage
+php artisan test --coverage
+```
 
-## License
+### Testing Tools
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Full Page Testing**: Use browser DevTools, Laravel Dusk, or manual testing
+- **API Testing**: Use Postman, Insomnia, or Laravel HTTP tests
+- **Performance**: Use Lighthouse (Chrome DevTools) or PageSpeed Insights
+
+**Note**: Postman is for API testing only. For full page testing, use a browser or Laravel Dusk.
+
+---
+
+## 🎨 Frontend Development
+
+### CSS Structure
+
+The project uses page-specific CSS files located in `public/assets/css/`:
+
+- `index.css` - Base styles (loaded on all pages)
+- `contact.css` - Contact page styles
+- `djs.css` - DJs page styles
+- `live-stream.css` - Live stream page styles
+- `playlist.css` - Playlist page styles
+- `podcast.css` - Podcast pages styles
+
+Page-specific CSS is automatically loaded based on the route name.
+
+### JavaScript
+
+Main JavaScript file: `public/assets/js/index.js`
+
+### Asset Management
+
+- Static assets (CSS, JS, images) are in `public/assets/`
+- Use Laravel's `asset()` helper: `{{ asset('assets/css/index.css') }}`
+- For Vite-compiled assets, use `@vite(['resources/css/app.css'])`
+
+---
+
+## 🔧 Common Commands
+
+```bash
+# Clear application cache
+php artisan cache:clear
+
+# Clear configuration cache
+php artisan config:clear
+
+# Clear route cache
+php artisan route:clear
+
+# Clear view cache
+php artisan view:clear
+
+# Run migrations
+php artisan migrate
+
+# Rollback last migration
+php artisan migrate:rollback
+
+# Refresh database (drop all tables and re-run migrations)
+php artisan migrate:fresh --seed
+
+# Create a new migration
+php artisan make:migration create_table_name
+
+# Create a new model
+php artisan make:model ModelName
+
+# Create a new controller
+php artisan make:controller ControllerName
+
+# List all routes
+php artisan route:list
+
+# Start queue worker (if using queues)
+php artisan queue:work
+```
+
+---
+
+## 📊 Database Models
+
+### Core Models
+
+- `User` - Users (admins, DJs)
+- `Dj` - On-air personalities
+- `Show` - Radio shows
+- `LiveStream` - Live streaming sessions
+- `NewsPost` - News articles
+- `Podcast` - Podcast episodes
+- `PlaylistTrack` - Playlist entries
+- `ContactMessage` - Contact form submissions
+- `SiteSetting` - Site configuration
+- `AdvertisingPackage` - Advertising packages
+- `RevenueRecord` - Revenue tracking
+- `AudienceMetric` - Audience analytics
+
+### Relationships
+
+- `Show` belongs to `Dj`
+- `LiveStream` belongs to `Dj` and `Show`
+- All models use slugs for SEO-friendly URLs
+
+---
+
+## 🌐 XAMPP Configuration
+
+### Virtual Host Setup
+
+Add to `/Applications/XAMPP/xamppfiles/etc/httpd.conf` or create a vhost:
+
+```apache
+<VirtualHost *:80>
+    DocumentRoot "/Applications/XAMPP/xamppfiles/htdocs/laravel-projects/DARLING FM/public"
+    ServerName darlingfm.test
+    <Directory "/Applications/XAMPP/xamppfiles/htdocs/laravel-projects/DARLING FM/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+Add to `/etc/hosts`:
+```
+127.0.0.1 darlingfm.test
+```
+
+Restart Apache after configuration changes.
+
+### Permissions
+
+Ensure Laravel can write to storage and cache:
+
+```bash
+chmod -R 775 storage bootstrap/cache
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Assets Not Loading
+- Ensure `public/storage` symlink exists: `php artisan storage:link`
+- Check file permissions on `public/assets/`
+- Clear browser cache
+
+### Database Connection Issues
+- Verify MySQL is running in XAMPP
+- Check `.env` database credentials
+- Ensure database `darling_fm` exists
+
+### Route Not Found
+- Clear route cache: `php artisan route:clear`
+- Check route exists: `php artisan route:list`
+
+### 500 Errors
+- Check `storage/logs/laravel.log` for errors
+- Ensure `.env` has `APP_DEBUG=true` for development
+- Verify file permissions on `storage/` and `bootstrap/cache/`
+
+---
+
+## 📝 Development Workflow
+
+1. **Create a feature branch**: `git checkout -b feature/your-feature-name`
+2. **Make changes**: Edit code, add tests
+3. **Test locally**: Run `php artisan test` and manual testing
+4. **Commit changes**: Use descriptive commit messages
+5. **Push to remote**: `git push origin feature/your-feature-name`
+6. **Create pull request**: Merge to `freds-code` branch
+
+---
+
+## 📋 TODO & Tasks
+
+See [TODO.md](./TODO.md) for detailed frontend and backend development tasks.
+
+---
+
+## 🔗 Useful Links
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Laravel Breeze](https://laravel.com/docs/breeze)
+- [Blade Templates](https://laravel.com/docs/blade)
+- [Eloquent ORM](https://laravel.com/docs/eloquent)
+
+---
+
+## 📄 License
+
+This project is proprietary software for Darling FM.
+
+---
+
+**Last Updated**: 2024-11-28

@@ -2,32 +2,42 @@
 
 @section('content')
     <section class="container">
-        <h2 class="section-title">Headlines</h2>
-        @if($featured)
-            <article class="featured-post" style="background-image: url('{{ $featured->hero_image ?? asset('assets/images/radio1.jpg') }}')">
-                <div class="overlay">
-                    <p>{{ optional($featured->published_at)->format('M d, Y') }}</p>
-                    <h1>{{ $featured->title }}</h1>
-                    <p>{{ $featured->excerpt }}</p>
-                    <a href="{{ route('news.show', $featured) }}" class="listen-btn">Full Story</a>
-                </div>
-            </article>
-        @endif
-    </section>
+        <h2 class="section-title">LATEST NEWS & UPDATES</h2>
 
-    <section class="container">
-        <h2 class="section-title">All Stories</h2>
         <div class="posts-grid">
             @foreach($posts as $post)
-                <div class="post-card">
+                <div class="post-card" data-post-id="{{ $post->id }}">
+                    <div class="post-image" style="background-image: url('{{ $post->hero_image ?? asset('assets/images/darling studio.jpg') }}')"></div>
                     <div class="post-content">
                         <div class="post-meta">
-                            <span>{{ optional($post->published_at)->format('M d, Y') }}</span>
-                            <span>{{ $post->author_name }}</span>
+                            <span><i class="far fa-calendar"></i> {{ optional($post->published_at)->format('M d, Y') }}</span>
+                            <span><i class="far fa-comment"></i> <span class="comment-count">{{ $post->comment_count ?? 0 }}</span> Comments</span>
                         </div>
                         <h3 class="post-title">{{ $post->title }}</h3>
-                        <p class="post-excerpt">{{ Str::limit(strip_tags($post->excerpt), 140) }}</p>
-                        <a href="{{ route('news.show', $post) }}" class="action-btn">Open</a>
+                        <p class="post-excerpt">{{ $post->excerpt }}</p>
+
+                        <div class="post-actions">
+                            <div class="like-comment">
+                                <button class="action-btn like-btn">
+                                    <i class="far fa-heart"></i>
+                                    <span class="like-count">{{ rand(5, 20) }}</span>
+                                </button>
+                                <button class="action-btn comment-toggle-btn">
+                                    <i class="far fa-comment"></i> Comment
+                                </button>
+                                <button class="action-btn share-btn" data-post-title="{{ $post->title }}">
+                                    <i class="fas fa-share-alt"></i> Share
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="comments-section" style="display: none;">
+                            <div class="comment-form">
+                                <textarea class="comment-input" placeholder="Add a comment..."></textarea>
+                                <button class="comment-submit">Post Comment</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -35,4 +45,3 @@
         {{ $posts->links() }}
     </section>
 @endsection
-
