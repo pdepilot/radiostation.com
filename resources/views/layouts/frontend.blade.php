@@ -29,6 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/sticky-player.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/news-search.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('styles')
 </head>
@@ -55,11 +56,17 @@
                         <li style="display: flex; align-items: center;"><a href="{{ route('contact.index') }}" class="{{ request()->routeIs('contact.index') ? 'active' : '' }}">Contact</a></li>
                         <li style="margin-left: 40px; position: relative; display: flex; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 20px;">
-                                <!-- News Search -->
+                                <!-- Intelligent News Search -->
                                 <div class="nav-search-container" style="position: relative;">
-                                    <input type="text" id="navNewsSearch" placeholder="Search news..." style="padding: 10px 40px 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; color: var(--light); outline: none; width: 200px; font-size: 0.9rem; transition: width 0.3s;" onfocus="this.style.width='250px'" onblur="this.style.width='200px'">
+                                    <input type="text" 
+                                           id="navNewsSearch" 
+                                           placeholder="Search news, presenters, dates..." 
+                                           autocomplete="off"
+                                           style="padding: 10px 40px 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; color: var(--light); outline: none; width: 200px; font-size: 0.9rem; transition: width 0.3s, border-color 0.3s;" 
+                                           onfocus="this.style.width='280px'; this.style.borderColor='var(--accent)'" 
+                                           onblur="this.style.width='200px'; this.style.borderColor='var(--glass-border)'">
                                     <i class="fas fa-search" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none;"></i>
-                                    <div id="navSearchResults" style="display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 5px; background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 10px; max-height: 400px; overflow-y: auto; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 10px;"></div>
+                                    <div id="navSearchResults" class="nav-search-results" style="display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; min-width: 350px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 12px; max-height: 500px; overflow-y: auto; z-index: 10000; box-shadow: 0 15px 40px rgba(0,0,0,0.6); padding: 0; opacity: 0; transform: translateY(-10px); transition: opacity 0.2s ease, transform 0.2s ease;"></div>
                                 </div>
                                 @guest
                                     <a href="{{ route('login') }}" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); color: var(--light); text-decoration: none; transition: all 0.3s; font-size: 1.1rem;" title="Login or Register" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--glass)'">

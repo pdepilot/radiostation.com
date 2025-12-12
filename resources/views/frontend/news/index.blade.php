@@ -6,7 +6,21 @@
 
 @section('content')
     <section class="container" style="padding-top: 120px;">
-        <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">LATEST NEWS & UPDATES</h2>
+        <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">
+            @if(!empty($searchQuery))
+                SEARCH RESULTS: "{{ $searchQuery }}"
+            @else
+                LATEST NEWS & UPDATES
+            @endif
+        </h2>
+        
+        @if(!empty($searchQuery))
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="{{ route('news.index') }}" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">
+                    <i class="fas fa-arrow-left"></i> Back to all news
+                </a>
+            </div>
+        @endif
 
         <div class="posts-grid">
             @foreach($posts as $post)
