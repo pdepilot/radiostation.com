@@ -48,7 +48,7 @@ Route::get('/api/news/search', [NewsController::class, 'search'])->name('news.se
 Route::get('/api/listener-count', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'getListenerCount'])->name('api.listener-count');
 Route::post('/api/listener/track', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'trackListener'])->name('api.listener.track');
 Route::post('/api/listener/reset', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'resetListenerCount'])->name('api.listener.reset');
-Route::get('/api/news/search', [NewsController::class, 'search'])->name('news.search');
+Route::get('/api/server-time', [\App\Http\Controllers\Api\ServerTimeController::class, 'index'])->name('api.server-time');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
@@ -106,44 +106,8 @@ Route::middleware('auth')->group(function () {
 // ========================
 // ADMIN ROUTES (protected)
 // ========================
-Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('shows', AdminShowController::class)->except(['show']);
-    Route::resource('djs', AdminDjController::class)->except(['show']);
-    Route::resource('news', AdminNewsController::class)->except(['show']);
-    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
-    Route::get('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('users.show');
-    Route::delete('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
-
-    // API Routes for Dashboard
-    Route::get('api/listener-analytics', [\App\Http\Controllers\Admin\DashboardController::class, 'getListenerAnalytics'])->name('api.listener-analytics');
-    Route::post('api/generate-sample-data', [\App\Http\Controllers\Admin\DashboardController::class, 'generateSampleData'])->name('api.generate-sample-data');
-    // Podcasts removed - Route::resource('podcasts', AdminPodcastController::class)->except(['show']);
-
-    Route::resource('playlist', AdminPlaylistController::class)->only(['index', 'store', 'destroy']);
-    Route::resource('livestreams', AdminLiveStreamController::class)->only(['index', 'update']);
-
-    // Removed unnecessary analytics pages - keeping only CRUD essentials
-    // Route::resource('audience', AudienceController::class)->only(['index']);
-    // Route::resource('advertising', AdvertisingController::class)->except(['show', 'edit', 'create']);
-    // Route::resource('revenue', RevenueController::class)->only(['index', 'store', 'update']);
-
-    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::post('settings', [SettingsController::class, 'store'])->name('settings.store');
-
-    // Adverts Management
-    Route::resource('adverts', \App\Http\Controllers\Admin\AdvertisementController::class)->except(['show']);
-
-    // Comments Management
-    Route::get('comments', [\App\Http\Controllers\Admin\CommentController::class, 'index'])->name('comments.index');
-    Route::post('comments/{comment}/approve', [\App\Http\Controllers\Admin\CommentController::class, 'approve'])->name('comments.approve');
-    Route::post('comments/{comment}/reject', [\App\Http\Controllers\Admin\CommentController::class, 'reject'])->name('comments.reject');
-    Route::delete('comments/{comment}', [\App\Http\Controllers\Admin\CommentController::class, 'destroy'])->name('comments.destroy');
-
-    // Events Management
-    Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->except(['show']);
-});
+// Admin routes are now handled by Filament at /admin
+// Old admin routes removed - using Filament 3 panel instead
 
 // ========================
 // AUTH ROUTES (OTP-based authentication)

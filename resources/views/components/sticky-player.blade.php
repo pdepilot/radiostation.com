@@ -1,4 +1,4 @@
-{{-- Sticky Mini Player Component - Always visible at bottom --}}
+{{-- Sticky Mini Player Component - HLS Live Stream --}}
 <div id="stickyPlayer" class="sticky-player" style="display: none;">
     <div class="sticky-player-content">
         {{-- Play/Pause Button --}}
@@ -19,6 +19,6 @@
     </div>
 </div>
 
-{{-- Hidden Audio Element - Single Global Instance --}}
-<audio id="globalAudioPlayer" preload="none" style="display: none;"></audio>
-
+{{-- Hidden Video Element for HLS - Single Global Instance --}}
+{{-- HLS.js will use this element for playback --}}
+<video id="hlsLivePlayer" preload="auto" style="display: none;" crossorigin="anonymous"></video>

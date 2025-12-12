@@ -354,7 +354,7 @@
     @include('components.sticky-player')
     
     {{-- Persistent Audio Player Script - Must load before other scripts --}}
-    <script src="{{ asset('assets/js/persistent-audio.js') }}" defer></script>
+    <script src="{{ asset('assets/js/hls-live-player.js') }}" defer></script>
 </body>
 </html>
 
