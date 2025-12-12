@@ -20,20 +20,21 @@ class LiveStreamController extends Controller
 
     public function update(Request $request, LiveStream $livestream): RedirectResponse
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:150'],
-            'description' => ['nullable', 'string'],
-            'status' => ['required', Rule::in(['scheduled', 'live', 'offline'])],
-            'stream_url' => ['nullable', 'url'],
-            'chat_enabled' => ['nullable', 'boolean'],
-            'listener_count' => ['nullable', 'integer'],
-        ]);
-        $data['chat_enabled'] = $request->boolean('chat_enabled');
+        try {
+            $data = $request->validate([
+                'title' => ['required', 'string', 'max:150'],
+                'description' => ['nullable', 'string'],
+                'status' => ['required', Rule::in(['scheduled', 'live', 'offline'])],
+                'stream_url' => ['nullable', 'url'],
+                'listener_count' => ['nullable', 'integer', 'min:0'],
+            ]);
 
-        $livestream->update($data);
+            $livestream->update($data);
 
-        return back()->with('status', 'Stream updated.');
+            return back()->with('status', 'Stream updated.');
+        } catch (\Exception $e) {
+            \Log::error('Live stream update error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to update stream. Please try again.']);
+        }
     }
 }
-<?php
-

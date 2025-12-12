@@ -16,6 +16,8 @@ return new class extends Migration
             $table->date('captured_for')->unique();
             $table->unsignedInteger('peak_listeners')->default(0);
             $table->unsignedInteger('average_listeners')->default(0);
+            $table->unsignedInteger('total_listening_sessions')->default(0);
+            $table->unsignedInteger('unique_listeners')->default(0);
             $table->unsignedInteger('new_followers')->default(0);
             $table->unsignedInteger('chat_messages')->default(0);
             $table->unsignedInteger('podcast_streams')->default(0);

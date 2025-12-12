@@ -14,8 +14,8 @@ use App\Http\Controllers\Admin\ShowController as AdminShowController;
 
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DjController;
+use App\Http\Controllers\Frontend\EventController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\LiveStreamController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\PlaylistController;
 use App\Http\Controllers\Frontend\PodcastController;
@@ -29,24 +29,58 @@ use Illuminate\Support\Facades\Route;
 // ========================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/live', [LiveStreamController::class, 'index'])->name('live');
-
 Route::get('/shows', [ShowController::class, 'index'])->name('shows.index');
 Route::get('/shows/{show:slug}', [ShowController::class, 'show'])->name('shows.show');
 
-Route::get('/djs', [DjController::class, 'index'])->name('djs.index');
-Route::get('/djs/{dj:slug}', [DjController::class, 'show'])->name('djs.show');
+// DJs page removed - using on-air personalities section on home page instead
+// Route::get('/djs', [DjController::class, 'index'])->name('djs.index');
+Route::get('/djs/{dj:slug}', [DjController::class, 'show'])->name('djs.show'); // OAP Profile Page
 
-Route::get('/playlist', [PlaylistController::class, 'index'])->name('playlist.index');
+// Route::get('/playlist', [PlaylistController::class, 'index'])->name('playlist.index');
 
-Route::get('/podcasts', [PodcastController::class, 'index'])->name('podcasts.index');
-Route::get('/podcasts/{podcast:slug}', [PodcastController::class, 'show'])->name('podcasts.show');
+// Commented out for now - might be needed in the future
+// Route::get('/podcasts', [PodcastController::class, 'index'])->name('podcasts.index');
+// Route::get('/podcasts/{podcast:slug}', [PodcastController::class, 'show'])->name('podcasts.show');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{newsPost:slug}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/api/news/search', [NewsController::class, 'search'])->name('news.search');
+Route::get('/api/listener-count', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'getListenerCount'])->name('api.listener-count');
+Route::post('/api/listener/track', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'trackListener'])->name('api.listener.track');
+Route::post('/api/listener/reset', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'resetListenerCount'])->name('api.listener.reset');
+Route::get('/api/news/search', [NewsController::class, 'search'])->name('news.search');
+
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+
+// Comments
+Route::post('/news/{newsPost:slug}/comments', [\App\Http\Controllers\Frontend\CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [\App\Http\Controllers\Frontend\CommentController::class, 'destroy'])->middleware('auth')->name('comments.destroy');
+
+// Likes (protected with CSRF)
+Route::middleware('web')->group(function () {
+    Route::post('/api/news/{newsPost}/like', [\App\Http\Controllers\Frontend\LikeController::class, 'toggle'])->name('likes.toggle');
+    Route::get('/api/news/{newsPost}/like/check', [\App\Http\Controllers\Frontend\LikeController::class, 'check'])->name('likes.check');
+});
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Policy Pages
+Route::get('/privacy', [\App\Http\Controllers\Frontend\PolicyController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [\App\Http\Controllers\Frontend\PolicyController::class, 'terms'])->name('terms');
+Route::get('/faq', [\App\Http\Controllers\Frontend\PolicyController::class, 'faq'])->name('faq');
+Route::get('/feedback', [\App\Http\Controllers\Frontend\PolicyController::class, 'feedback'])->name('feedback');
+
+// Live Chat API
+Route::get('/api/live-chat', [\App\Http\Controllers\Frontend\LiveChatController::class, 'index'])->name('live-chat.index');
+Route::post('/api/live-chat', [\App\Http\Controllers\Frontend\LiveChatController::class, 'store'])->name('live-chat.store');
+
+// Adverts API
+Route::get('/api/adverts', [\App\Http\Controllers\Frontend\AdvertController::class, 'getActiveAdverts'])->name('adverts.index');
+Route::post('/api/adverts/{advert}/view', [\App\Http\Controllers\Frontend\AdvertController::class, 'trackView'])->name('adverts.view');
+Route::post('/api/adverts/{advert}/click', [\App\Http\Controllers\Frontend\AdvertController::class, 'trackClick'])->name('adverts.click');
+Route::post('/api/adverts/{advert}/close', [\App\Http\Controllers\Frontend\AdvertController::class, 'closeAdvert'])->name('adverts.close');
 
 // ========================
 // AUTHENTICATED USER ROUTES
@@ -55,31 +89,70 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Email Verification Routes
+    Route::get('verify-email', [\App\Http\Controllers\Auth\EmailVerificationPromptController::class, '__invoke'])
+        ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', [\App\Http\Controllers\Auth\VerifyEmailController::class, '__invoke'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [\App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
 });
 
 // ========================
 // ADMIN ROUTES (protected)
 // ========================
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('shows', AdminShowController::class)->except(['show']);
     Route::resource('djs', AdminDjController::class)->except(['show']);
     Route::resource('news', AdminNewsController::class)->except(['show']);
-    Route::resource('podcasts', AdminPodcastController::class)->except(['show']);
+    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('users.show');
+    Route::delete('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+
+    // API Routes for Dashboard
+    Route::get('api/listener-analytics', [\App\Http\Controllers\Admin\DashboardController::class, 'getListenerAnalytics'])->name('api.listener-analytics');
+    Route::post('api/generate-sample-data', [\App\Http\Controllers\Admin\DashboardController::class, 'generateSampleData'])->name('api.generate-sample-data');
+    // Podcasts removed - Route::resource('podcasts', AdminPodcastController::class)->except(['show']);
 
     Route::resource('playlist', AdminPlaylistController::class)->only(['index', 'store', 'destroy']);
     Route::resource('livestreams', AdminLiveStreamController::class)->only(['index', 'update']);
 
-    Route::resource('audience', AudienceController::class)->only(['index']);
-    Route::resource('advertising', AdvertisingController::class)->except(['show', 'edit', 'create']);
-    Route::resource('revenue', RevenueController::class)->only(['index', 'store', 'update']);
+    // Removed unnecessary analytics pages - keeping only CRUD essentials
+    // Route::resource('audience', AudienceController::class)->only(['index']);
+    // Route::resource('advertising', AdvertisingController::class)->except(['show', 'edit', 'create']);
+    // Route::resource('revenue', RevenueController::class)->only(['index', 'store', 'update']);
 
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingsController::class, 'store'])->name('settings.store');
+
+    // Adverts Management
+    Route::resource('adverts', \App\Http\Controllers\Admin\AdvertisementController::class)->except(['show']);
+
+    // Comments Management
+    Route::get('comments', [\App\Http\Controllers\Admin\CommentController::class, 'index'])->name('comments.index');
+    Route::post('comments/{comment}/approve', [\App\Http\Controllers\Admin\CommentController::class, 'approve'])->name('comments.approve');
+    Route::post('comments/{comment}/reject', [\App\Http\Controllers\Admin\CommentController::class, 'reject'])->name('comments.reject');
+    Route::delete('comments/{comment}', [\App\Http\Controllers\Admin\CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Events Management
+    Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->except(['show']);
 });
 
 // ========================
-// AUTH ROUTES (login, register, etc)
+// AUTH ROUTES (OTP-based authentication)
 // ========================
-require __DIR__.'/auth.php';
+Route::get('/login', [\App\Http\Controllers\Auth\OtpController::class, 'showLogin'])->name('login');
+Route::post('/login', [\App\Http\Controllers\Auth\OtpController::class, 'login'])->name('login.post');
+Route::get('/register', [\App\Http\Controllers\Auth\OtpController::class, 'showRegister'])->name('register');
+Route::post('/register', [\App\Http\Controllers\Auth\OtpController::class, 'register'])->name('register.post');
+Route::get('/verify-otp', [\App\Http\Controllers\Auth\OtpController::class, 'showVerify'])->name('otp.verify');
+Route::post('/verify-otp', [\App\Http\Controllers\Auth\OtpController::class, 'verify'])->name('otp.verify.post');
+Route::post('/resend-otp', [\App\Http\Controllers\Auth\OtpController::class, 'resendOtp'])->name('otp.resend');
+Route::post('/logout', [\App\Http\Controllers\Auth\OtpController::class, 'logout'])->name('logout');

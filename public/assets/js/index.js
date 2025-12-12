@@ -1,48 +1,73 @@
-// Main radio stream URL (24/7 broadcast)
-const MAIN_STREAM_URL = "https://your-radioserver.com:8000/stream";
+// Main radio stream URL (24/7 broadcast) - Lower port = primary/default listener endpoint
+const MAIN_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
 
 // OAP Live Stream URL (for special broadcasts)
-const OAP_STREAM_URL = "https://your-radioserver.com:8000/live";
+const OAP_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
 
-// Backup stream URL (optional)
-const BACKUP_STREAM_URL = "https://your-backup-server.com:8000/stream";
+// Backup stream URL (Higher port = secondary/failover)
+const BACKUP_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
 
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Prevent pull-to-refresh duplicate navbar
+    let lastScrollTop = 0;
+    let isScrolling = false;
+    
     // Mobile menu toggle
     const mobileMenu = document.querySelector(".mobile-menu");
     const desktopNav = document.querySelector(".desktop-nav");
 
-    mobileMenu.addEventListener("click", function () {
-        desktopNav.style.display =
-            desktopNav.style.display === "flex" ? "none" : "flex";
-    });
+    if (mobileMenu && desktopNav) {
+        mobileMenu.addEventListener("click", function () {
+            desktopNav.style.display =
+                desktopNav.style.display === "flex" ? "none" : "flex";
+        });
+    }
 
     // Handle window resize
     window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 768 && desktopNav) {
             desktopNav.style.display = "flex";
-        } else {
+        } else if (desktopNav) {
             desktopNav.style.display = "none";
         }
     });
 
-    // On-scroll navbar effect
+    // On-scroll navbar effect - prevent duplicate
     window.addEventListener("scroll", function() {
         const header = document.getElementById("main-header");
-        if (window.scrollY > 50) {
+        if (!header) return;
+        
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Prevent duplicate navbar on pull-to-refresh
+        if (scrollTop < 0) {
+            return;
+        }
+        
+        if (scrollTop > 50) {
             header.classList.add("scrolled");
         } else {
             header.classList.remove("scrolled");
         }
-    });
+        
+        lastScrollTop = scrollTop;
+    }, { passive: true });
+    
+    // Prevent overscroll behavior that causes duplicate navbar
+    document.body.style.overscrollBehaviorY = 'contain';
+    document.documentElement.style.overscrollBehaviorY = 'contain';
 
     // Listen button functionality
     const listenBtn = document.querySelector('.listen-btn');
-    listenBtn.addEventListener('click', function() {
-        alert('Connecting to live stream...');
-        // In a real implementation, this would connect to the live stream
-    });
+    if (listenBtn) {
+        listenBtn.addEventListener('click', function() {
+            if (typeof showInfo === 'function') {
+                showInfo('Connecting to live stream...');
+            }
+            // In a real implementation, this would connect to the live stream
+        });
+    }
 
     // Remind button functionality
     const remindBtns = document.querySelectorAll('.remind-btn');
@@ -51,7 +76,11 @@ document.addEventListener("DOMContentLoaded", function() {
             const showName = this.closest('.show-card').querySelector('.show-name').textContent;
             const showTime = this.closest('.show-card').querySelector('.show-time span').textContent;
             
-            alert(`Reminder set for ${showName} at ${showTime}`);
+            if (typeof showSuccess === 'function') {
+                showSuccess(`Reminder set for ${showName} at ${showTime}`);
+            } else if (window.notifications) {
+                window.notifications.success(`Reminder set for ${showName} at ${showTime}`);
+            }
             
             // Change button state
             this.innerhtml = '<i class="fas fa-bell"></i> Reminder Set';
@@ -118,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
             liveStream.src = OAP_STREAM_URL;
             
             // For a real implementation, OAP url will be here when i get it
-            console.log("OAP stream started - connecting to:", OAP_STREAM_URL);
+            // OAP stream started - connecting to stream
             
             isStreaming = true;
             updateStreamUI();
@@ -146,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
             liveStream.pause();
             liveStream.src = '';
             
-            console.log("OAP stream stopped");
+            // OAP stream stopped
             
             isStreaming = false;
             updateStreamUI();
@@ -196,11 +225,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     updateListenerCount();
                     
                     addChatMessage('System', 'You joined the live stream', true);
-                    console.log("Connected to OAP live stream");
+                    // Connected to OAP live stream
                 })
                 .catch(e => {
                     console.error("Error connecting to live stream:", e);
-                    alert("Unable to connect to the live stream. Please try again.");
+                    if (typeof showError === 'function') {
+                        showError("Unable to connect to the live stream. Please try again.");
+                    } else if (window.notifications) {
+                        window.notifications.error("Unable to connect to the live stream. Please try again.");
+                    }
                 });
         }
     });
@@ -242,7 +275,13 @@ document.addEventListener("DOMContentLoaded", function() {
             streamDescriptionInput.value = description;
         }
         
-        alert('Stream information updated!');
+        if (typeof showSuccess === 'function') {
+            showSuccess('Stream information updated!');
+        } else if (window.notifications) {
+            window.notifications.success('Stream information updated!');
+        } else {
+            alert('Stream information updated!');
+        }
     });
     
     // Chat functionality
@@ -605,9 +644,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentPostTitle = "";
 
     shareButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            currentPostTitle = this.getAttribute("data-post-title");
-            shareModal.style.display = "flex";
+        button.addEventListener("click", function (e) {
+            e.stopPropagation();
+            currentPostTitle = this.getAttribute("data-post-title") || "";
+            const postUrl = this.getAttribute("data-post-url") || window.location.href;
+            window.currentShareUrl = postUrl;
+            if (shareModal) {
+                shareModal.style.display = "flex";
+            }
         });
     });
 
@@ -617,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function() {
     shareOptions.forEach((option) => {
         option.addEventListener("click", function() {
             const platform = this.getAttribute("data-platform");
-            const url = encodeURIComponent(window.location.href);
+            const url = encodeURIComponent(window.currentShareUrl || window.location.href);
             const text = encodeURIComponent(`Check out this news: ${currentPostTitle}`);
             
             let shareUrl = "";
@@ -631,7 +675,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     break;
                 case "instagram":
                     // Instagram doesn't have a direct sharing API for web
-                    alert("To share on Instagram, copy the link and paste it in your Instagram story or post.");
+                    if (typeof showInfo === 'function') {
+                        showInfo("To share on Instagram, copy the link and paste it in your Instagram story or post.");
+                    } else if (window.notifications) {
+                        window.notifications.info("To share on Instagram, copy the link and paste it in your Instagram story or post.");
+                    }
                     return;
                 case "whatsapp":
                     shareUrl = `https://api.whatsapp.com/send?text=${text} ${url}`;
@@ -676,22 +724,31 @@ document.addEventListener("DOMContentLoaded", function() {
         const message = document.getElementById('message').value;
         
         if (name && email && subject && message) {
-            alert('Thank you for your feedback! We appreciate your input.');
+            if (typeof showSuccess === 'function') {
+                showSuccess('Thank you for your feedback! We appreciate your input.');
+            } else if (window.notifications) {
+                window.notifications.success('Thank you for your feedback! We appreciate your input.');
+            }
             // In a real application, you would send this data to a server
             document.getElementById('name').value = '';
             document.getElementById('email').value = '';
             document.getElementById('subject').value = '';
             document.getElementById('message').value = '';
         } else {
-            alert('Please fill in all fields before submitting.');
+            if (typeof showError === 'function') {
+                showError('Please fill in all fields before submitting.');
+            } else if (window.notifications) {
+                window.notifications.error('Please fill in all fields before submitting.');
+            }
         }
     });
 
     // Enhanced Ads Functionality
-    initImageSliders();
-    
-    // Initialize video players
-    initVideoPlayers();
+    // Initialize after DOM is fully ready
+    setTimeout(() => {
+        initImageSliders();
+        initVideoPlayers();
+    }, 300);
     
     // Close ad functionality
     const closeAdButtons = document.querySelectorAll(".close-ad");
@@ -709,7 +766,7 @@ document.addEventListener("DOMContentLoaded", function() {
     videoAds.forEach(video => {
         video.muted = true;
         video.play().catch(e => {
-            console.log("Autoplay prevented:", e);
+            // Autoplay prevented
         });
     });
     
@@ -720,23 +777,41 @@ document.addEventListener("DOMContentLoaded", function() {
         sliders.forEach(slider => {
             const slides = slider.querySelector(".image-slides");
             const dots = slider.querySelectorAll(".slider-dot");
+            if (!slides || !dots || dots.length === 0) return;
+            
             let currentSlide = 0;
             let slideInterval;
+            const slideCount = dots.length;
+            
+            // Set slides container width dynamically
+            slides.style.width = `${slideCount * 100}%`;
             
             // Function to show a specific slide
             function showSlide(index) {
-                slides.style.transform = `translateX(-${index * 25}%)`;
+                if (index < 0 || index >= slideCount || !slides) return;
+                
+                const translateX = -(index * 100);
+                slides.style.transform = `translateX(${translateX}%)`;
                 
                 // Update active dot
-                dots.forEach(dot => dot.classList.remove("active"));
-                dots[index].classList.add("active");
+                dots.forEach((dot, i) => {
+                    dot.classList.remove("active");
+                    if (i === index) {
+                        dot.classList.add("active");
+                        dot.style.background = "white";
+                        dot.style.transform = "scale(1.3)";
+                    } else {
+                        dot.style.background = "rgba(255, 255, 255, 0.6)";
+                        dot.style.transform = "scale(1)";
+                    }
+                });
                 
                 currentSlide = index;
             }
             
             // Function to go to next slide
             function nextSlide() {
-                let nextIndex = (currentSlide + 1) % 4;
+                let nextIndex = (currentSlide + 1) % slideCount;
                 showSlide(nextIndex);
             }
             
@@ -760,6 +835,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 clearInterval(slideInterval);
                 startInterval();
             }
+            
+            // Initialize first slide
+            showSlide(0);
             
             // Start the slider
             startInterval();
@@ -792,7 +870,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Start video muted and autoplay
             video.muted = true;
             video.play().catch(e => {
-                console.log("Autoplay prevented:", e);
+                // Autoplay prevented
             });
             
             // Play/Pause functionality
@@ -919,8 +997,19 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // Reveal immediately on load and on scroll
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', revealOnScroll);
+    
+    // Also reveal immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', revealOnScroll);
+    } else {
+        revealOnScroll();
+    }
+    
+    // Force reveal after a short delay to ensure all elements are rendered
+    setTimeout(revealOnScroll, 100);
 });
 
 
@@ -945,3 +1034,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+

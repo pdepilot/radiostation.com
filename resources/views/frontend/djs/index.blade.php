@@ -8,12 +8,8 @@
     <div class="main-content">
         <div class="container">
             <!-- Page Header -->
-            <div class="page-header">
-                <h1>REVOLUTIONARY DJS</h1>
-                <p>
-                    Meet the visionary artists shaping the future of sound. Experience
-                    their unique styles and groundbreaking mixes.
-                </p>
+            <div class="page-header" style="text-align: center; margin-bottom: 60px;">
+                <h1 class="section-title">REVOLUTIONARY DJS</h1>
             </div>
 
             @if($djs->count() > 0)
@@ -39,10 +35,6 @@
                                 <div class="stat">
                                     <div class="stat-value">{{ $featuredDj->shows->count() ?? 0 }}</div>
                                     <div class="stat-label">Shows</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-value">4.9</div>
-                                    <div class="stat-label">Rating</div>
                                 </div>
                             </div>
                             <p class="dj-bio">
@@ -125,10 +117,6 @@
                                         <div class="dj-card-stat">
                                             <div class="dj-card-stat-value">{{ $dj->shows->count() ?? 0 }}</div>
                                             <div class="dj-card-stat-label">Shows</div>
-                                        </div>
-                                        <div class="dj-card-stat">
-                                            <div class="dj-card-stat-value">4.8</div>
-                                            <div class="dj-card-stat-label">Rating</div>
                                         </div>
                                     </div>
                                     <div class="dj-card-actions">

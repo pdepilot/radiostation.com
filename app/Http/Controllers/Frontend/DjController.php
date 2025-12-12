@@ -13,4 +13,15 @@ class DjController extends Controller
             'djs' => Dj::orderByDesc('is_featured')->paginate(12),
         ]);
     }
+
+    public function show(Dj $dj)
+    {
+        return view('frontend.djs.show', [
+            'dj' => $dj->load('shows'),
+            'related' => Dj::where('id', '!=', $dj->id)
+                ->where('is_featured', 1)
+                ->take(4)
+                ->get(),
+        ]);
+    }
 }

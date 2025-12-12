@@ -1,128 +1,179 @@
 @extends('layouts.frontend', ['title' => 'Darling FM • Show Schedule'])
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/shows.css') }}">
+<style>
+    .shows-page {
+        padding-top: 120px;
+        min-height: 100vh;
+    }
+    
+    .shows-page-header {
+        text-align: center;
+        margin-bottom: 60px;
+        padding: 0 20px;
+    }
+    
+    .shows-page-header h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+    
+    .shows-simple-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        padding: 0 20px;
+        margin-bottom: 60px;
+    }
+    
+    .show-simple-card {
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid var(--glass-border);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .show-simple-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(255, 0, 0, 0.2);
+    }
+    
+    .show-simple-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .show-simple-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        background: var(--accent);
+        color: white;
+    }
+    
+    .show-simple-content {
+        padding: 25px;
+    }
+    
+    .show-simple-title {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--accent);
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+    
+    .show-simple-host {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .show-simple-description {
+        color: var(--light);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .show-simple-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid var(--glass-border);
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    
+    .show-simple-schedule {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    @media (max-width: 768px) {
+        .shows-page-header h1 {
+            font-size: 2rem;
+        }
+        
+        .shows-simple-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+</style>
 @endpush
 
 @section('content')
-    <div class="main-content">
+    <div class="shows-page">
         <div class="container">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1>Discover Our Shows</h1>
-                <p>Explore our diverse collection of radio shows, from music mixes to talk shows and everything in between.</p>
+            <div class="shows-page-header">
+                <h1 class="section-title">Discover Our Shows</h1>
             </div>
             
             @if($shows->count() > 0)
-                <!-- Featured Show -->
-                <div class="featured-show">
-                    @php($featured = $shows->first())
-                    <div class="featured-image" style="background-image: url('{{ $featured->hero_image ?? asset('assets/images/studio.jpg') }}')"></div>
-                    <div class="featured-content">
-                        <div class="featured-badge">Featured Show</div>
-                        <h2 class="featured-title">{{ $featured->title }}</h2>
-                        <p class="featured-description">{{ $featured->description ?? 'Join us for an amazing radio experience.' }}</p>
-                        <div class="featured-meta">
-                            <div class="meta-item">
-                                <div class="meta-value">{{ number_format($featured->listener_count ?? 0) }}</div>
-                                <div class="meta-label">Listeners</div>
-                            </div>
-                            <div class="meta-item">
-                                <div class="meta-value">{{ $shows->count() }}</div>
-                                <div class="meta-label">Shows</div>
-                            </div>
-                            <div class="meta-item">
-                                <div class="meta-value">4.9</div>
-                                <div class="meta-label">Rating</div>
-                            </div>
-                        </div>
-                        <div class="show-actions">
-                            <a href="{{ route('shows.show', $featured) }}" class="action-btn primary">
-                                <i class="fas fa-play"></i>
-                                View Details
-                            </a>
-                            <a href="{{ route('live') }}" class="action-btn follow-btn">
-                                <i class="fas fa-heart"></i>
-                                Listen Live
-                            </a>
-                            <button class="action-btn share-btn" data-show="{{ $featured->title }}">
-                                <i class="fas fa-share-alt"></i>
-                                Share
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Show Filters -->
-                <div class="show-filters">
-                    <div class="filter-group">
-                        <button class="filter-btn active" data-category="all">All Shows</button>
-                        <button class="filter-btn" data-category="music">Music</button>
-                        <button class="filter-btn" data-category="talk">Talk</button>
-                        <button class="filter-btn" data-category="news">News</button>
-                        <button class="filter-btn" data-category="sports">Sports</button>
-                        <button class="filter-btn" data-category="culture">Culture</button>
-                    </div>
-                    <div class="search-box">
-                        <input type="text" placeholder="Search shows..." id="showSearch">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-                
-                <!-- Shows Grid -->
-                <div class="shows-grid">
+                <div class="shows-simple-grid">
                     @foreach($shows as $show)
-                        <div class="show-card" data-category="{{ strtolower($show->genre ?? 'music') }}">
-                            <div class="show-image" style="background-image: url('{{ $show->hero_image ?? asset('assets/images/studio.jpg') }}')">
+                        <a href="{{ route('shows.show', $show) }}" class="show-simple-card">
+                            <div class="show-simple-image" style="background-image: url('{{ $show->hero_image ?? asset('assets/images/studio.jpg') }}')">
                                 @if($show->is_featured ?? false)
-                                    <div class="show-badge badge-popular">FEATURED</div>
+                                    <div class="show-simple-badge">FEATURED</div>
                                 @elseif($loop->first)
-                                    <div class="show-badge badge-live">LIVE</div>
-                                @else
-                                    <div class="show-badge badge-new">NEW</div>
+                                    <div class="show-simple-badge" style="background: #00ff00; color: #000;">LIVE</div>
                                 @endif
                             </div>
-                            <div class="show-content">
-                                <div class="show-title">
-                                    <span>{{ $show->title }}</span>
-                                    @if($loop->first)
-                                        <div class="live-indicator"></div>
-                                    @endif
+                            <div class="show-simple-content">
+                                <h3 class="show-simple-title">{{ $show->title }}</h3>
+                                <div class="show-simple-host">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>{{ $show->dj?->stage_name ?? $show->dj?->name ?? 'TBA' }}</span>
                                 </div>
-                                <div class="show-host">
-                                    <div class="host-avatar">{{ substr($show->dj?->name ?? 'DJ', 0, 2) }}</div>
-                                    <span class="host-name">{{ $show->dj?->stage_name ?? $show->dj?->name ?? 'TBA' }}</span>
-                                </div>
-                                <p class="show-description">{{ Str::limit($show->description ?? 'Amazing radio show', 120) }}</p>
-                                <div class="show-meta">
-                                    <span>{{ $show->day_of_week }} {{ $show->start_time }} - {{ $show->end_time }}</span>
-                                    <span>{{ number_format($show->listener_count ?? 0) }} listeners</span>
-                                </div>
-                                <div class="show-actions">
-                                    <a href="{{ route('shows.show', $show) }}" class="action-btn primary">
-                                        <i class="fas fa-play"></i>
-                                        View Details
-                                    </a>
-                                    <button class="action-btn follow-btn" data-host="{{ $show->dj?->name }}">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <button class="action-btn share-btn" data-show="{{ $show->title }}">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
+                                <p class="show-simple-description">{{ $show->description ?? 'Amazing radio show experience.' }}</p>
+                                <div class="show-simple-meta">
+                                    <div class="show-simple-schedule">
+                                        <i class="far fa-calendar"></i>
+                                        <span>{{ $show->day_of_week }}</span>
+                                    </div>
+                                    <div>
+                                        <i class="far fa-clock"></i>
+                                        <span>{{ \Carbon\Carbon::parse($show->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($show->end_time)->format('g:i A') }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
                 
-                {{ $shows->links() }}
+                <div style="padding: 0 20px; margin-bottom: 60px;">
+                    {{ $shows->links() }}
+                </div>
             @else
-                <p>No shows scheduled yet.</p>
+                <div style="text-align: center; padding: 60px 20px;">
+                    <p style="color: var(--text-secondary); font-size: 1.1rem;">No shows scheduled yet.</p>
+                </div>
             @endif
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/js/shows.js') }}" defer></script>
-@endpush

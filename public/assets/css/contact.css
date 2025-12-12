@@ -475,6 +475,17 @@ nav a.active {
   width: 100%;
 }
 
+.info-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.info-card a {
+  position: relative;
+  z-index: 10 !important;
+  pointer-events: auto !important;
+}
+
 .info-card::before {
   content: "";
   position: absolute;
@@ -489,6 +500,8 @@ nav a.active {
   );
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .info-card:hover::before {

@@ -5,465 +5,582 @@ document.addEventListener("DOMContentLoaded", function () {
   const mobileMenuBtn = document.querySelector(".mobile-menu");
   const mobileNav = document.getElementById("mobileNav");
 
-  // Toggle mobile menu
-  mobileMenuBtn.addEventListener("click", function () {
-    mobileNav.classList.toggle("active");
-
-    // Change hamburger icon to X when menu is open
-    const icon = mobileMenuBtn.querySelector("i");
-    if (mobileNav.classList.contains("active")) {
-      icon.classList.remove("fa-bars");
-      icon.classList.add("fa-times");
-    } else {
-      icon.classList.remove("fa-times");
-      icon.classList.add("fa-bars");
-    }
-  });
-
-  // Close mobile menu when clicking on a link
-  const mobileNavLinks = mobileNav.querySelectorAll("a");
-  mobileNavLinks.forEach((link) => {
-    link.addEventListener("click", function () {
-      mobileNav.classList.remove("active");
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener("click", function () {
+      mobileNav.classList.toggle("active");
       const icon = mobileMenuBtn.querySelector("i");
-      icon.classList.remove("fa-times");
-      icon.classList.add("fa-bars");
-    });
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener("click", function (event) {
-    if (
-      !mobileMenuBtn.contains(event.target) &&
-      !mobileNav.contains(event.target)
-    ) {
-      mobileNav.classList.remove("active");
-      const icon = mobileMenuBtn.querySelector("i");
-      icon.classList.remove("fa-times");
-      icon.classList.add("fa-bars");
-    }
-  });
-});
-
-// =============================================
-// SOCIAL SHARING FUNCTIONALITY
-// =============================================
-document.addEventListener("DOMContentLoaded", function () {
-  // Get the share modal and buttons
-  const shareModal = document.getElementById("shareStreamModal");
-  const shareButtons = document.querySelectorAll(".social-share-btn");
-
-  // Define share URLs for each platform
-  const shareUrls = {
-    facebook: "https://www.facebook.com/sharer/sharer.html?u=",
-    twitter: "https://twitter.com/intent/tweet?url=",
-    whatsapp: "https://api.whatsapp.com/send?text=",
-    telegram: "https://t.me/share/url?url=",
-    reddit: "https://reddit.com/submit?url=",
-    linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=",
-    email: "mailto:?subject=Check out this live stream&body=",
-  };
-
-  // Define share text for each platform
-  const shareText = {
-    facebook: "Check out this awesome live radio stream!",
-    twitter: "Tune in to this amazing live radio stream! 🎧 #LiveRadio #Music",
-    whatsapp: "Check out this awesome live radio stream!",
-    telegram: "Check out this awesome live radio stream!",
-    reddit: "Check out this awesome live radio stream!",
-    linkedin: "Check out this awesome live radio stream!",
-    email: "I thought you might enjoy this live radio stream!",
-  };
-
-  // Add click event listeners to all share buttons
-  shareButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const platform = this.getAttribute("data-platform");
-      const streamUrl = encodeURIComponent("https://nexusradio.com/live");
-      const text = encodeURIComponent(shareText[platform]);
-
-      let shareUrl = "";
-
-      // Construct the share URL based on the platform
-      switch (platform) {
-        case "facebook":
-          shareUrl = `${shareUrls.facebook}${streamUrl}`;
-          break;
-        case "twitter":
-          shareUrl = `${shareUrls.twitter}${streamUrl}&text=${text}`;
-          break;
-        case "whatsapp":
-          shareUrl = `${shareUrls.whatsapp}${text} ${streamUrl}`;
-          break;
-        case "telegram":
-          shareUrl = `${shareUrls.telegram}${streamUrl}&text=${text}`;
-          break;
-        case "reddit":
-          shareUrl = `${shareUrls.reddit}${streamUrl}&title=${text}`;
-          break;
-        case "linkedin":
-          shareUrl = `${shareUrls.linkedin}${streamUrl}`;
-          break;
-        case "email":
-          shareUrl = `${shareUrls.email}${text} ${streamUrl}`;
-          break;
-      }
-
-      // Open the share URL in a new window (except for email)
-      if (platform === "email") {
-        window.location.href = shareUrl;
+      if (mobileNav.classList.contains("active")) {
+        icon.classList.remove("fa-bars");
+        icon.classList.add("fa-times");
       } else {
-        window.open(shareUrl, "shareWindow", "width=600,height=400");
+        icon.classList.remove("fa-times");
+        icon.classList.add("fa-bars");
+      }
+    });
+  }
+
+  // =============================================
+  // REAL-TIME LIVE CHAT FUNCTIONALITY
+  // =============================================
+  const chatInput = document.getElementById("chatInput");
+  const chatSend = document.getElementById("chatSend");
+  const chatMessages = document.getElementById("chatMessages");
+  let lastMessageId = 0;
+  let chatPollInterval = null;
+
+  if (chatInput && chatSend && chatMessages) {
+    function addChatMessage(name, message, time, isUser = false, isVerified = false) {
+      // Check if message already exists
+      const existingMessages = chatMessages.querySelectorAll('.message');
+      for (let msg of existingMessages) {
+        const msgText = msg.querySelector('.message-text')?.textContent;
+        if (msgText === message) return; // Skip duplicate
       }
 
-      // Close the modal after sharing
-      shareModal.style.display = "none";
-    });
-  });
-});
+      const messageDiv = document.createElement("div");
+      messageDiv.className = "message";
+      if (isUser) messageDiv.classList.add("user-message");
 
-// =============================================
-// CONFIGURATION - I REPLACE THESE WITH DARLING FM URLs
-// =============================================
+      const avatar = document.createElement("div");
+      avatar.className = "message-avatar";
+      avatar.textContent = name.substring(0, 2).toUpperCase();
 
-// Main radio stream URL (24/7 broadcast)
-const MAIN_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
+      const content = document.createElement("div");
+      content.className = "message-content";
 
-// OAP Live Stream URL (for special broadcasts)
-const OAP_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
+      const header = document.createElement("div");
+      header.className = "message-header";
 
-// Backup stream URL (optional)
-const BACKUP_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
+      const authorSpan = document.createElement("span");
+      authorSpan.className = "message-author";
+      authorSpan.textContent = name;
+      if (isVerified) {
+        const verifiedBadge = document.createElement("span");
+        verifiedBadge.style.cssText = "background: var(--success); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: 5px;";
+        verifiedBadge.textContent = "✓";
+        authorSpan.appendChild(verifiedBadge);
+      }
 
-// =============================================
-// MAIN RADIO STREAM FUNCTIONALITY
-// =============================================
+      const timeSpan = document.createElement("span");
+      timeSpan.className = "message-time";
+      timeSpan.textContent = time;
 
-document.addEventListener("DOMContentLoaded", function () {
-  const playButton = document.getElementById("playButton");
-  const playIcon = playButton.querySelector("i");
-  const currentStream = document.getElementById("currentStream");
-  const streamStatus = document.getElementById("streamStatus");
-  const streamOptions = document.querySelectorAll(".stream-option");
-  let isPlaying = false;
-  let currentStreamType = "main";
+      header.appendChild(authorSpan);
+      header.appendChild(timeSpan);
 
-  // Create Audio object for main stream
-  const radioStream = new Audio();
-  radioStream.src = MAIN_STREAM_URL;
-  radioStream.preload = "none";
+      const textP = document.createElement("p");
+      textP.className = "message-text";
+      textP.textContent = message;
 
-  // Stream type mapping
-  const streamUrls = {
-    main: MAIN_STREAM_URL,
-    oap: OAP_STREAM_URL,
-    backup: BACKUP_STREAM_URL,
-  };
+      content.appendChild(header);
+      content.appendChild(textP);
 
-  const streamNames = {
-    main: "Main Radio Stream",
-    oap: "OAP Live Stream",
-    backup: "Backup Stream",
-  };
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(content);
 
-  // Play button functionality
-  playButton.addEventListener("click", function () {
-    if (!isPlaying) {
-      // Start streaming
-      radioStream
-        .play()
-        .then(() => {
-          playIcon.classList.remove("fa-play");
-          playIcon.classList.add("fa-pause");
-          playButton.style.background =
-            "linear-gradient(45deg, var(--highlight), var(--accent))";
-          isPlaying = true;
-          streamStatus.textContent = `Now playing: ${streamNames[currentStreamType]}`;
-          console.log("Connected to main stream");
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function loadChatMessages() {
+      fetch("/api/live-chat")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data) && data.length > 0) {
+            data.forEach((msg) => {
+              if (msg.id > lastMessageId) {
+                addChatMessage(msg.name, msg.message, msg.time, false, msg.is_verified);
+                lastMessageId = Math.max(lastMessageId, msg.id);
+              }
+            });
+          }
         })
-        .catch((e) => {
-          console.error("Stream error:", e);
-          // Try backup stream if main fails
-          if (currentStreamType !== "backup") {
-            radioStream.src = BACKUP_STREAM_URL;
-            radioStream
-              .play()
-              .then(() => {
-                playIcon.classList.remove("fa-play");
-                playIcon.classList.add("fa-pause");
-                playButton.style.background =
-                  "linear-gradient(45deg, var(--highlight), var(--accent))";
-                isPlaying = true;
-                currentStreamType = "backup";
-                currentStream.textContent = streamNames[currentStreamType];
-                streamStatus.textContent = `Now playing: ${streamNames[currentStreamType]}`;
-                updateStreamOptions();
-                console.log("Connected to backup stream");
-              })
-              .catch((backupError) => {
-                console.error("Backup stream also failed:", backupError);
-                alert(
-                  "Unable to connect to any radio stream. Please try again later."
-                );
-              });
+        .catch((err) => console.error("Chat load error:", err));
+    }
+
+    function sendChatMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      const userName = window.authUser ? window.authUser.name : 'Guest';
+
+      fetch("/api/live-chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content || "",
+        },
+        body: JSON.stringify({ 
+          message,
+          name: userName === 'Guest' ? (prompt('Enter your name:') || 'Guest') : null
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            chatInput.value = "";
+            addChatMessage(data.message.name, data.message.message, data.message.time, true, data.message.is_verified);
+            lastMessageId = Math.max(lastMessageId, data.message.id);
+          } else if (data.error) {
+            if (typeof showError === 'function') {
+              showError(data.error);
+            } else {
+              if (typeof showError === 'function') {
+                  showError(data.error);
+              } else if (window.notifications) {
+                  window.notifications.error(data.error);
+              }
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("Chat send error:", err);
+          if (typeof showError === 'function') {
+            showError("Failed to send message. Please try again.");
           } else {
-            alert(
-              "Unable to connect to any radio stream. Please try again later."
-            );
+            if (typeof showError === 'function') {
+                showError("Failed to send message. Please try again.");
+            } else if (window.notifications) {
+                window.notifications.error("Failed to send message. Please try again.");
+            }
           }
         });
-    } else {
-      // Pause streaming
-      radioStream.pause();
-      playIcon.classList.remove("fa-pause");
-      playIcon.classList.add("fa-play");
-      playButton.style.background =
-        "linear-gradient(45deg, var(--accent), var(--accent-glow))";
-      isPlaying = false;
-      streamStatus.textContent = "Stream paused";
-      console.log("Stream paused");
     }
-  });
 
-  // Handle stream events
-  radioStream.addEventListener("ended", () => {
-    isPlaying = false;
-    playIcon.classList.remove("fa-pause");
-    playIcon.classList.add("fa-play");
-    streamStatus.textContent = "Stream ended";
-  });
+    // Load initial messages
+    loadChatMessages();
 
-  radioStream.addEventListener("error", (e) => {
-    console.error("Stream error:", e);
-    isPlaying = false;
-    playIcon.classList.remove("fa-pause");
-    playIcon.classList.add("fa-play");
-    streamStatus.textContent = "Connection error";
-  });
+    // Poll for new messages every 2 seconds
+    chatPollInterval = setInterval(loadChatMessages, 2000);
 
-  // Stream selection
-  streamOptions.forEach((option) => {
-    option.addEventListener("click", function () {
-      const streamType = this.getAttribute("data-stream");
+    // Send message handlers
+    chatSend.addEventListener("click", sendChatMessage);
+    chatInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendChatMessage();
+      }
+    });
+  }
 
-      if (streamType !== currentStreamType) {
-        // Change stream
-        radioStream.src = streamUrls[streamType];
-        currentStreamType = streamType;
-        currentStream.textContent = streamNames[streamType];
+  // =============================================
+  // RADIO PLAYER FUNCTIONALITY - USING GLOBAL AUDIO
+  // =============================================
+  const playButton = document.getElementById("playButton");
+  let isPlaying = false;
 
-        // Update UI
-        updateStreamOptions();
+  // Use global audio player if available, otherwise fallback to local
+  const getAudioPlayer = function() {
+    if (window.DarlingFMAudio && window.DarlingFMAudio.player) {
+      return window.DarlingFMAudio;
+    }
+    return null;
+  };
 
-        // If currently playing, restart with new stream
-        if (isPlaying) {
-          radioStream
-            .play()
-            .then(() => {
-              streamStatus.textContent = `Now playing: ${streamNames[currentStreamType]}`;
-            })
-            .catch((e) => {
-              console.error("Error switching streams:", e);
-              streamStatus.textContent = "Error switching streams";
-            });
-        } else {
-          streamStatus.textContent = `Selected: ${streamNames[currentStreamType]}`;
+  // Sync UI with global audio state
+  function syncUIWithGlobalAudio() {
+    if (!window.DarlingFMAudio) return;
+    
+    const globalAudio = window.DarlingFMAudio;
+    isPlaying = globalAudio.isPlaying;
+    
+    if (playButton) {
+      playButton.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+    }
+    
+    const streamStatus = document.getElementById("streamStatus");
+    if (streamStatus) {
+      streamStatus.textContent = isPlaying ? "Now Playing" : "Click play to start listening";
+    }
+    
+    // Sync active stream button - CRITICAL: Updates button highlights dynamically
+    const currentStream = globalAudio.currentStream || globalAudio.getCurrentStream?.() || localStorage.getItem('darlingfm_active_stream') || 'main';
+    streamOptions.forEach((opt) => {
+      const streamType = opt.dataset.stream;
+      if (streamType === currentStream) {
+        // Active stream - highlight it
+        opt.classList.add("active");
+        opt.style.background = 'rgba(255,0,0,0.2)';
+        opt.style.border = '1px solid var(--accent)';
+        opt.style.color = 'var(--light)';
+        opt.style.fontWeight = '600';
+      } else {
+        // Inactive stream - remove highlight
+        opt.classList.remove("active");
+        opt.style.background = 'rgba(255,255,255,0.05)';
+        opt.style.border = '1px solid var(--glass-border)';
+        opt.style.color = 'var(--text-secondary)';
+        opt.style.fontWeight = '400';
+      }
+    });
+    
+    // Update current stream text
+    const currentStreamEl = document.getElementById("currentStream");
+    if (currentStreamEl) {
+      const streamLabels = {
+        main: 'Main Radio Stream',
+        oap: 'OAP Live Stream',
+        backup: 'Backup Stream'
+      };
+      const currentStream = globalAudio.currentStream || globalAudio.getCurrentStream?.() || localStorage.getItem('darlingfm_active_stream') || 'main';
+      currentStreamEl.textContent = streamLabels[currentStream] || 'Main Radio Stream';
+    }
+  }
+
+  // Wait for global audio to be available
+  function initializePlayButton() {
+    if (!playButton) return;
+    
+    // Check if global audio is available, if not wait a bit
+    if (!window.DarlingFMAudio) {
+      setTimeout(initializePlayButton, 100);
+      return;
+    }
+    
+    const globalAudio = window.DarlingFMAudio;
+    
+    // Listen to global audio state changes
+    globalAudio.listeners.play.push(() => {
+      syncUIWithGlobalAudio();
+    });
+    
+    // Initial sync
+    syncUIWithGlobalAudio();
+    
+    playButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (!globalAudio) {
+        if (window.showError) {
+          window.showError("Audio player not initialized. Please refresh the page.");
+        } else if (window.notifications) {
+          window.notifications.error("Audio player not initialized. Please refresh the page.");
+        }
+        return;
+      }
+      
+      const wasPlaying = globalAudio.isPlaying;
+      
+      if (!wasPlaying) {
+        // Start playing
+        globalAudio.play()
+          .then(() => {
+            syncUIWithGlobalAudio();
+            if (window.showSuccess) {
+              window.showSuccess("Stream started!");
+            } else if (window.notifications) {
+              window.notifications.success("Stream started!");
+            }
+          })
+          .catch((err) => {
+            console.error("Play error:", err);
+            syncUIWithGlobalAudio();
+            if (window.showError) {
+              window.showError("Unable to start stream. Please check your connection and try again.");
+            } else if (window.notifications) {
+              window.notifications.error("Unable to start stream. Please check your connection and try again.");
+            }
+          });
+      } else {
+        // Pause
+        globalAudio.pause();
+        syncUIWithGlobalAudio();
+        if (window.showInfo) {
+          window.showInfo("Stream paused.");
+        } else if (window.notifications) {
+          window.notifications.info("Stream paused.");
         }
       }
     });
+  }
+  
+  // Initialize play button
+  initializePlayButton();
+
+  // =============================================
+  // STREAM SELECTOR - FULLY FUNCTIONAL WITH ACTIVE STATE
+  // =============================================
+  const streamOptions = document.querySelectorAll(".stream-option");
+  // Stream URLs - Main Stream (primary 7572), Backup (7567). OAP aliases to main for legacy buttons.
+  const streamUrls = {
+    main: "https://phoebe.streamerr.co:7572/stream",
+    oap: "https://phoebe.streamerr.co:7572/stream",
+    backup: "https://phoebe.streamerr.co:7567/stream"
+  };
+  
+  // Get current active stream from localStorage or default to main
+  let currentStreamType = localStorage.getItem('darlingfm_active_stream') || 'main';
+  
+  // Initialize stream selector with proper event handlers
+  function initializeStreamSelector() {
+    if (streamOptions.length === 0) return;
+    
+    // Wait for global audio if needed
+    if (!window.DarlingFMAudio) {
+      setTimeout(initializeStreamSelector, 100);
+      return;
+    }
+    
+    streamOptions.forEach((option) => {
+      // Remove any existing listeners to prevent duplicates
+      const newOption = option.cloneNode(true);
+      option.parentNode.replaceChild(newOption, option);
+      
+      newOption.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const streamType = this.dataset.stream;
+        
+        // Prevent switching to the same stream
+        const currentStream = window.DarlingFMAudio?.getCurrentStream?.() || 
+                             window.DarlingFMAudio?.currentStream || 
+                             localStorage.getItem('darlingfm_active_stream') || 
+                             'main';
+        
+        if (streamType === currentStream) {
+          return; // Already on this stream
+        }
+        
+        if (window.DarlingFMAudio) {
+          // Update UI immediately for better UX
+          streamOptions.forEach((opt) => {
+            opt.classList.remove("active");
+            opt.style.background = 'rgba(255,255,255,0.05)';
+            opt.style.border = '1px solid var(--glass-border)';
+            opt.style.color = 'var(--text-secondary)';
+            opt.style.fontWeight = '400';
+          });
+          
+          // Highlight clicked option immediately
+          this.classList.add("active");
+          this.style.background = 'rgba(255,0,0,0.2)';
+          this.style.border = '1px solid var(--accent)';
+          this.style.color = 'var(--light)';
+          this.style.fontWeight = '600';
+          
+          // Switch stream
+          const wasPlaying = window.DarlingFMAudio.isPlaying;
+          window.DarlingFMAudio.switchStream(streamType)
+            .then(() => {
+              // Ensure UI is synced after switch
+              syncUIWithGlobalAudio();
+              if (wasPlaying && window.showSuccess) {
+                window.showSuccess(`Switched to ${streamType === 'main' ? 'Main Stream' : streamType === 'oap' ? 'OAP Live' : 'Backup Stream'}`);
+              } else if (wasPlaying && window.notifications) {
+                window.notifications.success(`Switched to ${streamType === 'main' ? 'Main Stream' : streamType === 'oap' ? 'OAP Live' : 'Backup Stream'}`);
+              }
+            })
+            .catch((err) => {
+              console.error("Stream switch error:", err);
+              // Revert UI on error
+              syncUIWithGlobalAudio();
+              if (window.showError) {
+                window.showError("Unable to switch stream. Please try again.");
+              } else if (window.notifications) {
+                window.notifications.error("Unable to switch stream. Please try again.");
+              }
+            });
+        } else {
+          // Fallback if global audio not available
+          streamOptions.forEach((opt) => {
+            opt.classList.remove("active");
+            opt.style.background = 'rgba(255,255,255,0.05)';
+            opt.style.border = '1px solid var(--glass-border)';
+            opt.style.color = 'var(--text-secondary)';
+          });
+          
+          this.classList.add("active");
+          this.style.background = 'rgba(255,0,0,0.2)';
+          this.style.border = '1px solid var(--accent)';
+          this.style.color = 'var(--light)';
+          this.style.fontWeight = '600';
+          localStorage.setItem('darlingfm_active_stream', streamType);
+          
+          const currentStreamEl = document.getElementById("currentStream");
+          if (currentStreamEl) {
+            currentStreamEl.textContent = 
+              streamType === 'main' ? 'Main Radio Stream' : 
+              streamType === 'oap' ? 'OAP Live Stream' : 'Backup Stream';
+          }
+        }
+      });
+    });
+  }
+  
+  // Initialize stream selector
+  initializeStreamSelector();
+  
+  // Sync UI on page load and listen for stream changes
+  if (window.DarlingFMAudio) {
+    // Listen for stream changes
+    window.DarlingFMAudio.listeners.streamChange.push(() => {
+      syncUIWithGlobalAudio();
+      initializeStreamSelector(); // Re-initialize selector to ensure correct highlighting
+    });
+    
+    // Initial sync
+    syncUIWithGlobalAudio();
+    initializeStreamSelector();
+    
+    // Also listen for play/pause to update UI
+    window.DarlingFMAudio.listeners.play.push(() => {
+      syncUIWithGlobalAudio();
+    });
+  }
+  
+  // Listener count functionality removed - div has been removed from HTML
+  
+  // Show visualizer when playing
+  const audioVisualizer = document.getElementById("audioVisualizer");
+  if (audioVisualizer && playButton) {
+    playButton.addEventListener("click", function() {
+      if (isPlaying) {
+        audioVisualizer.style.display = "flex";
+        animateVisualizer();
+      } else {
+        audioVisualizer.style.display = "none";
+      }
+    });
+  }
+  
+  // Animate visualizer bars
+  function animateVisualizer() {
+    if (!isPlaying) return;
+    const bars = document.querySelectorAll('.viz-bar');
+    bars.forEach((bar, index) => {
+      const height = Math.random() * 60 + 20; // Random height between 20-80px
+      bar.style.height = height + 'px';
+    });
+    if (isPlaying) {
+      requestAnimationFrame(animateVisualizer);
+    }
+  }
+
+  // =============================================
+  // MODAL FUNCTIONALITY
+  // =============================================
+  const modals = document.querySelectorAll(".modal");
+  const closeButtons = document.querySelectorAll(".close-modal");
+
+  closeButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const modal = this.closest(".modal");
+      if (modal) {
+        modal.style.display = "none";
+        modal.classList.remove("active");
+      }
+    });
   });
 
-  function updateStreamOptions() {
-    streamOptions.forEach((option) => {
-      if (option.getAttribute("data-stream") === currentStreamType) {
-        option.classList.add("active");
-      } else {
-        option.classList.remove("active");
+  // Voice Chat Button
+  const voiceChatBtn = document.getElementById("voiceChatBtn");
+  if (voiceChatBtn) {
+    voiceChatBtn.addEventListener("click", function () {
+      const modal = document.getElementById("voiceChatModal");
+      if (modal) {
+        modal.style.display = "flex";
+        modal.classList.add("active");
       }
     });
   }
 
-  // Audio Visualizer
-  const visualizer = document.getElementById("visualizer");
-  const barCount = 50;
-
-  // Create visualizer bars
-  for (let i = 0; i < barCount; i++) {
-    const bar = document.createElement("div");
-    bar.className = "visualizer-bar";
-    visualizer.appendChild(bar);
-  }
-
-  // Animate bars randomly (in a real app, this would connect to actual audio)
-  const bars = document.querySelectorAll(".visualizer-bar");
-
-  function animateBars() {
-    bars.forEach((bar) => {
-      const height = Math.random() * 90 + 10;
-      bar.style.height = `${height}%`;
-    });
-  }
-
-  setInterval(animateBars, 100);
-
-  // Simulate live listener count updates
-  const listenerCount = document.querySelector(".stat-value");
-  let count = 1247;
-
-  setInterval(() => {
-    // Randomly increase or decrease listener count
-    const change = Math.floor(Math.random() * 10) - 3;
-    count = Math.max(1200, count + change);
-    listenerCount.textContent = count.toLocaleString();
-  }, 5000);
-
-  // Chat functionality
-  const chatInput = document.querySelector(".chat-input input");
-  const chatSend = document.querySelector(".chat-input button");
-  const chatMessages = document.querySelector(".chat-messages");
-
-  function addMessage(author, text) {
-    const message = document.createElement("div");
-    message.className = "message";
-
-    const avatar = document.createElement("div");
-    avatar.className = "message-avatar";
-    avatar.textContent = author.substring(0, 2).toUpperCase();
-
-    const content = document.createElement("div");
-    content.className = "message-content";
-
-    const header = document.createElement("div");
-    header.className = "message-header";
-
-    const authorSpan = document.createElement("span");
-    authorSpan.className = "message-author";
-    authorSpan.textContent = author;
-
-    const timeSpan = document.createElement("span");
-    timeSpan.className = "message-time";
-
-    const now = new Date();
-    timeSpan.textContent = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    header.appendChild(authorSpan);
-    header.appendChild(timeSpan);
-
-    const textP = document.createElement("p");
-    textP.className = "message-text";
-    textP.textContent = text;
-
-    content.appendChild(header);
-    content.appendChild(textP);
-
-    message.appendChild(avatar);
-    message.appendChild(content);
-
-    chatMessages.appendChild(message);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  chatSend.addEventListener("click", function () {
-    if (chatInput.value.trim() !== "") {
-      addMessage("You", chatInput.value);
-      chatInput.value = "";
-
-      // Simulate response after a delay
-      setTimeout(() => {
-        const responses = [
-          "Great point!",
-          "I love this track too!",
-          "Anyone else feeling the vibes?",
-          "What should we play next?",
-          "The bass on this is incredible!",
-        ];
-        const randomUser = ["MusicLover", "BassHead", "DnBFan", "RadioJunkie"][
-          Math.floor(Math.random() * 4)
-        ];
-        const randomResponse =
-          responses[Math.floor(Math.random() * responses.length)];
-        addMessage(randomUser, randomResponse);
-      }, 1000 + Math.random() * 3000);
-    }
-  });
-
-  chatInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      chatSend.click();
-    }
-  });
-
-  // Modal functionality
-  const voiceChatBtn = document.getElementById("voiceChatBtn");
+  // Request Song Button
   const requestSongBtn = document.getElementById("requestSongBtn");
-  const livePollBtn = document.getElementById("livePollBtn");
-  const shareStreamBtn = document.getElementById("shareStreamBtn");
-
-  const voiceChatModal = document.getElementById("voiceChatModal");
-  const requestSongModal = document.getElementById("requestSongModal");
-  const livePollModal = document.getElementById("livePollModal");
-  const shareStreamModal = document.getElementById("shareStreamModal");
-
-  const closeModalButtons = document.querySelectorAll(
-    ".close-modal, .btn-outline"
-  );
-
-  // Open modals
-  voiceChatBtn.addEventListener("click", function () {
-    voiceChatModal.style.display = "flex";
-  });
-
-  requestSongBtn.addEventListener("click", function () {
-    requestSongModal.style.display = "flex";
-  });
-
-  livePollBtn.addEventListener("click", function () {
-    livePollModal.style.display = "flex";
-  });
-
-  shareStreamBtn.addEventListener("click", function () {
-    shareStreamModal.style.display = "flex";
-  });
-
-  // Close modals
-  closeModalButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      voiceChatModal.style.display = "none";
-      requestSongModal.style.display = "none";
-      livePollModal.style.display = "none";
-      shareStreamModal.style.display = "none";
+  if (requestSongBtn) {
+    requestSongBtn.addEventListener("click", function () {
+      const modal = document.getElementById("requestSongModal");
+      if (modal) {
+        modal.style.display = "flex";
+        modal.classList.add("active");
+      }
     });
-  });
+  }
 
-  // Close modals when clicking outside
-  window.addEventListener("click", function (event) {
-    if (event.target === voiceChatModal) {
-      voiceChatModal.style.display = "none";
-    }
-    if (event.target === requestSongModal) {
-      requestSongModal.style.display = "none";
-    }
-    if (event.target === livePollModal) {
-      livePollModal.style.display = "none";
-    }
-    if (event.target === shareStreamModal) {
-      shareStreamModal.style.display = "none";
-    }
-  });
+  // Live Poll Button
+  const livePollBtn = document.getElementById("livePollBtn");
+  if (livePollBtn) {
+    livePollBtn.addEventListener("click", function () {
+      const modal = document.getElementById("livePollModal");
+      if (modal) {
+        modal.style.display = "flex";
+        modal.classList.add("active");
+      }
+    });
+  }
 
-  // Copy URL functionality
+  // Share Stream Button
+  const shareStreamBtn = document.getElementById("shareStreamBtn");
+  if (shareStreamBtn) {
+    shareStreamBtn.addEventListener("click", function () {
+      const modal = document.getElementById("shareStreamModal");
+      if (modal) {
+        modal.style.display = "flex";
+        modal.classList.add("active");
+      }
+    });
+  }
+
+  // Copy URL Button
   const copyUrlBtn = document.getElementById("copyUrlBtn");
-  const shareUrl = document.getElementById("shareUrl");
+  if (copyUrlBtn) {
+    copyUrlBtn.addEventListener("click", function () {
+      const urlInput = document.getElementById("shareUrl");
+      if (urlInput) {
+        urlInput.select();
+        document.execCommand("copy");
+        this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-copy"></i> Copy URL';
+        }, 2000);
+      }
+    });
+  }
 
-  copyUrlBtn.addEventListener("click", function () {
-    shareUrl.select();
-    document.execCommand("copy");
-    copyUrlBtn.innerhtml = '<i class="fas fa-check"></i> Copied!';
-    setTimeout(() => {
-      copyUrlBtn.innerhtml = '<i class="fas fa-copy"></i> Copy URL';
-    }, 2000);
+  // =============================================
+  // AUDIO VISUALIZER
+  // =============================================
+  const visualizer = document.getElementById("visualizer");
+  if (visualizer) {
+    // Clear any existing content
+    visualizer.innerHTML = "";
+    
+    // Create bars
+    for (let i = 0; i < 20; i++) {
+      const bar = document.createElement("div");
+      bar.style.cssText = `
+        width: 4px;
+        height: ${Math.random() * 50 + 10}px;
+        background: linear-gradient(to top, var(--accent), #0099ff);
+        margin: 0 2px;
+        border-radius: 2px;
+        transition: height 0.1s ease;
+        display: inline-block;
+        vertical-align: bottom;
+      `;
+      visualizer.appendChild(bar);
+    }
+
+    // Animate bars
+    const animateBars = setInterval(() => {
+      if (!visualizer || visualizer.children.length === 0) {
+        clearInterval(animateBars);
+        return;
+      }
+      const bars = visualizer.querySelectorAll("div");
+      bars.forEach((bar) => {
+        bar.style.height = Math.random() * 50 + 10 + "px";
+      });
+    }, 100);
+  }
+
+  // Cleanup on page unload
+  window.addEventListener("beforeunload", function () {
+    if (chatPollInterval) {
+      clearInterval(chatPollInterval);
+    }
+    if (audioPlayer) {
+      audioPlayer.pause();
+    }
   });
 });

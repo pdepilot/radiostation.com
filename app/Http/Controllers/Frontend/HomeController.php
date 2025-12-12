@@ -20,7 +20,6 @@ class HomeController extends Controller
                                     ->latest('published_at')
                                     ->take(3)
                                     ->get(),
-            'podcasts'       => Podcast::latest('published_at')->take(4)->get(),
             'featuredDjs'    => Dj::where('is_featured', 1)
                                     ->with('shows')
                                     ->take(4)

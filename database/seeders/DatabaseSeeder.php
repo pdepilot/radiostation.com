@@ -135,8 +135,12 @@ class DatabaseSeeder extends Seeder
             ['key' => 'whatsapp_number', 'value' => '+234 806 444 4444', 'type' => 'text'],
         ]);
 
-        NewsPost::factory(6)->create();
-        Podcast::factory(6)->create();
+        $this->call([
+            NewsPostsTableSeeder::class,
+            DjsTableSeeder::class,
+            ShowsTableSeeder::class,
+            PodcastsTableSeeder::class,
+        ]);
         PlaylistTrack::factory(15)->create();
         AdvertisingPackage::factory(4)->create();
         RevenueRecord::factory(6)->create();

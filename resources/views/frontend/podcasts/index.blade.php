@@ -107,10 +107,6 @@
                                     <i class="fas fa-calendar"></i>
                                     <span>{{ optional($heroPodcast->published_at)->format('M d, Y') }}</span>
                                 </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-eye"></i>
-                                    <span>{{ number_format($heroPodcast->listen_count ?? 0) }} views</span>
-                                </div>
                             </div>
                             <div class="hero-actions">
                                 <a href="{{ route('podcasts.show', $heroPodcast) }}" class="action-btn primary-btn">

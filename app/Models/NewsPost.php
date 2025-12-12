@@ -28,4 +28,9 @@ class NewsPost extends Model
         'is_featured' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\Comment::class, 'news_post_id');
+    }
 }
