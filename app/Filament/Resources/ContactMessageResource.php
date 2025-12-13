@@ -63,9 +63,8 @@ class ContactMessageResource extends Resource
                         Forms\Components\Select::make('status')
                             ->options([
                                 'new' => 'New',
-                                'read' => 'Read',
-                                'replied' => 'Replied',
-                                'archived' => 'Archived',
+                                'in_progress' => 'In Progress',
+                                'resolved' => 'Resolved',
                             ])
                             ->disabled(),
                         Forms\Components\TextInput::make('handled_by')
@@ -104,9 +103,8 @@ class ContactMessageResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'new' => 'danger',
-                        'read' => 'info',
-                        'replied' => 'success',
-                        'archived' => 'gray',
+                        'in_progress' => 'info',
+                        'resolved' => 'success',
                         default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('created_at')
@@ -118,9 +116,8 @@ class ContactMessageResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'new' => 'New',
-                        'read' => 'Read',
-                        'replied' => 'Replied',
-                        'archived' => 'Archived',
+                        'in_progress' => 'In Progress',
+                        'resolved' => 'Resolved',
                     ]),
                 Tables\Filters\SelectFilter::make('type')
                     ->options([
@@ -137,12 +134,21 @@ class ContactMessageResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('mark_read')
-                        ->label('Mark as Read')
-                        ->icon('heroicon-o-check')
+                    Tables\Actions\BulkAction::make('mark_in_progress')
+                        ->label('Mark as In Progress')
+                        ->icon('heroicon-o-clock')
                         ->action(function ($records) {
                             $records->each(function ($record) {
-                                $record->update(['status' => 'read']);
+                                $record->update(['status' => 'in_progress']);
+                            });
+                        }),
+                    Tables\Actions\BulkAction::make('mark_resolved')
+                        ->label('Mark as Resolved')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->action(function ($records) {
+                            $records->each(function ($record) {
+                                $record->update(['status' => 'resolved']);
                             });
                         }),
                 ]),
