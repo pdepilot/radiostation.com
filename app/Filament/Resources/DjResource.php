@@ -83,21 +83,25 @@ class DjResource extends Resource
                 Forms\Components\Section::make('Social Media')
                     ->schema([
                         Forms\Components\TextInput::make('instagram')
+                            ->label('Instagram URL')
                             ->url()
                             ->maxLength(255)
-                            ->prefixIcon('fab fa-instagram'),
+                            ->placeholder('https://instagram.com/username'),
                         Forms\Components\TextInput::make('twitter')
+                            ->label('Twitter/X URL')
                             ->url()
                             ->maxLength(255)
-                            ->prefixIcon('fab fa-twitter'),
+                            ->placeholder('https://twitter.com/username'),
                         Forms\Components\TextInput::make('facebook')
+                            ->label('Facebook URL')
                             ->url()
                             ->maxLength(255)
-                            ->prefixIcon('fab fa-facebook'),
+                            ->placeholder('https://facebook.com/username'),
                         Forms\Components\TextInput::make('mixcloud')
+                            ->label('Mixcloud URL')
                             ->url()
                             ->maxLength(255)
-                            ->prefixIcon('fab fa-mixcloud'),
+                            ->placeholder('https://mixcloud.com/username'),
                     ])
                     ->collapsible()
                     ->collapsed(),
