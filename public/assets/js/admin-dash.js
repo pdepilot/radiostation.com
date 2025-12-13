@@ -322,39 +322,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Generate sample data button
-  const generateBtn = document.getElementById('generateSampleData');
-  if (generateBtn) {
-    generateBtn.addEventListener('click', function() {
-      if (confirm('Generate sample listener analytics data for the past 30 days? This will add demo data to your charts.')) {
-        generateBtn.disabled = true;
-        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-
-        fetch('/admin/api/generate-sample-data', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('Sample data generated successfully! Refreshing chart...');
-            updateListenerChart('month'); // Refresh the current chart
-          } else {
-            alert('Failed to generate sample data: ' + (data.message || 'Unknown error'));
-          }
-        })
-        .catch(error => {
-          console.error('Generate sample data error:', error);
-          alert('Failed to generate sample data. Check console for details.');
-        })
-        .finally(() => {
-          generateBtn.disabled = false;
-          generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Sample Data';
-        });
-      }
-    });
-  }
+  // Sample data generation removed - using real data only
 });

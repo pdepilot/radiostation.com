@@ -4,11 +4,12 @@ namespace App\Filament\Pages;
 
 use App\Filament\Widgets\ListenerCountWidget;
 use App\Filament\Widgets\DashboardStatsWidget;
+use App\Filament\Widgets\ListenerAnalyticsChartWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 /**
  * Custom Dashboard
- * Shows live listener count and quick stats
+ * Shows live listener count, quick stats, and analytics charts
  */
 class Dashboard extends BaseDashboard
 {
@@ -27,6 +28,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             DashboardStatsWidget::class,
+            ListenerAnalyticsChartWidget::class,
         ];
     }
 }

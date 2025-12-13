@@ -164,47 +164,82 @@
     }
 
     // =============================================
-    // BROADCAST CHANNEL (Cross-tab sync)
+    // BROADCAST CHANNEL (Cross-tab sync - Single Instance)
     // =============================================
+    let isActiveTab = true;
+    let tabId = Math.random().toString(36).substring(7);
+    
     function initBroadcastChannel() {
         if (typeof BroadcastChannel !== 'undefined') {
             broadcastChannel = new BroadcastChannel('darlingfm_audio_sync');
             
             broadcastChannel.onmessage = (event) => {
+                // Ignore messages from this tab
+                if (event.data.tabId === tabId) return;
+                
                 if (event.data.type === 'position_update') {
                     const data = event.data.data;
-                    // Sync with other tab's position
-                    if (data.isPlaying && !isPlaying) {
-                        // Other tab is playing, sync our state
+                    // Only sync if this tab is not active and other tab is playing
+                    if (!isActiveTab && data.isPlaying && !isPlaying) {
                         serverTimeOffset = data.serverTimeOffset;
                         if (currentStreamUrl === data.streamUrl) {
-                            // Same stream, sync position
                             syncPosition(data.serverTime);
                         }
                     }
                 } else if (event.data.type === 'play') {
-                    // Another tab started playing - ensure single instance
-                    if (!isPlaying) {
-                        // Sync with the playing tab
-                        currentStreamUrl = event.data.streamUrl;
-                        playStream(event.data.streamUrl).catch(() => {
-                            console.warn('Failed to sync play from other tab');
-                        });
-                    } else if (currentStreamUrl !== event.data.streamUrl) {
-                        // Different stream, switch to it
-                        currentStreamUrl = event.data.streamUrl;
-                        playStream(event.data.streamUrl).catch(() => {
-                            console.warn('Failed to switch stream from other tab');
-                        });
+                    // Another tab started playing - PAUSE this tab (single instance)
+                    if (isPlaying && event.data.tabId !== tabId) {
+                        console.log('Another tab started playing, pausing this tab');
+                        pauseStream();
                     }
                 } else if (event.data.type === 'pause') {
-                    // Another tab paused - sync pause state
-                    if (isPlaying) {
+                    // Another tab paused - do nothing, this tab can play if active
+                } else if (event.data.type === 'tab_active') {
+                    // Another tab became active - pause this tab if it's playing
+                    if (isPlaying && event.data.tabId !== tabId) {
+                        console.log('Another tab became active, pausing this tab');
                         pauseStream();
                     }
                 }
             };
+            
+            // Announce this tab's active state
+            broadcastChannel.postMessage({
+                type: 'tab_active',
+                tabId: tabId
+            });
         }
+    }
+    
+    // Handle tab visibility changes for single-instance playback
+    function handleTabVisibility() {
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Tab is hidden - pause if playing (single instance)
+                isActiveTab = false;
+                if (isPlaying && video && !video.paused) {
+                    console.log('Tab hidden, pausing stream (single instance)');
+                    pauseStream();
+                }
+                // Announce tab is inactive
+                if (broadcastChannel) {
+                    broadcastChannel.postMessage({
+                        type: 'tab_inactive',
+                        tabId: tabId
+                    });
+                }
+            } else {
+                // Tab is visible - become active tab
+                isActiveTab = true;
+                if (broadcastChannel) {
+                    broadcastChannel.postMessage({
+                        type: 'tab_active',
+                        tabId: tabId
+                    });
+                }
+                // Don't auto-resume - user must click play (prevents multiple tabs playing)
+            }
+        });
     }
 
     // =============================================
@@ -505,10 +540,11 @@
         savePosition();
         updateUI('Paused');
 
-        // Broadcast pause event
+        // Broadcast pause event with tab ID
         if (broadcastChannel) {
             broadcastChannel.postMessage({
-                type: 'pause'
+                type: 'pause',
+                tabId: tabId
             });
         }
 
@@ -578,12 +614,20 @@
         player.style.display = 'flex';
 
         const icon = playBtn.querySelector('i');
-        if (isPlaying && video && !video.paused) {
-            icon.className = 'fas fa-pause';
-            playBtn.setAttribute('aria-label', 'Pause');
-        } else {
-            icon.className = 'fas fa-play';
-            playBtn.setAttribute('aria-label', 'Play');
+        if (icon) {
+            if (isPlaying && video && !video.paused) {
+                icon.className = 'fas fa-pause';
+                icon.style.display = 'inline-block';
+                icon.style.visibility = 'visible';
+                icon.style.opacity = '1';
+                playBtn.setAttribute('aria-label', 'Pause');
+            } else {
+                icon.className = 'fas fa-play';
+                icon.style.display = 'inline-block';
+                icon.style.visibility = 'visible';
+                icon.style.opacity = '1';
+                playBtn.setAttribute('aria-label', 'Play');
+            }
         }
 
         if (status) {

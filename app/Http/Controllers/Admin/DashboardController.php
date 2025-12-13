@@ -96,130 +96,81 @@ class DashboardController extends Controller
 
         $series = [];
 
-        // If no data exists, create sample data for demonstration
-        $existingData = AudienceMetric::whereYear('captured_for', now()->year)->count();
-        if ($existingData === 0) {
-            Log::info('No audience metrics found, creating sample data');
-            $this->createSampleAudienceData();
-        }
+        // Use real data only - no sample/dummy data
+        // If no data exists, return empty series (will display 0)
 
         if ($period === 'day') {
-            // Last 7 days + include today's live data
+            // Last 7 days including today - real data only
             $series = AudienceMetric::whereDate('captured_for', '>=', now()->subDays(6))
-                ->whereDate('captured_for', '<', today()) // Exclude today from historical data
                 ->orderBy('captured_for')
                 ->get()
                 ->map(function ($metric) {
                     return [
-                        'value' => $metric->total_listening_sessions,
+                        'value' => $metric->total_listening_sessions ?? 0,
                         'date' => $metric->captured_for->format('M d'),
                     ];
                 })->toArray();
-
-            // Add today's live data as the most recent point
-            $series[] = [
-                'value' => $currentLiveListeners,
-                'date' => now()->format('M d'),
-                'is_live' => true // Mark as live data
-            ];
+            
+            // Add today if not in series (real data only)
+            $todayExists = collect($series)->contains(function ($item) {
+                return $item['date'] === now()->format('M d');
+            });
+            if (!$todayExists) {
+                $series[] = [
+                    'value' => $dailySessions > 0 ? $dailySessions : 0,
+                    'date' => now()->format('M d'),
+                ];
+            }
         } elseif ($period === 'week') {
-            // Last 6 days + today
+            // Last 7 days - real data only
             $series = AudienceMetric::whereDate('captured_for', '>=', now()->subDays(6))
-                ->whereDate('captured_for', '<', today())
                 ->orderBy('captured_for')
                 ->get()
                 ->map(function ($metric) {
                     return [
-                        'value' => $metric->total_listening_sessions,
+                        'value' => $metric->total_listening_sessions ?? 0,
                         'date' => $metric->captured_for->format('M d'),
                     ];
                 })->toArray();
-
-            // Add today's live data
-            $series[] = [
-                'value' => $currentLiveListeners,
-                'date' => now()->format('M d'),
-                'is_live' => true
-            ];
-        } else {
-            // Last 29 days + today
+        } elseif ($period === 'month') {
+            // Last 30 days - real data only
             $series = AudienceMetric::whereDate('captured_for', '>=', now()->subDays(29))
-                ->whereDate('captured_for', '<', today())
                 ->orderBy('captured_for')
                 ->get()
                 ->map(function ($metric) {
                     return [
-                        'value' => $metric->total_listening_sessions,
+                        'value' => $metric->total_listening_sessions ?? 0,
                         'date' => $metric->captured_for->format('M d'),
                     ];
                 })->toArray();
-
-            // Add today's live data
-            $series[] = [
-                'value' => $currentLiveListeners,
-                'date' => now()->format('M d'),
-                'is_live' => true
-            ];
+        } else {
+            // Yearly - last 12 months - real data only
+            $series = [];
+            for ($i = 11; $i >= 0; $i--) {
+                $monthStart = now()->subMonths($i)->startOfMonth();
+                $monthEnd = now()->subMonths($i)->endOfMonth();
+                $monthValue = AudienceMetric::whereBetween('captured_for', [$monthStart, $monthEnd])
+                    ->sum('total_listening_sessions') ?? 0;
+                
+                $series[] = [
+                    'value' => $monthValue,
+                    'date' => $monthStart->format('M Y'),
+                ];
+            }
         }
+
+        // Calculate yearly total (real data only)
+        $yearlyTotal = AudienceMetric::whereYear('captured_for', now()->year)
+            ->sum('total_listening_sessions') ?? 0;
 
         return response()->json([
             'daily' => $dailySessions,
             'weekly' => $weeklyListeners,
             'monthly' => $monthlyListenersTotal,
+            'yearly' => $yearlyTotal,
             'series' => $series,
         ]);
     }
 
-    private function createSampleAudienceData()
-    {
-        try {
-            $sampleData = [];
-
-            // Create data for the past 30 days
-            for ($i = 29; $i >= 0; $i--) {
-                $date = now()->subDays($i)->toDateString();
-
-                // Generate realistic listener numbers (higher on weekends)
-                $isWeekend = now()->subDays($i)->isWeekend();
-                $baseListeners = $isWeekend ? rand(50, 150) : rand(20, 80);
-                $peakListeners = $baseListeners + rand(10, 30);
-                $averageListeners = round(($baseListeners + $peakListeners) / 2);
-
-                $sampleData[] = [
-                    'captured_for' => $date,
-                    'peak_listeners' => $peakListeners,
-                    'average_listeners' => $averageListeners,
-                    'total_listening_time' => rand(1000, 5000), // in minutes
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            AudienceMetric::insert($sampleData);
-            Log::info('Created ' . count($sampleData) . ' sample audience metrics');
-        } catch (\Exception $e) {
-            Log::error('Failed to create sample audience data: ' . $e->getMessage());
-        }
-    }
-
-    public function generateSampleData(Request $request)
-    {
-        try {
-            // Clear existing sample data first
-            AudienceMetric::where('captured_for', '>=', now()->subDays(30))->delete();
-
-            $this->createSampleAudienceData();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Sample audience data generated for the past 30 days'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Generate sample data error: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate sample data: ' . $e->getMessage()
-            ], 500);
-        }
-    }
+    // Sample data generation removed - using real data only
 }

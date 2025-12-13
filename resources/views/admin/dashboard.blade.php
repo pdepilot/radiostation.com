@@ -5,68 +5,8 @@
 @endpush
 
 @section('content')
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-        <div class="stat-card reveal-on-scroll">
-            <div class="stat-icon icon-listeners">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-info">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <h3>Monthly Listeners</h3>
-                    <button id="resetListenerCount" style="background: rgba(255,0,0,0.1); border: 1px solid #ff0000; color: #ff0000; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s;" title="Reset listener count to 0">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
-                </div>
-                <div class="stat-value" id="monthlyListenersValue">{{ number_format($stats['monthlyListeners'] ?? 0) }}</div>
-                @if(($stats['monthlyListeners'] ?? 0) > 0)
-                    <div class="stat-change {{ ($stats['listenerChange'] ?? 0) >= 0 ? 'change-positive' : 'change-negative' }}">
-                        <i class="fas fa-arrow-{{ ($stats['listenerChange'] ?? 0) >= 0 ? 'up' : 'down' }}"></i> 
-                        {{ abs($stats['listenerChange'] ?? 0) }}% {{ ($stats['listenerChange'] ?? 0) >= 0 ? 'increase' : 'decrease' }} from last month
-                    </div>
-                @else
-                    <div class="stat-change" style="color: var(--text-secondary); font-size: 0.85rem;">
-                        <i class="fas fa-info-circle"></i> Real-time data will appear as listeners engage
-                    </div>
-                @endif
-            </div>
-        </div>
-        
-        <div class="stat-card reveal-on-scroll">
-            <div class="stat-icon icon-djs">
-                <i class="fas fa-user-friends"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Total Users</h3>
-                <div class="stat-value">{{ number_format($stats['totalUsers'] ?? 0) }}</div>
-                <div class="stat-change change-positive">
-                    <i class="fas fa-arrow-up"></i> Registered users
-                </div>
-            </div>
-        </div>
-        
-        <div class="stat-card reveal-on-scroll">
-            <div class="stat-icon icon-shows">
-                <i class="fas fa-broadcast-tower"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Live Shows</h3>
-                <div class="stat-value">{{ $stats['shows'] }}</div>
-                @php
-                    $activeShows = \App\Models\Show::where('status', 'live')->orWhere('is_live', true)->count();
-                @endphp
-                @if($activeShows > 0)
-                    <div class="stat-change change-positive">
-                        <i class="fas fa-arrow-up"></i> {{ $activeShows }} active now
-                    </div>
-                @else
-                    <div class="stat-change" style="color: var(--text-secondary);">
-                        <i class="fas fa-info-circle"></i> No active shows
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
+    {{-- Stats are now displayed via Filament widgets (ListenerCountWidget, DashboardStatsWidget) --}}
+    {{-- Removed duplicate cards to avoid redundancy --}}
     
     <!-- Charts Section -->
     <div class="charts-section">
@@ -77,15 +17,13 @@
                     <button class="chart-btn" data-period="day" onclick="updateListenerChart('day')">Day</button>
                     <button class="chart-btn" data-period="week" onclick="updateListenerChart('week')">Week</button>
                     <button class="chart-btn active" data-period="month" onclick="updateListenerChart('month')">Month</button>
-                    <button id="generateSampleData" style="background: rgba(0,150,0,0.2); border: 1px solid #00aa00; color: #00aa00; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-left: 10px;" title="Generate sample analytics data">
-                        <i class="fas fa-magic"></i> Generate Sample Data
-                    </button>
+                    <button class="chart-btn" data-period="year" onclick="updateListenerChart('year')">Year</button>
                 </div>
             </div>
-            <div id="listenerStats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;" class="listener-stats-grid">
+            <div id="listenerStats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;" class="listener-stats-grid">
                 <div style="text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="dayCount">{{ number_format($dailyListeners) }}</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Today's Sessions</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Daily Sessions</div>
                 </div>
                 <div style="text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="weekCount">{{ number_format($weeklyListeners) }}</div>
@@ -94,6 +32,13 @@
                 <div style="text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="monthCount">{{ number_format($monthlyListenersTotal) }}</div>
                     <div style="font-size: 0.85rem; color: var(--text-secondary);">Monthly Sessions</div>
+                </div>
+                <div style="text-align: center;">
+                    @php
+                        $yearlyTotal = \App\Models\AudienceMetric::whereYear('captured_for', now()->year)->sum('total_listening_sessions') ?? 0;
+                    @endphp
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="yearCount">{{ number_format($yearlyTotal) }}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Yearly Sessions</div>
                 </div>
             </div>
             <div class="chart-container" id="listenerChartContainer" style="height: 300px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px;">
