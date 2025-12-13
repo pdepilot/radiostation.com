@@ -20,5 +20,5 @@
 </div>
 
 {{-- Hidden Video Element for HLS - Single Global Instance --}}
-{{-- HLS.js will use this element for playback --}}
-<video id="hlsLivePlayer" preload="auto" style="display: none;" crossorigin="anonymous"></video>
+{{-- HLS.js will use this element for playback - persists across page navigations --}}
+<video id="hlsLivePlayer" preload="auto" style="display: none;" crossorigin="anonymous" data-persistent="true"></video>

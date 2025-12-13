@@ -201,8 +201,19 @@
     // VIDEO ELEMENT INITIALIZATION
     // =============================================
     function initVideoElement() {
-        if (video) return video;
+        // Check if video element already exists (from previous page)
+        const existingVideo = document.getElementById('hlsLivePlayer');
+        if (existingVideo) {
+            video = existingVideo;
+            // Re-attach event listeners if needed
+            if (!video.hasAttribute('data-listeners-attached')) {
+                attachVideoListeners();
+                video.setAttribute('data-listeners-attached', 'true');
+            }
+            return video;
+        }
 
+        // Create new video element if it doesn't exist
         video = document.createElement('video');
         video.id = 'hlsLivePlayer';
         video.style.display = 'none';
@@ -210,6 +221,25 @@
         video.crossOrigin = 'anonymous';
         video.muted = false;
         video.volume = 1.0;
+        video.setAttribute('data-listeners-attached', 'true');
+
+        // Attach event listeners
+        attachVideoListeners();
+
+        // Only append if not already in DOM
+        if (!document.body.contains(video)) {
+            document.body.appendChild(video);
+        }
+        return video;
+    }
+
+    function attachVideoListeners() {
+        if (!video) return;
+
+        // Remove existing listeners to prevent duplicates
+        const newVideo = video.cloneNode(true);
+        video.parentNode?.replaceChild(newVideo, video);
+        video = newVideo;
 
         // Event listeners
         video.addEventListener('play', () => {
@@ -241,9 +271,6 @@
             console.error('Video error:', e);
             handleStreamError();
         });
-
-        document.body.appendChild(video);
-        return video;
     }
 
     // =============================================
@@ -383,8 +410,19 @@
         const streamUrl = url || currentStreamUrl || STREAM_URLS.main;
 
         try {
-            // Initialize HLS if needed
-            if (!video || video.src !== streamUrl) {
+            // Initialize video element if needed
+            if (!video) {
+                initVideoElement();
+            }
+
+            // Check if already playing the same stream
+            if (video && !video.paused && video.src === streamUrl && currentStreamUrl === streamUrl) {
+                console.log('Already playing this stream');
+                return;
+            }
+
+            // Initialize HLS if needed or if stream URL changed
+            if (!video.src || video.src !== streamUrl) {
                 await initHLS(streamUrl);
                 currentStreamUrl = streamUrl;
             }
@@ -570,11 +608,22 @@
         // Calculate if we should resume
         const timeSinceSave = (getServerTime() - saved.serverTime) / 1000;
         
-        // If saved position is less than 60 seconds old, resume
-        if (timeSinceSave < 60) {
+        // If saved position is less than 120 seconds old, resume (increased from 60)
+        if (timeSinceSave < 120) {
             try {
-                await playStream(saved.streamUrl);
-                console.log('Playback restored from saved position');
+                // Check if video is already playing (from previous page)
+                if (video && !video.paused && video.readyState >= 2) {
+                    // Video is already playing, just update UI
+                    isPlaying = true;
+                    currentStreamUrl = saved.streamUrl;
+                    updateUI('Live');
+                    startPositionUpdates();
+                    console.log('Playback already active, restored state');
+                } else {
+                    // Need to start playback
+                    await playStream(saved.streamUrl);
+                    console.log('Playback restored from saved position');
+                }
             } catch (error) {
                 console.warn('Failed to restore playback:', error);
                 updateUI('Tap to play');
@@ -589,7 +638,13 @@
     // INITIALIZATION
     // =============================================
     async function init() {
-        // Initialize video element
+        // Check if already initialized (prevent double initialization)
+        if (window.DarlingFMAudio && window.DarlingFMAudio._initialized) {
+            console.log('Player already initialized, skipping...');
+            return;
+        }
+
+        // Initialize video element (reuse existing if available)
         initVideoElement();
 
         // Initialize broadcast channel
@@ -638,7 +693,9 @@
         toggle: togglePlayback,
         isPlaying: () => isPlaying,
         getCurrentUrl: () => currentStreamUrl,
-        syncServerTime: syncServerTime
+        syncServerTime: syncServerTime,
+        _initialized: true,
+        getVideo: () => video
     };
 
     // =============================================
