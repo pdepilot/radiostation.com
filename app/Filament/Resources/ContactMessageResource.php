@@ -50,7 +50,8 @@ class ContactMessageResource extends Resource
                             ->options([
                                 'general' => 'General Inquiry',
                                 'advertising' => 'Advertising',
-                                'partnership' => 'Partnership',
+                                'playlist' => 'Playlist Request',
+                                'technical' => 'Technical Support',
                                 'shoutout' => 'Shout-out Request',
                             ]),
                         Forms\Components\Textarea::make('message')
@@ -95,7 +96,8 @@ class ContactMessageResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'general' => 'primary',
                         'advertising' => 'info',
-                        'partnership' => 'success',
+                        'playlist' => 'success',
+                        'technical' => 'warning',
                         'shoutout' => 'warning',
                         default => 'gray',
                     }),
@@ -123,7 +125,8 @@ class ContactMessageResource extends Resource
                     ->options([
                         'general' => 'General Inquiry',
                         'advertising' => 'Advertising',
-                        'partnership' => 'Partnership',
+                        'playlist' => 'Playlist Request',
+                        'technical' => 'Technical Support',
                         'shoutout' => 'Shout-out Request',
                     ]),
             ])
