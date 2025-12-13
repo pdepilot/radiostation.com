@@ -410,8 +410,9 @@
     
     function updateHomepageUI(data) {
         const titleEl = document.getElementById('streamTitle');
-        if (titleEl && data.title) {
-            titleEl.textContent = data.title;
+        if (titleEl) {
+            // Use show name if available, otherwise use title
+            titleEl.textContent = data.show || data.title || '107.3 FM';
         }
         
         const badgeEl = document.getElementById('liveNowBadge');
@@ -423,7 +424,7 @@
         const stickyTitleEl = document.getElementById('stickyPlayerTitle');
         if (stickyTitleEl) {
             // Use show name if available, otherwise use title
-            stickyTitleEl.textContent = data.show || data.title || 'Darling FM 107.3';
+            stickyTitleEl.textContent = data.show || data.title || 'Darling FM Live';
         }
     }
 
