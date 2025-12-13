@@ -8,7 +8,7 @@
         
         {{-- Stream Info --}}
         <div class="sticky-player-info">
-            <div class="sticky-player-title" id="stickyPlayerTitle">Darling FM 107.3</div>
+            <div class="sticky-player-title" id="stickyPlayerTitle">Darling FM Live</div>
             <div class="sticky-player-status" id="stickyPlayerStatus">Tap to play</div>
         </div>
     </div>

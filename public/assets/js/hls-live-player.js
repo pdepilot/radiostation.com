@@ -418,6 +418,13 @@
         if (badgeEl) {
             badgeEl.style.display = data.status === 'live' ? 'inline-block' : 'none';
         }
+        
+        // Update sticky player title with show name (or title if no show)
+        const stickyTitleEl = document.getElementById('stickyPlayerTitle');
+        if (stickyTitleEl) {
+            // Use show name if available, otherwise use title
+            stickyTitleEl.textContent = data.show || data.title || 'Darling FM 107.3';
+        }
     }
 
     // =============================================
@@ -535,15 +542,15 @@
         updateUI('Error loading stream');
 
         // Try backup stream
-        if (currentStreamUrl === STREAM_URLS.main) {
+        if (currentStreamUrl === STREAM_URLS.main || (activeStreamData && currentStreamUrl === activeStreamData.stream_url)) {
             console.log('Trying backup stream...');
             setTimeout(() => {
                 playStream(STREAM_URLS.backup).catch(() => {
-                    updateUI('Stream unavailable');
+                    updateUI('Tap to play');
                 });
             }, 2000);
         } else {
-            updateUI('Stream unavailable');
+            updateUI('Tap to play');
         }
     }
 
