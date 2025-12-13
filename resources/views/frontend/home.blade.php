@@ -138,118 +138,45 @@
                 <h2 class="section-title">FEATURED SPONSORS</h2>
                             </div>
             <div class="sponsors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; width: 100%;">
-            <!-- Sponsor Card 1 - Sony Headphones -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://www.sony.com/electronics/headphones" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3));">
-                        <div class="image-slider-ad" id="slider1" style="height: 100%; position: relative;">
-                            <div class="image-slides" style="display: flex; height: 100%; transition: transform 0.5s ease;">
-                                <div class="image-slide" style="min-width: 100%; height: 100%; background-size: cover; background-position: center; background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')"></div>
-                                <div class="image-slide" style="min-width: 100%; height: 100%; background-size: cover; background-position: center; background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')"></div>
-                                <div class="image-slide" style="min-width: 100%; height: 100%; background-size: cover; background-position: center; background-image: url('https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')"></div>
-                                <div class="image-slide" style="min-width: 100%; height: 100%; background-size: cover; background-position: center; background-image: url('https://images.unsplash.com/photo-1521316370238-71445104d3e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')"></div>
+            @forelse($featuredSponsors as $sponsor)
+                <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <a href="{{ $sponsor->website_url ?? '#' }}" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
+                        <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3));">
+                            @if($sponsor->images && count($sponsor->images) > 0)
+                                <div class="image-slider-ad" id="slider{{ $sponsor->id }}" style="height: 100%; position: relative;">
+                                    <div class="image-slides" style="display: flex; height: 100%; transition: transform 0.5s ease;">
+                                        @foreach($sponsor->images as $image)
+                                            <div class="image-slide" style="min-width: 100%; height: 100%; background-size: cover; background-position: center; background-image: url('{{ asset('storage/' . $image['image']) }}')"></div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @elseif($sponsor->logo)
+                                <div style="height: 100%; background-size: cover; background-position: center; background-image: url('{{ asset('storage/' . $sponsor->logo) }}')"></div>
+                            @else
+                                <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-building" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+                                </div>
+                            @endif
+                            @if($sponsor->badge)
+                                <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">{{ $sponsor->badge }}</div>
+                            @endif
+                        </div>
+                        <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
+                            <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">{{ $sponsor->name }}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">{{ $sponsor->description ?? 'Premium partner of Darling FM.' }}</p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
+                                <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
+                                <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
                             </div>
                         </div>
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Premium</div>
-                    </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">Sony Headphones</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Hear the difference with premium audio quality and cutting-edge technology.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sponsor Card 2 - Apple Music -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://www.apple.com/apple-music" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
-                        <i class="fab fa-apple" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Premium</div>
-                            </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">Apple Music</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Stream millions of songs and discover new music with premium quality audio.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sponsor Card 3 - Live Nation -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://www.livenation.com" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3)); background-image: url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80'); background-size: cover; background-position: center;">
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Events</div>
-                            </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">Live Nation</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Experience the best live music events and festivals around the world.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sponsor Card 4 - Spotify -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://www.spotify.com" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, #1DB954, rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
-                        <i class="fab fa-spotify" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Streaming</div>
-                            </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">Spotify</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Music for everyone. Discover, stream, and share your favorite tracks.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sponsor Card 5 - Beats by Dre -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://www.beatsbydre.com" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3)); background-image: url('https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80'); background-size: cover; background-position: center;">
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Audio</div>
-                            </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">Beats by Dre</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Premium audio experience with cutting-edge design and superior sound quality.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sponsor Card 6 - YouTube Music -->
-            <div class="sponsor-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <a href="https://music.youtube.com" target="_blank" style="text-decoration: none; color: inherit; display: block; flex: 1;">
-                    <div class="sponsor-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, #FF0000, rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
-                        <i class="fab fa-youtube" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
-                        <div class="sponsor-badge" style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Video</div>
-                            </div>
-                    <div class="sponsor-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 10px; font-weight: 700;">YouTube Music</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Official music videos, live performances, and exclusive content.</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <span style="color: var(--light); font-size: 0.9rem; font-weight: 600;">Learn More</span>
-                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+            @empty
+                {{-- Fallback: Show message if no sponsors --}}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary);">
+                    <p>No featured sponsors at the moment. Check back soon!</p>
+                </div>
+            @endforelse
             </div>
         </div>
     </section>

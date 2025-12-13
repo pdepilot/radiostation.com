@@ -8,6 +8,7 @@ use App\Models\Podcast;
 use App\Models\Dj;
 use App\Models\Show;
 use App\Models\LiveStream;
+use App\Models\Sponsor;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,10 @@ class HomeController extends Controller
             'featuredDjs'    => Dj::where('is_featured', 1)
                                     ->with('shows')
                                     ->take(4)
+                                    ->get(),
+            'featuredSponsors' => Sponsor::where('status', 'active')
+                                    ->where('is_featured', true)
+                                    ->orderBy('order')
                                     ->get(),
         ]);
     }
