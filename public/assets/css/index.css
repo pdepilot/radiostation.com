@@ -1093,6 +1093,59 @@ nav a.active {
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
 }
 
+/* OAP Carousel Navigation Buttons */
+.aops-carousel-wrapper {
+  position: relative;
+  margin: 60px 0;
+  overflow: hidden;
+  padding: 80px 100px;
+  width: 100%;
+}
+
+.aops-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--light);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: all 0.3s;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.aops-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.aops-nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.aops-nav-btn[style*="pointer-events: none"] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.aops-nav-prev {
+  left: 20px;
+}
+
+.aops-nav-next {
+  right: 20px;
+}
+
 /* OAP Profile Modal */
 .profile-modal {
   display: none;
