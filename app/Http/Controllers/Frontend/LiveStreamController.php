@@ -69,6 +69,59 @@ class LiveStreamController extends Controller
         }
     }
 
+    public function getActiveStream()
+    {
+        try {
+            // Get the active live stream (status = 'live') or latest stream
+            $liveStream = LiveStream::where('status', 'live')
+                ->latest('updated_at')
+                ->with(['show', 'dj'])
+                ->first();
+
+            // If no live stream, get the latest one as fallback
+            if (!$liveStream) {
+                $liveStream = LiveStream::latest('updated_at')
+                    ->with(['show', 'dj'])
+                    ->first();
+            }
+
+            // Default fallback values
+            $defaultStreamUrl = 'https://phoebe.streamerr.co:7572/stream';
+            $defaultTitle = '107.3 FM';
+
+            if ($liveStream) {
+                return response()->json([
+                    'stream_url' => $liveStream->stream_url ?? $defaultStreamUrl,
+                    'title' => $liveStream->title ?? $defaultTitle,
+                    'status' => $liveStream->status ?? 'offline',
+                    'show' => $liveStream->show?->title,
+                    'dj' => $liveStream->dj?->stage_name,
+                    'listener_count' => $liveStream->listener_count ?? 0,
+                ]);
+            }
+
+            // Return defaults if no stream exists
+            return response()->json([
+                'stream_url' => $defaultStreamUrl,
+                'title' => $defaultTitle,
+                'status' => 'offline',
+                'show' => null,
+                'dj' => null,
+                'listener_count' => 0,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Active stream API error: ' . $e->getMessage());
+            return response()->json([
+                'stream_url' => 'https://phoebe.streamerr.co:7572/stream',
+                'title' => '107.3 FM',
+                'status' => 'offline',
+                'show' => null,
+                'dj' => null,
+                'listener_count' => 0,
+            ]);
+        }
+    }
+
     public function trackListener(Request $request)
     {
         try {
