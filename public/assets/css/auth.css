@@ -17,7 +17,8 @@
     margin: 0;
     width: 100%;
     box-sizing: border-box;
-    padding-top: 80px;
+    padding-top: 120px;
+    margin-top: 40px;
 }
 
 .auth-container {
@@ -345,7 +346,8 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .auth-page {
-        padding: 60px 15px 20px;
+        padding: 100px 15px 20px;
+        margin-top: 30px;
     }
 
     .auth-container {
@@ -374,7 +376,8 @@
 
 @media (max-width: 480px) {
     .auth-page {
-        padding: 50px 15px 20px;
+        padding: 80px 15px 20px;
+        margin-top: 20px;
     }
     
     .auth-container {
