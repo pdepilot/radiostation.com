@@ -377,10 +377,60 @@
     }
 
     // =============================================
+    // FETCH ACTIVE STREAM FROM API
+    // =============================================
+    let activeStreamData = null;
+    
+    async function fetchActiveStream() {
+        try {
+            const response = await fetch('/api/active-stream', {
+                method: 'GET',
+                cache: 'no-cache',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            
+            if (response.ok) {
+                activeStreamData = await response.json();
+                updateHomepageUI(activeStreamData);
+                return activeStreamData;
+            }
+        } catch (error) {
+            console.warn('Failed to fetch active stream:', error);
+        }
+        
+        // Fallback
+        activeStreamData = {
+            stream_url: STREAM_URLS.main,
+            title: '107.3 FM',
+            status: 'offline'
+        };
+        updateHomepageUI(activeStreamData);
+        return activeStreamData;
+    }
+    
+    function updateHomepageUI(data) {
+        const titleEl = document.getElementById('streamTitle');
+        if (titleEl && data.title) {
+            titleEl.textContent = data.title;
+        }
+        
+        const badgeEl = document.getElementById('liveNowBadge');
+        if (badgeEl) {
+            badgeEl.style.display = data.status === 'live' ? 'inline-block' : 'none';
+        }
+    }
+
+    // =============================================
     // PLAYBACK CONTROL
     // =============================================
     async function playStream(url = null) {
-        const streamUrl = url || currentStreamUrl || STREAM_URLS.main;
+        // Fetch stream data if not available
+        if (!activeStreamData) {
+            await fetchActiveStream();
+        }
+        
+        // Use provided URL, current URL, API stream_url, or fallback
+        const streamUrl = url || currentStreamUrl || activeStreamData?.stream_url || STREAM_URLS.main;
 
         try {
             // Initialize HLS if needed

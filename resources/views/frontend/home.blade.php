@@ -18,10 +18,10 @@
 
     {{-- Live Stream CTA --}}
     <section style="padding: 40px 20px; text-align: center; background: var(--glass); backdrop-filter: blur(16px); border-radius: 24px; max-width: 560px; margin: 40px auto; border: 1px solid rgba(255,255,255,0.1);">
-        <div style="display: inline-block; background: #ff0000; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
+        <div id="liveNowBadge" style="display: none; background: #ff0000; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
             ● LIVE NOW
         </div>
-        <h2 style="font-size: 2.4rem; margin: 12px 0; color: var(--light); font-weight: 800; letter-spacing: -0.5px;">
+        <h2 id="streamTitle" style="font-size: 2.4rem; margin: 12px 0; color: var(--light); font-weight: 800; letter-spacing: -0.5px;">
             107.3 FM
         </h2>
         <p style="color: var(--text-secondary); margin: 0 0 32px; font-size: 1.05rem;">
