@@ -1010,6 +1010,71 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Force reveal after a short delay to ensure all elements are rendered
     setTimeout(revealOnScroll, 100);
+
+    // =============================================
+    // OAP CAROUSEL NAVIGATION
+    // =============================================
+    const aopsCarousel = document.getElementById('aopsCarousel');
+    const aopsPrevBtn = document.getElementById('aopsPrevBtn');
+    const aopsNextBtn = document.getElementById('aopsNextBtn');
+    const aopsWrapper = document.querySelector('.aops-carousel-wrapper');
+
+    if (aopsCarousel && aopsPrevBtn && aopsNextBtn) {
+        let currentScrollPosition = 0;
+        const cardWidth = 300; // min-width of aop-card
+        const gap = 40; // gap between cards
+        const scrollAmount = cardWidth + gap;
+
+        // Function to update button visibility
+        function updateButtonVisibility() {
+            const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
+            
+            if (currentScrollPosition <= 0) {
+                aopsPrevBtn.style.opacity = '0.3';
+                aopsPrevBtn.style.pointerEvents = 'none';
+            } else {
+                aopsPrevBtn.style.opacity = '1';
+                aopsPrevBtn.style.pointerEvents = 'auto';
+            }
+
+            if (currentScrollPosition >= maxScroll - 10) {
+                aopsNextBtn.style.opacity = '0.3';
+                aopsNextBtn.style.pointerEvents = 'none';
+            } else {
+                aopsNextBtn.style.opacity = '1';
+                aopsNextBtn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Previous button click
+        aopsPrevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            currentScrollPosition = Math.max(0, currentScrollPosition - scrollAmount);
+            aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
+            updateButtonVisibility();
+        });
+
+        // Next button click
+        aopsNextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
+            currentScrollPosition = Math.min(maxScroll, currentScrollPosition + scrollAmount);
+            aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
+            updateButtonVisibility();
+        });
+
+        // Initialize button visibility
+        updateButtonVisibility();
+
+        // Update on window resize
+        window.addEventListener('resize', function() {
+            updateButtonVisibility();
+        });
+    }
 });
 
 
