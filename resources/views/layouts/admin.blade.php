@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/admin-dash.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/sticky-player.css') }}">
     @stack('styles')
     <style>
         :root {
@@ -333,7 +334,14 @@
         </div>
     </div>
 
+    {{-- Global Livestream Player --}}
+    @include('components.sticky-player')
+    
+    {{-- HLS.js CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
     <script src="{{ asset('assets/js/admin-dash.js') }}" defer></script>
+    <script src="{{ asset('assets/js/hls-live-player.js') }}" defer></script>
     @stack('scripts')
 </body>
 </html>
