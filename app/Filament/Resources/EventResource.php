@@ -143,13 +143,15 @@ class EventResource extends Resource
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean()
                     ->label('Featured'),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'info' => 'upcoming',
-                        'success' => 'ongoing',
-                        'gray' => 'past',
-                        'danger' => 'cancelled',
-                    ]),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'upcoming' => 'info',
+                        'ongoing' => 'success',
+                        'past' => 'gray',
+                        'cancelled' => 'danger',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('view_count')
                     ->numeric()
                     ->sortable()

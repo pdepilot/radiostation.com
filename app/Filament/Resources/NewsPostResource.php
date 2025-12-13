@@ -135,12 +135,14 @@ class NewsPostResource extends Resource
                 Tables\Columns\TextColumn::make('author_name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'warning' => 'draft',
-                        'info' => 'scheduled',
-                        'success' => 'published',
-                    ]),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'draft' => 'warning',
+                        'scheduled' => 'info',
+                        'published' => 'success',
+                        default => 'gray',
+                    }),
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean()
                     ->label('Featured'),

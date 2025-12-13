@@ -91,20 +91,24 @@ class ContactMessageResource extends Resource
                 Tables\Columns\TextColumn::make('subject')
                     ->searchable()
                     ->limit(40),
-                Tables\Columns\BadgeColumn::make('type')
-                    ->colors([
-                        'primary' => 'general',
-                        'info' => 'advertising',
-                        'success' => 'partnership',
-                        'warning' => 'shoutout',
-                    ]),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'danger' => 'new',
-                        'info' => 'read',
-                        'success' => 'replied',
-                        'gray' => 'archived',
-                    ]),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'general' => 'primary',
+                        'advertising' => 'info',
+                        'partnership' => 'success',
+                        'shoutout' => 'warning',
+                        default => 'gray',
+                    }),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'new' => 'danger',
+                        'read' => 'info',
+                        'replied' => 'success',
+                        'archived' => 'gray',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

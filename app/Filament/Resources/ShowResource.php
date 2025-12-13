@@ -155,13 +155,15 @@ class ShowResource extends Resource
                 Tables\Columns\IconColumn::make('is_live')
                     ->boolean()
                     ->label('Live'),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'warning' => 'scheduled',
-                        'success' => 'live',
-                        'gray' => 'completed',
-                        'danger' => 'cancelled',
-                    ]),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'scheduled' => 'warning',
+                        'live' => 'success',
+                        'completed' => 'gray',
+                        'cancelled' => 'danger',
+                        default => 'gray',
+                    }),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
