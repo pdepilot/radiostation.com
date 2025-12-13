@@ -22,8 +22,11 @@
             ● LIVE NOW
         </div>
         <h2 id="streamTitle" style="font-size: 2.4rem; margin: 12px 0; color: var(--light); font-weight: 800; letter-spacing: -0.5px;">
-            107.3 FM
+            Morning Charge
         </h2>
+        <p style="color: var(--text-secondary); margin: 8px 0 32px; font-size: 1.1rem; font-weight: 600;">
+            107.3 FM
+        </p>
         <p style="color: var(--text-secondary); margin: 0 0 32px; font-size: 1.05rem;">
             Tap the button to listen live
         </p>
@@ -33,9 +36,6 @@
            style="display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; background: #ff0000; color: white; font-size: 3rem; border-radius: 50%; box-shadow: 0 12px 40px rgba(255,0,0,0.45); transition: transform 0.2s; border: none; cursor: pointer;">
             <i class="fas fa-play" style="margin-left: 6px;"></i>
         </button>
-        <div style="margin-top: 24px; font-size: 0.8rem; color: var(--text-secondary);">
-            Main: 7572 • Backup auto-switches if needed
-        </div>
     </section>
 
 
