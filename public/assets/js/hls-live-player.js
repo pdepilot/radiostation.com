@@ -644,6 +644,12 @@
 
         // Initialize broadcast channel
         initBroadcastChannel();
+        
+        // Fetch active stream data from API
+        await fetchActiveStream();
+        
+        // Refresh stream data every 5 minutes
+        setInterval(fetchActiveStream, 5 * 60 * 1000);
 
         // Setup UI controls
         const playBtn = document.getElementById('stickyPlayBtn');
