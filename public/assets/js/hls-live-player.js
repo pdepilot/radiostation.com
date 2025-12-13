@@ -25,7 +25,10 @@
         playState: 'darlingfm_play_state',
         serverTime: 'darlingfm_server_time',
         clientTime: 'darlingfm_client_time',
-        streamUrl: 'darlingfm_stream_url'
+        streamUrl: 'darlingfm_stream_url',
+        // SessionStorage keys for immediate resume
+        radioPlaying: 'radioPlaying', // 'true' or 'false'
+        radioVolume: 'radioVolume' // 0.0 to 1.0
     };
 
     const SEEK_BUFFER = 5; // Seek 5 seconds before live edge
@@ -44,6 +47,8 @@
     let broadcastChannel = null;
     let syncInterval = null;
     let positionUpdateInterval = null;
+    let playRetryCount = 0;
+    const MAX_PLAY_RETRIES = 3;
 
     // =============================================
     // HLS.JS DETECTION & LOADING
@@ -139,6 +144,14 @@
             };
             localStorage.setItem(STORAGE_KEYS.playState, JSON.stringify(data));
             
+            // Save play state to sessionStorage for immediate resume
+            if (typeof sessionStorage !== 'undefined') {
+                sessionStorage.setItem(STORAGE_KEYS.radioPlaying, isPlaying ? 'true' : 'false');
+                if (video) {
+                    sessionStorage.setItem(STORAGE_KEYS.radioVolume, video.volume.toString());
+                }
+            }
+            
             // Broadcast to other tabs
             if (broadcastChannel) {
                 broadcastChannel.postMessage({
@@ -214,6 +227,7 @@
         // Event listeners
         video.addEventListener('play', () => {
             isPlaying = true;
+            playRetryCount = 0; // Reset retry count on successful play
             savePosition();
             updateUI();
         });
@@ -239,7 +253,15 @@
 
         video.addEventListener('error', (e) => {
             console.error('Video error:', e);
+            isPlaying = false;
+            savePosition(); // Save paused state on error
             handleStreamError();
+        });
+
+        video.addEventListener('ended', () => {
+            isPlaying = false;
+            savePosition(); // Save paused state on end
+            updateUI('Ended');
         });
 
         document.body.appendChild(video);
@@ -379,7 +401,41 @@
     // =============================================
     // PLAYBACK CONTROL
     // =============================================
-    async function playStream(url = null) {
+    /**
+     * Attempt to play the stream with retry logic for autoplay policy
+     * @param {boolean} muted - Whether to attempt muted playback first
+     * @returns {Promise<void>}
+     */
+    async function attemptPlay(muted = false) {
+        if (!video) {
+            throw new Error('Video element not initialized');
+        }
+
+        // Try muted play if browser blocks autoplay
+        if (muted && !video.muted) {
+            const originalVolume = video.volume;
+            video.muted = true;
+            try {
+                await video.play();
+                // Unmute after successful play
+                video.muted = false;
+                video.volume = originalVolume;
+                return;
+            } catch (e) {
+                video.muted = false;
+                video.volume = originalVolume;
+                throw e;
+            }
+        }
+
+        // Normal play attempt
+        await video.play();
+    }
+
+    /**
+     * Play stream with retry logic and autoplay policy handling
+     */
+    async function playStream(url = null, retryMuted = false) {
         const streamUrl = url || currentStreamUrl || STREAM_URLS.main;
 
         try {
@@ -387,6 +443,14 @@
             if (!video || video.src !== streamUrl) {
                 await initHLS(streamUrl);
                 currentStreamUrl = streamUrl;
+            }
+
+            // Restore volume from sessionStorage
+            if (typeof sessionStorage !== 'undefined') {
+                const savedVolume = sessionStorage.getItem(STORAGE_KEYS.radioVolume);
+                if (savedVolume !== null) {
+                    video.volume = parseFloat(savedVolume) || 1.0;
+                }
             }
 
             // Sync server time before playing
@@ -400,8 +464,25 @@
                 console.log('Resuming from saved position. Elapsed:', elapsed, 'seconds');
             }
 
-            // Play
-            await video.play();
+            // Attempt to play with retry logic
+            try {
+                await attemptPlay(retryMuted);
+            } catch (error) {
+                // If play fails and we haven't tried muted yet, try muted
+                if (!retryMuted && playRetryCount < MAX_PLAY_RETRIES) {
+                    playRetryCount++;
+                    console.log(`Play blocked, trying muted playback (attempt ${playRetryCount})...`);
+                    return playStream(streamUrl, true);
+                }
+                // If muted also fails, try again up to MAX_RETRIES
+                if (playRetryCount < MAX_PLAY_RETRIES) {
+                    playRetryCount++;
+                    console.log(`Play failed, retrying (attempt ${playRetryCount}/${MAX_PLAY_RETRIES})...`);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    return playStream(streamUrl, false);
+                }
+                throw error;
+            }
             
             // Seek to live position after a short delay
             setTimeout(() => {
@@ -424,8 +505,16 @@
             updateUI('Live');
         } catch (error) {
             console.error('Play error:', error);
-            handleStreamError();
-            throw error;
+            // If autoplay is blocked, show UI but don't throw
+            if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                console.warn('Autoplay blocked. User interaction required.');
+                updateUI('Tap to play');
+                isPlaying = false;
+                savePosition();
+            } else {
+                handleStreamError();
+                throw error;
+            }
         }
     }
 
@@ -556,32 +645,67 @@
     // =============================================
     // RESTORE PLAYBACK ON LOAD
     // =============================================
+    /**
+     * Restore playback state immediately on page load
+     * Uses sessionStorage for instant resume without waiting for server sync
+     */
     async function restorePlayback() {
-        const saved = loadPosition();
+        // Check sessionStorage first for immediate resume
+        let shouldResume = false;
+        let savedStreamUrl = null;
         
-        if (!saved || !saved.isPlaying) {
+        if (typeof sessionStorage !== 'undefined') {
+            const radioPlaying = sessionStorage.getItem(STORAGE_KEYS.radioPlaying);
+            if (radioPlaying === 'true') {
+                shouldResume = true;
+                // Get stream URL from localStorage or use default
+                const saved = loadPosition();
+                savedStreamUrl = (saved && saved.streamUrl) || STREAM_URLS.main;
+            }
+        }
+
+        // Fallback to localStorage if sessionStorage not available
+        if (!shouldResume) {
+            const saved = loadPosition();
+            if (saved && saved.isPlaying) {
+                // Sync server time first
+                await syncServerTime();
+                
+                // Calculate if we should resume
+                const timeSinceSave = (getServerTime() - saved.serverTime) / 1000;
+                
+                // If saved position is less than 120 seconds old, resume
+                if (timeSinceSave < 120) {
+                    shouldResume = true;
+                    savedStreamUrl = saved.streamUrl || STREAM_URLS.main;
+                }
+            }
+        }
+
+        if (!shouldResume || !savedStreamUrl) {
             updateUI('Tap to play');
             return;
         }
 
-        // Sync server time first
-        await syncServerTime();
+        // Initialize video element if needed
+        if (!video) {
+            initVideoElement();
+        }
 
-        // Calculate if we should resume
-        const timeSinceSave = (getServerTime() - saved.serverTime) / 1000;
-        
-        // If saved position is less than 60 seconds old, resume
-        if (timeSinceSave < 60) {
-            try {
-                await playStream(saved.streamUrl);
-                console.log('Playback restored from saved position');
-            } catch (error) {
-                console.warn('Failed to restore playback:', error);
+        // Sync server time (non-blocking for immediate resume)
+        syncServerTime().catch(err => console.warn('Server time sync failed:', err));
+
+        // Immediately attempt to resume playback
+        try {
+            console.log('Auto-resuming playback from sessionStorage...');
+            await playStream(savedStreamUrl, true); // Try muted first for autoplay policy
+            console.log('Playback restored successfully');
+        } catch (error) {
+            console.warn('Failed to auto-resume playback:', error);
+            // If autoplay is blocked, that's okay - user can click play
+            if (error.name !== 'NotAllowedError' && error.name !== 'NotSupportedError') {
                 updateUI('Tap to play');
             }
-        } else {
-            // Too old, just show UI
-            updateUI('Tap to play');
         }
     }
 
@@ -589,8 +713,16 @@
     // INITIALIZATION
     // =============================================
     async function init() {
-        // Initialize video element
+        // Initialize video element first
         initVideoElement();
+
+        // Restore volume from sessionStorage immediately
+        if (video && typeof sessionStorage !== 'undefined') {
+            const savedVolume = sessionStorage.getItem(STORAGE_KEYS.radioVolume);
+            if (savedVolume !== null) {
+                video.volume = parseFloat(savedVolume) || 1.0;
+            }
+        }
 
         // Initialize broadcast channel
         initBroadcastChannel();
@@ -601,7 +733,13 @@
         const homePlayBtn = document.getElementById('homePlayButton');
 
         if (playBtn) {
-            playBtn.addEventListener('click', togglePlayback);
+            playBtn.addEventListener('click', () => {
+                // On first user interaction, unmute if muted due to autoplay policy
+                if (video && video.muted && isPlaying) {
+                    video.muted = false;
+                }
+                togglePlayback();
+            });
         }
 
         if (expandBtn) {
@@ -611,7 +749,13 @@
         }
 
         if (homePlayBtn) {
-            homePlayBtn.addEventListener('click', togglePlayback);
+            homePlayBtn.addEventListener('click', () => {
+                // On first user interaction, unmute if muted due to autoplay policy
+                if (video && video.muted && isPlaying) {
+                    video.muted = false;
+                }
+                togglePlayback();
+            });
         }
 
         // Page visibility handlers
@@ -619,14 +763,19 @@
         window.addEventListener('pagehide', handlePageHide);
         window.addEventListener('beforeunload', handlePageHide);
 
-        // Start server time sync interval
-        syncInterval = setInterval(syncServerTime, SYNC_INTERVAL);
+        // Start server time sync interval (non-blocking)
+        syncInterval = setInterval(() => {
+            syncServerTime().catch(err => console.warn('Server time sync failed:', err));
+        }, SYNC_INTERVAL);
 
-        // Initial server time sync
-        await syncServerTime();
+        // Initial server time sync (non-blocking for immediate resume)
+        syncServerTime().catch(err => console.warn('Initial server time sync failed:', err));
 
-        // Restore playback
-        await restorePlayback();
+        // Restore playback immediately (don't await - let it happen in background)
+        restorePlayback().catch(err => {
+            console.warn('Playback restoration failed:', err);
+            updateUI('Tap to play');
+        });
     }
 
     // =============================================
