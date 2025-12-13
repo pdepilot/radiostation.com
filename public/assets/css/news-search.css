@@ -7,6 +7,8 @@
 .nav-search-results {
     scrollbar-width: thin;
     scrollbar-color: var(--accent) rgba(255, 255, 255, 0.1);
+    background: rgba(15, 15, 20, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
 }
 
 .nav-search-results::-webkit-scrollbar {
@@ -141,8 +143,8 @@
 /* View All Results Link */
 .search-view-all {
     padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 0, 0, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 0, 0, 0.1);
 }
 
 .view-all-link {
@@ -240,7 +242,7 @@
 
 /* Search Suggestions */
 .search-suggestions {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     padding: 15px;
     margin: 20px 0;
