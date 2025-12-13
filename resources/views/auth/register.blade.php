@@ -147,7 +147,7 @@
                                 required 
                                 autocomplete="new-password"
                                 placeholder="Create a password (min. 8 characters)">
-                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye" id="password-eye"></i>
                             </button>
                         </div>
@@ -171,7 +171,7 @@
                                 required 
                                 autocomplete="new-password"
                                 placeholder="Confirm your password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">
+                            <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye" id="password_confirmation-eye"></i>
                             </button>
                         </div>
@@ -199,17 +199,26 @@
     </div>
 
     <script>
+        /**
+         * Toggle password visibility
+         * Shows/hides password in real-time
+         */
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
             const eye = document.getElementById(inputId + '-eye');
+            
+            if (!input || !eye) return;
+            
             if (input.type === 'password') {
                 input.type = 'text';
                 eye.classList.remove('fa-eye');
                 eye.classList.add('fa-eye-slash');
+                eye.setAttribute('aria-label', 'Hide password');
             } else {
                 input.type = 'password';
                 eye.classList.remove('fa-eye-slash');
                 eye.classList.add('fa-eye');
+                eye.setAttribute('aria-label', 'Show password');
             }
         }
     </script>

@@ -70,7 +70,7 @@
                                 required 
                                 autocomplete="current-password"
                                 placeholder="Enter your password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye" id="password-eye"></i>
                             </button>
                         </div>
