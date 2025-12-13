@@ -26,7 +26,7 @@ class Dashboard extends BaseDashboard
         ];
     }
     
-    public function getWidgets(): array
+    protected function getFooterWidgets(): array
     {
         return [
             \Filament\Widgets\StatsOverviewWidget::make([
