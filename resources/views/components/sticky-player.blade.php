@@ -11,11 +11,6 @@
             <div class="sticky-player-title" id="stickyPlayerTitle">Darling FM 107.3</div>
             <div class="sticky-player-status" id="stickyPlayerStatus">Tap to play</div>
         </div>
-        
-        {{-- Expand Button (optional - opens full player) --}}
-        <button id="stickyExpandBtn" class="sticky-player-expand" aria-label="Expand player">
-            <i class="fas fa-chevron-up"></i>
-        </button>
     </div>
 </div>
 
