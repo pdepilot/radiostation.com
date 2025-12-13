@@ -284,7 +284,7 @@
             
             <ul class="sidebar-menu">
                 <li class="menu-label">Main</li>
-                <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="{{ url('/admin') }}" class="{{ request()->is('admin') ? 'active' : '' }}"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
                 <li><a href="{{ route('admin.livestreams.index') }}" class="{{ request()->routeIs('admin.livestreams.*') ? 'active' : '' }}"><i class="fas fa-broadcast-tower"></i> <span>Live Stream</span></a></li>
                 <li><a href="{{ route('admin.shows.index') }}" class="{{ request()->routeIs('admin.shows.*') ? 'active' : '' }}"><i class="fas fa-music"></i> <span>Shows</span></a></li>
                 <li><a href="{{ route('admin.djs.index') }}" class="{{ request()->routeIs('admin.djs.*') ? 'active' : '' }}"><i class="fas fa-user"></i> <span>DJs</span></a></li>

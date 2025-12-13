@@ -74,7 +74,7 @@
                                     </a>
                                 @else
                                     @if(auth()->user()->isAdmin())
-                                        <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); color: var(--light); text-decoration: none; transition: all 0.3s; font-size: 1.1rem;" title="Admin Dashboard" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--glass)'">
+                                        <a href="{{ url('/admin') }}" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); color: var(--light); text-decoration: none; transition: all 0.3s; font-size: 1.1rem;" title="Admin Dashboard" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--glass)'">
                                             <i class="fas fa-tachometer-alt"></i>
                                         </a>
                                     @else
