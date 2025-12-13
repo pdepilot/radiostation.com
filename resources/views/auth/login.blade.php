@@ -6,8 +6,7 @@
 
 @section('content')
     <div class="auth-page">
-        <div class="container">
-            <div class="auth-container">
+        <div class="auth-container">
                 {{-- Logo Section --}}
                 <div class="auth-header">
                     <a href="{{ route('home') }}" class="auth-logo">
@@ -106,7 +105,6 @@
                     </p>
                 </div>
             </div>
-        </div>
     </div>
 
     <script>
