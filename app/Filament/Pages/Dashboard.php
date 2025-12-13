@@ -42,7 +42,7 @@ class Dashboard extends BaseDashboard
                     ->description('Scheduled events')
                     ->descriptionIcon('heroicon-o-calendar')
                     ->color('warning'),
-                \Filament\Widgets\StatsOverviewWidget\Stat::make('New Messages', ContactMessage::where('status', 'new')->count())
+                \Filament\Widgets\StatsOverviewWidget\Stat::make('New Messages', ContactMessage::where('status', 'pending')->orWhere('status', 'new')->count())
                     ->description('Unread contact messages')
                     ->descriptionIcon('heroicon-o-envelope')
                     ->color('danger'),
