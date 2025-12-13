@@ -33,8 +33,9 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Red,
             ])
             ->brandName('Darling FM Admin')
-            ->brandLogo(asset('assets/images/REAL_LOGO-removebg-preview.png'))
+            ->brandLogo(asset('assets/images/REAL_LOGO-removebg-preview.png'), true)
             ->favicon(asset('assets/images/REAL_LOGO-removebg-preview.png'))
+            ->brandLogoHeight('60px')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
@@ -58,19 +59,19 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
-    
+
     public function register(): void
     {
         parent::register();
-        
+
         FilamentView::registerRenderHook(
             'panels::body.end',
-            fn (): View => view('components.sticky-player')
+            fn(): View => view('components.sticky-player')
         );
-        
+
         FilamentView::registerRenderHook(
             'panels::head.end',
-            fn (): View => view('components.sticky-player-assets')
+            fn(): View => view('components.sticky-player-assets')
         );
     }
 }

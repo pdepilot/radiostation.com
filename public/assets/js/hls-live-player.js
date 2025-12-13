@@ -183,12 +183,22 @@
                         }
                     }
                 } else if (event.data.type === 'play') {
-                    // Another tab started playing
+                    // Another tab started playing - ensure single instance
                     if (!isPlaying) {
-                        playStream(event.data.streamUrl);
+                        // Sync with the playing tab
+                        currentStreamUrl = event.data.streamUrl;
+                        playStream(event.data.streamUrl).catch(() => {
+                            console.warn('Failed to sync play from other tab');
+                        });
+                    } else if (currentStreamUrl !== event.data.streamUrl) {
+                        // Different stream, switch to it
+                        currentStreamUrl = event.data.streamUrl;
+                        playStream(event.data.streamUrl).catch(() => {
+                            console.warn('Failed to switch stream from other tab');
+                        });
                     }
                 } else if (event.data.type === 'pause') {
-                    // Another tab paused
+                    // Another tab paused - sync pause state
                     if (isPlaying) {
                         pauseStream();
                     }

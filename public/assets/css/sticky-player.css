@@ -42,16 +42,25 @@
     height: 50px;
     border-radius: 50%;
     background: var(--accent);
-    color: white;
+    color: white !important;
     border: none;
     cursor: pointer;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
     transition: all 0.3s ease;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sticky-player-btn i {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: white !important;
 }
 
 .sticky-player-btn:hover {

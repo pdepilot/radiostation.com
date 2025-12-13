@@ -21,7 +21,7 @@ class ListenerCountWidget extends BaseWidget
 
         return [
             Stat::make('Live Listeners', $currentListeners)
-                ->description('Currently listening')
+                ->description('Active now')
                 ->descriptionIcon('heroicon-o-radio')
                 ->color('danger'),
         ];
