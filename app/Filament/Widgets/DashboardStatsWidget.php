@@ -32,7 +32,7 @@ class DashboardStatsWidget extends BaseWidget
                 ->description('Scheduled events')
                 ->descriptionIcon('heroicon-o-calendar')
                 ->color('warning'),
-            Stat::make('New Messages', ContactMessage::where('status', 'new')->count())
+            Stat::make('New Messages', ContactMessage::whereIn('status', ['new', 'pending'])->count())
                 ->description('Unread contact messages')
                 ->descriptionIcon('heroicon-o-envelope')
                 ->color('danger'),
