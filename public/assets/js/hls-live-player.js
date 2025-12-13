@@ -214,15 +214,25 @@
     // VIDEO ELEMENT INITIALIZATION
     // =============================================
     function initVideoElement() {
-        if (video) return video;
+        // Check if video element already exists in DOM (from sticky-player component)
+        const existingVideo = document.getElementById('hlsLivePlayer');
+        if (existingVideo) {
+            video = existingVideo;
+        } else if (!video) {
+            // Create new video element if it doesn't exist
+            video = document.createElement('video');
+            video.id = 'hlsLivePlayer';
+            video.style.display = 'none';
+            document.body.appendChild(video);
+        }
 
-        video = document.createElement('video');
-        video.id = 'hlsLivePlayer';
-        video.style.display = 'none';
+        // Configure video element properties
         video.preload = 'auto';
         video.crossOrigin = 'anonymous';
         video.muted = false;
-        video.volume = 1.0;
+        if (!video.volume) {
+            video.volume = 1.0;
+        }
 
         // Event listeners
         video.addEventListener('play', () => {
@@ -264,7 +274,10 @@
             updateUI('Ended');
         });
 
-        document.body.appendChild(video);
+        // Only append if not already in DOM
+        if (!document.body.contains(video)) {
+            document.body.appendChild(video);
+        }
         return video;
     }
 
