@@ -116,9 +116,7 @@ class ChatbotKnowledgeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListChatbotKnowledge::class,
-            'create' => Pages\CreateChatbotKnowledge::class,
-            'edit' => Pages\EditChatbotKnowledge::class,
+            'index' => Pages\ManageChatbotKnowledge::route('/'),
         ];
     }
 }

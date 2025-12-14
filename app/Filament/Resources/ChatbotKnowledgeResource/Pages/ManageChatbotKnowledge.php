@@ -4,9 +4,9 @@ namespace App\Filament\Resources\ChatbotKnowledgeResource\Pages;
 
 use App\Filament\Resources\ChatbotKnowledgeResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ManageChatbotKnowledge extends ListRecords
+class ManageChatbotKnowledge extends ManageRecords
 {
     protected static string $resource = ChatbotKnowledgeResource::class;
 
