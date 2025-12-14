@@ -35,7 +35,7 @@ class ShowsScheduleWidget extends BaseWidget
                 ->color('danger'),
             Stat::make('Active Streams', $activeStreams)
                 ->description('Live streams')
-                ->descriptionIcon('heroicon-o-broadcast-tower')
+                ->descriptionIcon('heroicon-o-radio')
                 ->color('success'),
             Stat::make('Scheduled', $scheduledShows)
                 ->description('Upcoming shows')
