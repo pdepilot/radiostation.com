@@ -112,6 +112,12 @@ Route::middleware('auth')->group(function () {
 // Admin routes are now handled by Filament at /admin
 // Old admin routes removed - using Filament 3 panel instead
 
+// Admin API routes for real-time updates
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/api/realtime/stream', [\App\Http\Controllers\Admin\RealtimeController::class, 'stream'])->name('admin.api.realtime.stream');
+    Route::get('/api/realtime/poll', [\App\Http\Controllers\Admin\RealtimeController::class, 'poll'])->name('admin.api.realtime.poll');
+});
+
 // ========================
 // AUTH ROUTES (OTP-based authentication)
 // ========================

@@ -5,6 +5,11 @@ namespace App\Filament\Pages;
 use App\Filament\Widgets\ListenerCountWidget;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\ListenerAnalyticsChartWidget;
+use App\Filament\Widgets\MessagesFeedbackWidget;
+use App\Filament\Widgets\ShowsScheduleWidget;
+use App\Filament\Widgets\ChatbotInfoWidget;
+use App\Filament\Widgets\TrafficAnalyticsWidget;
+use App\Filament\Widgets\AdsDealsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 /**
@@ -29,6 +34,11 @@ class Dashboard extends BaseDashboard
         return [
             DashboardStatsWidget::class,
             ListenerAnalyticsChartWidget::class,
+            MessagesFeedbackWidget::class,
+            ShowsScheduleWidget::class,
+            ChatbotInfoWidget::class,
+            TrafficAnalyticsWidget::class,
+            AdsDealsWidget::class,
         ];
     }
 }
