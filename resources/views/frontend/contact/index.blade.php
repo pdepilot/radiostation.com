@@ -17,12 +17,8 @@
 @endpush
 
 @section('content')
-    <div class="main-content" style="padding-top: 120px;">
-        <div class="container">
-            <!-- Page Header -->
-            <div class="page-header" style="text-align: center; margin-bottom: 60px;">
-                <h1 class="section-title">Contact Us</h1>
-            </div>
+    <section class="container" style="padding-top: 120px;">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">CONTACT US</h2>
 
             <!-- Contact Grid -->
             <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px;">
