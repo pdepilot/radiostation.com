@@ -117,11 +117,9 @@
                             <p><strong>Partnerships:</strong> <a href="mailto:partners@darlingfm.ng" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">partners@darlingfm.ng</a></p>
                         </div>
                     </div>
-                </section>
-            </div>
-
+        </section>
         </div>
-    </div>
+    </section>
 @endsection
 
 @push('scripts')
