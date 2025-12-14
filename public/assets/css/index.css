@@ -1102,14 +1102,16 @@ nav a.active {
   width: 100%;
 }
 
-/* Hide scrollbar */
+/* Hide scrollbar completely */
 .aops-carousel-wrapper::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .aops-carousel-wrapper {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .aops-carousel {
@@ -1117,35 +1119,54 @@ nav a.active {
 }
 
 .aops-carousel::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .aops-carousel {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Hide scrollbar on section */
+#on-air-personalities::-webkit-scrollbar {
+  display: none !important;
+}
+
+#on-air-personalities {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .aops-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--light);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1000 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: var(--light) !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
   display: flex !important;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  transition: all 0.3s;
-  opacity: 1;
-  pointer-events: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.5rem !important;
+  transition: all 0.3s !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  visibility: visible !important;
+}
+
+.aops-nav-btn i {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .aops-nav-btn:hover {
