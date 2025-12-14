@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('60px')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            // Widgets are explicitly registered in Dashboard.php to avoid duplicates
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->navigationGroups([
                 'Content',
                 'Broadcasting',
