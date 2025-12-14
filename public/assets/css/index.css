@@ -1095,11 +1095,12 @@ nav a.active {
 
 /* OAP Carousel Navigation Buttons */
 .aops-carousel-wrapper {
-  position: relative;
+  position: relative !important;
   margin: 60px 0;
   overflow: hidden !important;
   padding: 80px 100px;
   width: 100%;
+  transform: none !important;
 }
 
 /* Hide scrollbar completely */
