@@ -22,16 +22,10 @@ class Dashboard extends BaseDashboard
     
     protected static ?int $navigationSort = 1;
 
-    protected function getHeaderWidgets(): array
+    public function getWidgets(): array
     {
         return [
             ListenerCountWidget::class,
-        ];
-    }
-    
-    protected function getFooterWidgets(): array
-    {
-        return [
             DashboardStatsWidget::class,
             ListenerAnalyticsChartWidget::class,
             MessagesFeedbackWidget::class,
