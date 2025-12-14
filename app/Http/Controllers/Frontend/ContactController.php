@@ -11,10 +11,19 @@ use Illuminate\View\View;
 
 class ContactController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $selectedCategory = $request->get('category', 'general');
+        
+        // Validate category
+        $validCategories = ['general', 'advertising', 'shoutout', 'technical', 'event_partnership', 'feedback'];
+        if (!in_array($selectedCategory, $validCategories)) {
+            $selectedCategory = 'general';
+        }
+        
         return view('frontend.contact.index', [
             'settings' => SiteSetting::query()->pluck('value', 'key'),
+            'selectedCategory' => $selectedCategory,
         ]);
     }
 
@@ -25,7 +34,7 @@ class ContactController extends Controller
             'email' => ['required', 'email'],
             'phone' => ['nullable', 'string', 'max:40'],
             'subject' => ['required', 'string', 'max:150'],
-            'type' => ['required', 'in:general,advertising,shoutout,technical'],
+            'type' => ['required', 'in:general,advertising,shoutout,technical,event_partnership,feedback'],
             'message' => ['required', 'string'],
         ]);
 

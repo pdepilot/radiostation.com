@@ -63,10 +63,12 @@
                             <div class="input-group" style="margin-bottom: 25px; position: relative;">
                                 <select class="form-input" id="type" name="type" required style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--light); outline: none; font-size: 1rem; transition: border-color 0.3s; appearance: none; cursor: pointer;">
                                     <option value="">Select Category</option>
-                                    <option value="general" @selected(old('type') === 'general')>General Inquiry</option>
-                                    <option value="advertising" @selected(old('type') === 'advertising')>Advertising & Sponsorship</option>
-                                    <option value="shoutout" @selected(old('type') === 'shoutout')>Shout-out Request (Anniversaries/Birthdays)</option>
-                                    <option value="technical" @selected(old('type') === 'technical')>Technical Support</option>
+                                    <option value="general" @selected(old('type', $selectedCategory ?? '') === 'general')>General Inquiry</option>
+                                    <option value="advertising" @selected(old('type', $selectedCategory ?? '') === 'advertising')>Advertising & Sponsorship</option>
+                                    <option value="shoutout" @selected(old('type', $selectedCategory ?? '') === 'shoutout')>Shout-out Request (Anniversaries/Birthdays)</option>
+                                    <option value="technical" @selected(old('type', $selectedCategory ?? '') === 'technical')>Technical Support</option>
+                                    <option value="event_partnership" @selected(old('type', $selectedCategory ?? '') === 'event_partnership')>Event Partnership</option>
+                                    <option value="feedback" @selected(old('type', $selectedCategory ?? '') === 'feedback')>Feedback</option>
                                 </select>
                                 <label for="type" class="form-label" style="position: absolute; left: 15px; top: -10px; background: var(--primary); padding: 0 5px; color: var(--text-secondary); font-size: 0.85rem;">Message Category</label>
                             </div>

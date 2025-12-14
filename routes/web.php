@@ -71,7 +71,9 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/privacy', [\App\Http\Controllers\Frontend\PolicyController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [\App\Http\Controllers\Frontend\PolicyController::class, 'terms'])->name('terms');
 Route::get('/faq', [\App\Http\Controllers\Frontend\PolicyController::class, 'faq'])->name('faq');
-Route::get('/feedback', [\App\Http\Controllers\Frontend\PolicyController::class, 'feedback'])->name('feedback');
+Route::get('/feedback', function() {
+    return redirect()->route('contact.index', ['category' => 'feedback']);
+})->name('feedback');
 
 // Live Chat API
 Route::get('/api/live-chat', [\App\Http\Controllers\Frontend\LiveChatController::class, 'index'])->name('live-chat.index');

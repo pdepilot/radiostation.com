@@ -1027,7 +1027,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Function to update button visibility
         function updateButtonVisibility() {
-            const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
+            const wrapperWidth = aopsWrapper.clientWidth;
+            const carouselWidth = aopsCarousel.scrollWidth;
+            const maxScroll = Math.max(0, carouselWidth - wrapperWidth);
             
             if (currentScrollPosition <= 0) {
                 aopsPrevBtn.style.opacity = '0.3';
@@ -1065,7 +1067,9 @@ document.addEventListener("DOMContentLoaded", function() {
             e.stopImmediatePropagation();
             
             console.log('Next button clicked, current position:', currentScrollPosition);
-            const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
+            const wrapperWidth = aopsWrapper.clientWidth;
+            const carouselWidth = aopsCarousel.scrollWidth;
+            const maxScroll = Math.max(0, carouselWidth - wrapperWidth);
             currentScrollPosition = Math.min(maxScroll, currentScrollPosition + scrollAmount);
             aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
             updateButtonVisibility();
