@@ -1050,7 +1050,9 @@ document.addEventListener("DOMContentLoaded", function() {
         aopsPrevBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             
+            console.log('Prev button clicked, current position:', currentScrollPosition);
             currentScrollPosition = Math.max(0, currentScrollPosition - scrollAmount);
             aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
             updateButtonVisibility();
@@ -1060,12 +1062,20 @@ document.addEventListener("DOMContentLoaded", function() {
         aopsNextBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             
+            console.log('Next button clicked, current position:', currentScrollPosition);
             const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
             currentScrollPosition = Math.min(maxScroll, currentScrollPosition + scrollAmount);
             aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
             updateButtonVisibility();
         });
+        
+        // Ensure buttons are on top and clickable
+        aopsPrevBtn.style.zIndex = '10000';
+        aopsNextBtn.style.zIndex = '10000';
+        aopsPrevBtn.style.pointerEvents = 'auto';
+        aopsNextBtn.style.pointerEvents = 'auto';
 
         // Initialize button visibility
         updateButtonVisibility();

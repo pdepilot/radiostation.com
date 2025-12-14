@@ -1143,7 +1143,7 @@ nav a.active {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  z-index: 1000 !important;
+  z-index: 10000 !important;
   background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(10px) !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -1161,12 +1161,15 @@ nav a.active {
   pointer-events: auto !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
   visibility: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .aops-nav-btn i {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  pointer-events: none !important;
 }
 
 .aops-nav-btn:hover {
