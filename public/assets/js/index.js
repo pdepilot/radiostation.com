@@ -1025,19 +1025,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const gap = 40; // gap between cards
         const scrollAmount = cardWidth + gap;
 
-        // Function to position buttons relative to wrapper
-        function positionButtons() {
-            const wrapperRect = aopsWrapper.getBoundingClientRect();
-            const wrapperLeft = wrapperRect.left;
-            const wrapperRight = wrapperRect.right;
-            
-            // Position buttons relative to viewport but within wrapper bounds
-            if (window.innerWidth > 768) {
-                aopsPrevBtn.style.left = (wrapperLeft + 20) + 'px';
-                aopsNextBtn.style.right = (window.innerWidth - wrapperRight + 20) + 'px';
-            }
-        }
-
         // Function to update button visibility
         function updateButtonVisibility() {
             const maxScroll = aopsCarousel.scrollWidth - aopsCarousel.clientWidth;
@@ -1080,18 +1067,12 @@ document.addEventListener("DOMContentLoaded", function() {
             updateButtonVisibility();
         });
 
-        // Initialize button positioning and visibility
-        positionButtons();
+        // Initialize button visibility
         updateButtonVisibility();
 
-        // Update on window resize and scroll
+        // Update on window resize
         window.addEventListener('resize', function() {
-            positionButtons();
             updateButtonVisibility();
-        });
-
-        window.addEventListener('scroll', function() {
-            positionButtons();
         });
     }
 });

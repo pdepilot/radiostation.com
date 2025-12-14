@@ -1103,7 +1103,7 @@ nav a.active {
 }
 
 .aops-nav-btn {
-  position: fixed !important;
+  position: absolute !important;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1000 !important;
@@ -1148,18 +1148,18 @@ nav a.active {
   right: 20px;
 }
 
-/* Make buttons relative to wrapper on smaller screens */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .aops-nav-btn {
-    position: absolute !important;
-  }
-  
   .aops-nav-prev {
     left: 10px;
   }
   
   .aops-nav-next {
     right: 10px;
+  }
+  
+  .aops-carousel-wrapper {
+    padding: 60px 60px;
   }
 }
 
