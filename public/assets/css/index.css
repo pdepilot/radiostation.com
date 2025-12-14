@@ -1103,10 +1103,10 @@ nav a.active {
 }
 
 .aops-nav-btn {
-  position: absolute;
+  position: fixed !important;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 1000 !important;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1122,11 +1122,13 @@ nav a.active {
   transition: all 0.3s;
   opacity: 1;
   pointer-events: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .aops-nav-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .aops-nav-btn:active {
@@ -1144,6 +1146,21 @@ nav a.active {
 
 .aops-nav-next {
   right: 20px;
+}
+
+/* Make buttons relative to wrapper on smaller screens */
+@media (max-width: 768px) {
+  .aops-nav-btn {
+    position: absolute !important;
+  }
+  
+  .aops-nav-prev {
+    left: 10px;
+  }
+  
+  .aops-nav-next {
+    right: 10px;
+  }
 }
 
 /* OAP Profile Modal */

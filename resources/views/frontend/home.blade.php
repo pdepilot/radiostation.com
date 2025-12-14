@@ -88,12 +88,6 @@
     <section class="container" id="on-air-personalities" style="margin: 80px 0; padding: 0; width: 100%; max-width: 100%;">
         <h2 class="section-title">OUR ON-AIR PERSONALITIES</h2>
         <div class="aops-carousel-wrapper" style="position: relative; margin: 60px 0; overflow: hidden; padding: 80px 100px; width: 100%;">
-            <button class="aops-nav-btn aops-nav-prev" id="aopsPrevBtn" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: var(--light); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: all 0.3s; opacity: 1;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(-50%) scale(1)'">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="aops-nav-btn aops-nav-next" id="aopsNextBtn" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: var(--light); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: all 0.3s; opacity: 1;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(-50%) scale(1)'">
-                <i class="fas fa-chevron-right"></i>
-            </button>
             <div class="aops-carousel" id="aopsCarousel" style="display: flex; gap: 40px; padding: 20px 0; min-width: max-content; width: max-content; margin: 0 auto; transition: transform 0.5s ease; overflow: visible;">
                 @php
                     $allDjs = $featuredDjs->count() > 0 ? $featuredDjs : collect([

@@ -1019,11 +1019,24 @@ document.addEventListener("DOMContentLoaded", function() {
     const aopsNextBtn = document.getElementById('aopsNextBtn');
     const aopsWrapper = document.querySelector('.aops-carousel-wrapper');
 
-    if (aopsCarousel && aopsPrevBtn && aopsNextBtn) {
+    if (aopsCarousel && aopsPrevBtn && aopsNextBtn && aopsWrapper) {
         let currentScrollPosition = 0;
         const cardWidth = 300; // min-width of aop-card
         const gap = 40; // gap between cards
         const scrollAmount = cardWidth + gap;
+
+        // Function to position buttons relative to wrapper
+        function positionButtons() {
+            const wrapperRect = aopsWrapper.getBoundingClientRect();
+            const wrapperLeft = wrapperRect.left;
+            const wrapperRight = wrapperRect.right;
+            
+            // Position buttons relative to viewport but within wrapper bounds
+            if (window.innerWidth > 768) {
+                aopsPrevBtn.style.left = (wrapperLeft + 20) + 'px';
+                aopsNextBtn.style.right = (window.innerWidth - wrapperRight + 20) + 'px';
+            }
+        }
 
         // Function to update button visibility
         function updateButtonVisibility() {
@@ -1067,12 +1080,18 @@ document.addEventListener("DOMContentLoaded", function() {
             updateButtonVisibility();
         });
 
-        // Initialize button visibility
+        // Initialize button positioning and visibility
+        positionButtons();
         updateButtonVisibility();
 
-        // Update on window resize
+        // Update on window resize and scroll
         window.addEventListener('resize', function() {
+            positionButtons();
             updateButtonVisibility();
+        });
+
+        window.addEventListener('scroll', function() {
+            positionButtons();
         });
     }
 });
