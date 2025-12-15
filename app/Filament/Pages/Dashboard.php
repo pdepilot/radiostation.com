@@ -25,20 +25,14 @@ class Dashboard extends BaseDashboard
     protected function getHeaderWidgets(): array
     {
         return [
-            ListenerCountWidget::class,
+            // Widgets auto-discovered by Filament - no explicit registration needed
         ];
     }
     
     protected function getFooterWidgets(): array
     {
         return [
-            DashboardStatsWidget::class,
-            ListenerAnalyticsChartWidget::class,
-            MessagesFeedbackWidget::class,
-            ShowsScheduleWidget::class,
-            ChatbotInfoWidget::class,
-            TrafficAnalyticsWidget::class,
-            AdsDealsWidget::class,
+            // Widgets auto-discovered by Filament - no explicit registration needed
         ];
     }
 }
