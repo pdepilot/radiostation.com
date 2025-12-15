@@ -555,6 +555,8 @@
             isPlaying = true;
             savePosition();
             updateUI('Live');
+            // Track listener count - increment when stream starts playing
+            trackListenerCount('start');
         } catch (error) {
             console.error('Play error:', error);
             handleStreamError();
@@ -569,6 +571,8 @@
         isPlaying = false;
         savePosition();
         updateUI('Paused');
+        // Track listener count - decrement when stream pauses
+        trackListenerCount('stop');
 
         // Broadcast pause event with tab ID
         if (broadcastChannel) {

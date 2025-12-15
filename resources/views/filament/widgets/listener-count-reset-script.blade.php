@@ -1,7 +1,19 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function addResetButton() {
-        const statCard = document.querySelector('.listener-count-stat-card');
+        // Try multiple selectors to find the Live Listeners card
+        let statCard = document.querySelector('.listener-count-stat-card');
+        if (!statCard) {
+            // Try finding by text content
+            const allStats = document.querySelectorAll('.fi-wi-stats-overview-stat');
+            allStats.forEach(card => {
+                const label = card.querySelector('.fi-wi-stats-overview-stat-label');
+                if (label && label.textContent.includes('Live Listeners')) {
+                    statCard = card;
+                }
+            });
+        }
+        
         if (statCard && !statCard.querySelector('.reset-listener-btn')) {
             const button = document.createElement('button');
             button.className = 'reset-listener-btn fi-btn fi-btn-size-sm fi-color-warning items-center justify-center gap-x-1 rounded-lg font-semibold outline-none transition duration-75 focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-70 px-2 py-1 text-sm absolute top-2 right-2';
@@ -41,11 +53,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Try immediately
     addResetButton();
     
-    // Try after a delay (for Livewire updates)
+    // Try after delays (for Livewire updates)
     setTimeout(addResetButton, 500);
     setTimeout(addResetButton, 1000);
+    setTimeout(addResetButton, 2000);
     
     // Watch for Livewire updates
+    if (window.Livewire) {
+        Livewire.hook('morph.updated', () => {
+            setTimeout(addResetButton, 100);
+        });
+    }
+    
     document.addEventListener('livewire:load', addResetButton);
     document.addEventListener('livewire:update', addResetButton);
 });
