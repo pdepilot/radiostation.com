@@ -160,10 +160,9 @@ class LiveStreamController extends Controller
             }
 
             if ($action === 'start') {
-                // Check if this session already exists and is active
+                // Check if this session already exists (active or inactive)
                 $existingSession = ListenerSession::where('session_id', $sessionId)
                     ->where('live_stream_id', $liveStream->id)
-                    ->where('is_active', true)
                     ->first();
 
                 if (!$existingSession) {
@@ -184,8 +183,20 @@ class LiveStreamController extends Controller
                     // Increment total listening sessions for today
                     $this->incrementDailyListeningSession();
                 } else {
-                    // Session already exists, just update last activity
-                    $existingSession->update(['last_activity_at' => now()]);
+                    // Session exists - check if it's inactive (user paused and is resuming)
+                    if (!$existingSession->is_active) {
+                        // Reactivate the session (user resumed listening)
+                        $existingSession->update([
+                            'is_active' => true,
+                            'last_activity_at' => now()
+                        ]);
+                        
+                        // Increment listener count (they were counted before, but paused)
+                        $liveStream->increment('listener_count');
+                    } else {
+                        // Session is already active, just update last activity
+                        $existingSession->update(['last_activity_at' => now()]);
+                    }
                 }
             } elseif ($action === 'stop') {
                 // Mark session as inactive
