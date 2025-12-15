@@ -4,6 +4,8 @@ namespace App\Filament\Widgets;
 
 use App\Models\AudienceMetric;
 use Filament\Widgets\ChartWidget;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
 
 /**
  * Listener Analytics Chart Widget
@@ -57,6 +59,27 @@ class ListenerAnalyticsChartWidget extends ChartWidget
         }
         
         return $years;
+    }
+    
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('selectYear')
+                ->form([
+                    Select::make('selectedYear')
+                        ->label('Select Year')
+                        ->options($this->getYearOptions())
+                        ->default($this->selectedYear ?? now()->year)
+                        ->searchable()
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $this->selectedYear = $data['selectedYear'];
+                })
+                ->icon('heroicon-o-calendar')
+                ->label('Select Year')
+                ->visible(fn () => $this->filter === 'month'),
+        ];
     }
 
     protected function getData(): array
