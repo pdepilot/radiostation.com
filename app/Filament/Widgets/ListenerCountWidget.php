@@ -30,11 +30,11 @@ class ListenerCountWidget extends BaseWidget
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('reset')
-                ->label('Reset Count')
+                ->label('Reset')
                 ->icon('heroicon-o-arrow-path')
                 ->color('warning')
                 ->requiresConfirmation()
