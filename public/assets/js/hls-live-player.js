@@ -478,6 +478,30 @@
     }
 
     // =============================================
+    // LISTENER COUNT TRACKING
+    // =============================================
+    async function trackListenerCount(action) {
+        try {
+            const response = await fetch('/api/listener-count', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({ action: action })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`Listener count ${action === 'start' ? 'incremented' : 'decremented'}:`, data.count);
+            }
+        } catch (error) {
+            console.warn('Failed to track listener count:', error);
+        }
+    }
+
+    // =============================================
     // PLAYBACK CONTROL
     // =============================================
     async function playStream(url = null) {
