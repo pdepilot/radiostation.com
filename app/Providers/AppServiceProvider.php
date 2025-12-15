@@ -26,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
             $schedule->command('shows:auto-update')->everyMinute();
             // Schedule monthly listener count reset - runs on the 1st of every month at midnight
             $schedule->command('listeners:reset-monthly')->monthly();
+            // Schedule yearly listener count reset - runs on January 1st at midnight
+            $schedule->command('listeners:reset-yearly')->yearly();
         });
     }
 }

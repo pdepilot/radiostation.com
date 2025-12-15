@@ -19,6 +19,8 @@ class ListenerAnalyticsChartWidget extends ChartWidget
     protected static ?string $pollingInterval = '30s';
     
     public ?string $filter = 'month';
+    
+    public ?int $selectedYear = null;
 
     protected function getFilters(): ?array
     {
@@ -28,6 +30,33 @@ class ListenerAnalyticsChartWidget extends ChartWidget
             'month' => 'Monthly',
             'year' => 'Yearly',
         ];
+    }
+    
+    protected function getYearOptions(): array
+    {
+        $currentYear = now()->year;
+        $years = [];
+        
+        // Get all years that have data
+        $yearsWithData = \App\Models\AudienceMetric::selectRaw('YEAR(captured_for) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+        
+        // Always include current year
+        if (!in_array($currentYear, $yearsWithData)) {
+            $yearsWithData[] = $currentYear;
+        }
+        
+        // Sort descending
+        rsort($yearsWithData);
+        
+        foreach ($yearsWithData as $year) {
+            $years[$year] = (string)$year;
+        }
+        
+        return $years;
     }
 
     protected function getData(): array
@@ -73,16 +102,20 @@ class ListenerAnalyticsChartWidget extends ChartWidget
                     ];
                 })->toArray();
         } elseif ($period === 'month') {
-            // Last 30 days - real data only
-            $series = \App\Models\AudienceMetric::whereDate('captured_for', '>=', now()->subDays(29))
-                ->orderBy('captured_for')
-                ->get()
-                ->map(function ($metric) {
-                    return [
-                        'value' => $metric->total_listening_sessions ?? 0,
-                        'date' => $metric->captured_for->format('M d'),
-                    ];
-                })->toArray();
+            // Show all 12 months (Jan-Dec) of selected year or current year
+            $year = $this->selectedYear ?? now()->year;
+            
+            for ($month = 1; $month <= 12; $month++) {
+                $monthStart = \Carbon\Carbon::create($year, $month, 1)->startOfMonth();
+                $monthEnd = \Carbon\Carbon::create($year, $month, 1)->endOfMonth();
+                $monthValue = \App\Models\AudienceMetric::whereBetween('captured_for', [$monthStart, $monthEnd])
+                    ->sum('total_listening_sessions') ?? 0;
+                
+                $series[] = [
+                    'value' => $monthValue,
+                    'date' => $monthStart->format('M'),
+                ];
+            }
         } else {
             // Yearly - last 12 months - real data only
             for ($i = 11; $i >= 0; $i--) {
