@@ -73,5 +73,10 @@ class AdminPanelProvider extends PanelProvider
             'panels::head.end',
             fn(): View => view('components.sticky-player-assets')
         );
+
+        FilamentView::registerRenderHook(
+            'panels::body.end',
+            fn(): View => view('filament.widgets.listener-count-reset-script')
+        );
     }
 }

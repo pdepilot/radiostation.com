@@ -5,7 +5,6 @@ namespace App\Filament\Widgets;
 use App\Models\LiveStream;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Actions\Action;
 
 /**
  * Live Listener Count Widget
@@ -26,28 +25,19 @@ class ListenerCountWidget extends BaseWidget
             Stat::make('Live Listeners', $currentListeners)
                 ->description('Active now')
                 ->descriptionIcon('heroicon-o-radio')
-                ->color('danger'),
+                ->color('danger')
+                ->extraAttributes([
+                    'class' => 'listener-count-stat-card',
+                ]),
         ];
     }
 
-    protected function getHeaderActions(): array
+    public function resetListenerCount()
     {
-        return [
-            Action::make('reset')
-                ->label('Reset')
-                ->icon('heroicon-o-arrow-path')
-                ->color('warning')
-                ->requiresConfirmation()
-                ->modalHeading('Reset Listener Count')
-                ->modalDescription('Are you sure you want to reset the listener count to 0? This action cannot be undone.')
-                ->modalSubmitActionLabel('Reset')
-                ->action(function () {
-                    $liveStream = LiveStream::where('status', 'live')->first();
-                    if ($liveStream) {
-                        $liveStream->update(['listener_count' => 0]);
-                    }
-                }),
-        ];
+        $liveStream = LiveStream::where('status', 'live')->first();
+        if ($liveStream) {
+            $liveStream->update(['listener_count' => 0]);
+        }
     }
 }
 
