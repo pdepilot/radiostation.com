@@ -49,6 +49,7 @@ Route::get('/api/listener-count', [\App\Http\Controllers\Frontend\LiveStreamCont
 Route::get('/api/active-stream', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'getActiveStream'])->name('api.active-stream');
 Route::post('/api/listener/track', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'trackListener'])->name('api.listener.track');
 Route::post('/api/listener/reset', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'resetListenerCount'])->name('api.listener.reset');
+Route::post('/admin/api/analytics/reset', [\App\Http\Controllers\Admin\AnalyticsController::class, 'resetAnalytics'])->name('admin.api.analytics.reset')->middleware('auth');
 Route::get('/api/server-time', [\App\Http\Controllers\Api\ServerTimeController::class, 'index'])->name('api.server-time');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
