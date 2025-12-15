@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
             $schedule->command('shows:auto-update')->everyMinute();
+            // Schedule monthly listener count reset - runs on the 1st of every month at midnight
+            $schedule->command('listeners:reset-monthly')->monthly();
         });
     }
 }

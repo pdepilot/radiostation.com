@@ -18,6 +18,7 @@ class LiveStream extends Model
         'stream_url',
         'chat_enabled',
         'listener_count',
+        'last_reset_at',
         'server_host',
         'bitrate',
         'scheduled_for',
@@ -32,6 +33,7 @@ class LiveStream extends Model
         'scheduled_for' => 'datetime',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
+        'last_reset_at' => 'datetime',
     ];
 
     public function show()

@@ -261,12 +261,16 @@
             isPlaying = true;
             savePosition();
             updateUI();
+            // Track listener count - increment when play starts
+            trackListenerCount('start');
         });
 
         video.addEventListener('pause', () => {
             isPlaying = false;
             savePosition();
             updateUI();
+            // Track listener count - decrement when pause
+            trackListenerCount('stop');
         });
 
         video.addEventListener('loadedmetadata', () => {
