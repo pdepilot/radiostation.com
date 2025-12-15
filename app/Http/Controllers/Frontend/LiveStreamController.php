@@ -10,7 +10,6 @@ use App\Models\AudienceMetric;
 use App\Models\ListenerSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Broadcast;
 
 class LiveStreamController extends Controller
 {
@@ -221,14 +220,6 @@ class LiveStreamController extends Controller
 
             // Record in audience metrics for historical tracking
             $this->recordAudienceMetric($liveStream->fresh()->listener_count);
-
-            // Broadcast real-time update to admin dashboard
-            Broadcast::channel('listener-count-updates', function () {
-                return true;
-            });
-            
-            // Trigger Livewire update event
-            event(new \App\Events\ListenerCountUpdated($liveStream->fresh()->listener_count));
 
             return response()->json([
                 'success' => true,
