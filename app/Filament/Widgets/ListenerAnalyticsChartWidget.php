@@ -27,6 +27,8 @@ class ListenerAnalyticsChartWidget extends ChartWidget
     public ?int $selectedMonth = null;
     
     public ?int $selectedYearForYearly = null;
+    
+    public ?string $selectedWeek = null; // Format: YYYY-WW (e.g., 2024-01)
 
     protected function getFilters(): ?array
     {
@@ -65,9 +67,55 @@ class ListenerAnalyticsChartWidget extends ChartWidget
         return $years;
     }
     
+    protected function getWeekOptions(): array
+    {
+        $weeks = [];
+        $currentYear = now()->year;
+        
+        // Get all weeks that have data
+        $weeksWithData = \App\Models\AudienceMetric::selectRaw('YEAR(captured_for) as year, WEEK(captured_for, 1) as week')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->orderBy('week', 'desc')
+            ->get();
+        
+        foreach ($weeksWithData as $weekData) {
+            $weekKey = $weekData->year . '-' . str_pad($weekData->week, 2, '0', STR_PAD_LEFT);
+            $weekStart = \Carbon\Carbon::now()->setISODate($weekData->year, $weekData->week)->startOfWeek();
+            $weekEnd = $weekStart->copy()->endOfWeek();
+            $weeks[$weekKey] = "Week {$weekData->week}, {$weekData->year} ({$weekStart->format('M d')} - {$weekEnd->format('M d')})";
+        }
+        
+        // Always include current week
+        $currentWeek = now()->format('o-\WW');
+        if (!isset($weeks[$currentWeek])) {
+            $weekStart = now()->startOfWeek();
+            $weekEnd = now()->endOfWeek();
+            $weeks[$currentWeek] = "Current Week ({$weekStart->format('M d')} - {$weekEnd->format('M d')})";
+        }
+        
+        return $weeks;
+    }
+    
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('selectWeek')
+                ->form([
+                    Select::make('selectedWeek')
+                        ->label('Select Week')
+                        ->options($this->getWeekOptions())
+                        ->default($this->selectedWeek ?? now()->format('o-\WW'))
+                        ->searchable()
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $this->selectedWeek = $data['selectedWeek'];
+                })
+                ->icon('heroicon-o-calendar')
+                ->label('Select Week')
+                ->visible(fn () => $this->filter === 'day'),
+            
             Action::make('selectYear')
                 ->form([
                     Select::make('selectedYear')
@@ -146,27 +194,30 @@ class ListenerAnalyticsChartWidget extends ChartWidget
         $series = [];
         
         if ($period === 'day') {
-            // Last 7 days including today - real data only
-            $series = \App\Models\AudienceMetric::whereDate('captured_for', '>=', now()->subDays(6))
-                ->orderBy('captured_for')
-                ->get()
-                ->map(function ($metric) {
-                    return [
-                        'value' => $metric->total_listening_sessions ?? 0,
-                        'date' => $metric->captured_for->format('M d'),
-                    ];
-                })->toArray();
+            // Show Mon-Sun of selected week or current week
+            if ($this->selectedWeek) {
+                // Parse week string (format: YYYY-WW)
+                [$year, $week] = explode('-', $this->selectedWeek);
+                $weekStart = \Carbon\Carbon::now()->setISODate($year, $week)->startOfWeek();
+            } else {
+                // Default to current week
+                $weekStart = now()->startOfWeek();
+            }
             
-            // Add today if not in series (real data only)
-            $todayExists = collect($series)->contains(function ($item) {
-                return $item['date'] === now()->format('M d');
-            });
-            if (!$todayExists) {
-                $dailySessions = \App\Models\AudienceMetric::whereDate('captured_for', today())
+            $weekEnd = $weekStart->copy()->endOfWeek();
+            
+            // Get all 7 days (Mon-Sun)
+            $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            $series = [];
+            
+            for ($i = 0; $i < 7; $i++) {
+                $dayDate = $weekStart->copy()->addDays($i);
+                $dayValue = \App\Models\AudienceMetric::whereDate('captured_for', $dayDate)
                     ->sum('total_listening_sessions') ?? 0;
+                
                 $series[] = [
-                    'value' => $dailySessions > 0 ? $dailySessions : 0,
-                    'date' => now()->format('M d'),
+                    'value' => $dayValue,
+                    'date' => $days[$i] . ' ' . $dayDate->format('M d'),
                 ];
             }
         } elseif ($period === 'week') {
