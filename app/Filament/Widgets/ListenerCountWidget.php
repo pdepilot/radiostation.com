@@ -14,7 +14,7 @@ class ListenerCountWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
     
-    protected static ?string $pollingInterval = '30s';
+    protected static ?string $pollingInterval = '5s';
 
     protected function getStats(): array
     {
