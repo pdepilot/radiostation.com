@@ -480,8 +480,20 @@
     // =============================================
     // LISTENER COUNT TRACKING
     // =============================================
+    // Generate or retrieve session ID
+    function getSessionId() {
+        let sessionId = sessionStorage.getItem('listener_session_id');
+        if (!sessionId) {
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('listener_session_id', sessionId);
+        }
+        return sessionId;
+    }
+
     async function trackListenerCount(action) {
         try {
+            const sessionId = getSessionId();
+            
             const response = await fetch('/api/listener/track', {
                 method: 'POST',
                 headers: {
@@ -489,7 +501,10 @@
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                 },
-                body: JSON.stringify({ action: action })
+                body: JSON.stringify({ 
+                    action: action,
+                    session_id: sessionId
+                })
             });
             
             if (response.ok) {

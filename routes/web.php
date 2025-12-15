@@ -72,7 +72,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/privacy', [\App\Http\Controllers\Frontend\PolicyController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [\App\Http\Controllers\Frontend\PolicyController::class, 'terms'])->name('terms');
 Route::get('/faq', [\App\Http\Controllers\Frontend\PolicyController::class, 'faq'])->name('faq');
-Route::get('/feedback', function() {
+Route::get('/feedback', function () {
     return redirect()->route('contact.index', ['category' => 'feedback']);
 })->name('feedback');
 

@@ -7,7 +7,9 @@ use App\Models\LiveStream;
 use App\Models\Show;
 use App\Models\PlaylistTrack;
 use App\Models\AudienceMetric;
+use App\Models\ListenerSession;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LiveStreamController extends Controller
 {
@@ -126,12 +128,17 @@ class LiveStreamController extends Controller
     {
         try {
             $action = $request->input('action'); // 'start' or 'stop'
-            $streamUrl = $request->input('stream_url');
-            $userId = $request->input('user_id', null); // Optional for authenticated users
+            $sessionId = $request->input('session_id'); // Browser session ID
+            $userId = auth()->id(); // Authenticated user ID if available
 
             // Validate action
             if (!in_array($action, ['start', 'stop'])) {
                 return response()->json(['success' => false, 'message' => 'Invalid action'], 400);
+            }
+
+            // Validate session_id
+            if (!$sessionId) {
+                return response()->json(['success' => false, 'message' => 'Session ID required'], 400);
             }
 
             // Find the active live stream
@@ -152,21 +159,56 @@ class LiveStreamController extends Controller
                 ]);
             }
 
-            // Update listener count based on action
             if ($action === 'start') {
-                $liveStream->increment('listener_count');
-                // Increment total listening sessions for today
-                $this->incrementDailyListeningSession();
+                // Check if this session already exists and is active
+                $existingSession = ListenerSession::where('session_id', $sessionId)
+                    ->where('live_stream_id', $liveStream->id)
+                    ->where('is_active', true)
+                    ->first();
+
+                if (!$existingSession) {
+                    // Create new session - this is a new listener
+                    ListenerSession::create([
+                        'session_id' => $sessionId,
+                        'live_stream_id' => $liveStream->id,
+                        'user_id' => $userId,
+                        'ip_address' => $request->ip(),
+                        'started_at' => now(),
+                        'last_activity_at' => now(),
+                        'is_active' => true,
+                    ]);
+
+                    // Increment listener count only if this is a new session
+                    $liveStream->increment('listener_count');
+                    
+                    // Increment total listening sessions for today
+                    $this->incrementDailyListeningSession();
+                } else {
+                    // Session already exists, just update last activity
+                    $existingSession->update(['last_activity_at' => now()]);
+                }
             } elseif ($action === 'stop') {
-                $liveStream->decrement('listener_count');
-                // Ensure it doesn't go below 0
-                if ($liveStream->listener_count < 0) {
-                    $liveStream->update(['listener_count' => 0]);
+                // Mark session as inactive
+                $session = ListenerSession::where('session_id', $sessionId)
+                    ->where('live_stream_id', $liveStream->id)
+                    ->where('is_active', true)
+                    ->first();
+
+                if ($session) {
+                    $session->update(['is_active' => false]);
+                    
+                    // Decrement listener count
+                    $liveStream->decrement('listener_count');
+                    
+                    // Ensure it doesn't go below 0
+                    if ($liveStream->listener_count < 0) {
+                        $liveStream->update(['listener_count' => 0]);
+                    }
                 }
             }
 
             // Record in audience metrics for historical tracking
-            $this->recordAudienceMetric($liveStream->listener_count);
+            $this->recordAudienceMetric($liveStream->fresh()->listener_count);
 
             return response()->json([
                 'success' => true,
