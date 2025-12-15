@@ -14,12 +14,22 @@ class ListenerCountWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
     
-    protected static ?string $pollingInterval = '5s';
+    protected static ?string $pollingInterval = '2s';
 
     protected function getStats(): array
     {
+        // Get current listener count from active sessions
         $liveStream = LiveStream::where('status', 'live')->first();
-        $currentListeners = $liveStream ? $liveStream->listener_count : 0;
+        
+        if ($liveStream) {
+            $activeSessions = \App\Models\ListenerSession::where('live_stream_id', $liveStream->id)
+                ->where('is_active', true)
+                ->count();
+            
+            $currentListeners = $activeSessions > 0 ? $activeSessions : $liveStream->listener_count;
+        } else {
+            $currentListeners = 0;
+        }
 
         return [
             Stat::make('Live Listeners', $currentListeners)
