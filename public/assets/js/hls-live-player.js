@@ -482,7 +482,7 @@
     // =============================================
     async function trackListenerCount(action) {
         try {
-            const response = await fetch('/api/listener-count', {
+            const response = await fetch('/api/listener/track', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -495,6 +495,8 @@
             if (response.ok) {
                 const data = await response.json();
                 console.log(`Listener count ${action === 'start' ? 'incremented' : 'decremented'}:`, data.count);
+            } else {
+                console.warn('Failed to track listener count:', await response.text());
             }
         } catch (error) {
             console.warn('Failed to track listener count:', error);
