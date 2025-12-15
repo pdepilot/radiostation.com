@@ -23,6 +23,10 @@ class ListenerAnalyticsChartWidget extends ChartWidget
     public ?string $filter = 'month';
     
     public ?int $selectedYear = null;
+    
+    public ?int $selectedMonth = null;
+    
+    public ?int $selectedYearForYearly = null;
 
     protected function getFilters(): ?array
     {
@@ -79,6 +83,58 @@ class ListenerAnalyticsChartWidget extends ChartWidget
                 ->icon('heroicon-o-calendar')
                 ->label('Select Year')
                 ->visible(fn () => $this->filter === 'month'),
+            
+            Action::make('selectMonthYear')
+                ->form([
+                    Select::make('selectedYear')
+                        ->label('Select Year')
+                        ->options($this->getYearOptions())
+                        ->default($this->selectedYear ?? now()->year)
+                        ->searchable()
+                        ->required(),
+                    Select::make('selectedMonth')
+                        ->label('Select Month')
+                        ->options([
+                            1 => 'January',
+                            2 => 'February',
+                            3 => 'March',
+                            4 => 'April',
+                            5 => 'May',
+                            6 => 'June',
+                            7 => 'July',
+                            8 => 'August',
+                            9 => 'September',
+                            10 => 'October',
+                            11 => 'November',
+                            12 => 'December',
+                        ])
+                        ->default($this->selectedMonth ?? now()->month)
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $this->selectedYear = $data['selectedYear'];
+                    $this->selectedMonth = $data['selectedMonth'];
+                })
+                ->icon('heroicon-o-calendar')
+                ->label('Select Month/Year')
+                ->visible(fn () => $this->filter === 'week'),
+            
+            Action::make('selectYearForYearly')
+                ->form([
+                    Select::make('selectedYearForYearly')
+                        ->label('Select Starting Year')
+                        ->options($this->getYearOptions())
+                        ->default($this->selectedYearForYearly ?? now()->year)
+                        ->searchable()
+                        ->required()
+                        ->helperText('Shows this year and 3 previous years'),
+                ])
+                ->action(function (array $data) {
+                    $this->selectedYearForYearly = $data['selectedYearForYearly'];
+                })
+                ->icon('heroicon-o-calendar')
+                ->label('Select Year Range')
+                ->visible(fn () => $this->filter === 'year'),
         ];
     }
 
@@ -114,16 +170,51 @@ class ListenerAnalyticsChartWidget extends ChartWidget
                 ];
             }
         } elseif ($period === 'week') {
-            // Last 7 days - real data only
-            $series = \App\Models\AudienceMetric::whereDate('captured_for', '>=', now()->subDays(6))
-                ->orderBy('captured_for')
-                ->get()
-                ->map(function ($metric) {
-                    return [
-                        'value' => $metric->total_listening_sessions ?? 0,
-                        'date' => $metric->captured_for->format('M d'),
-                    ];
-                })->toArray();
+            // Show 4 weeks of selected month/year or current month
+            $year = $this->selectedYear ?? now()->year;
+            $month = $this->selectedMonth ?? now()->month;
+            
+            $monthStart = \Carbon\Carbon::create($year, $month, 1)->startOfMonth();
+            $monthEnd = \Carbon\Carbon::create($year, $month, 1)->endOfMonth();
+            
+            // Calculate 4 weeks within the month
+            $weeks = [];
+            $currentWeekStart = $monthStart->copy();
+            
+            for ($weekNum = 1; $weekNum <= 4; $weekNum++) {
+                $weekEnd = $currentWeekStart->copy()->endOfWeek();
+                
+                // Don't go beyond month end
+                if ($weekEnd->gt($monthEnd)) {
+                    $weekEnd = $monthEnd->copy();
+                }
+                
+                $weekValue = \App\Models\AudienceMetric::whereBetween('captured_for', [$currentWeekStart, $weekEnd])
+                    ->sum('total_listening_sessions') ?? 0;
+                
+                $weeks[] = [
+                    'value' => $weekValue,
+                    'date' => "Week {$weekNum}",
+                ];
+                
+                // Move to next week
+                $currentWeekStart = $weekEnd->copy()->addDay()->startOfWeek();
+                
+                // Break if we've passed the month end
+                if ($currentWeekStart->gt($monthEnd)) {
+                    break;
+                }
+            }
+            
+            // Ensure we always have 4 weeks (fill with 0 if needed)
+            while (count($weeks) < 4) {
+                $weeks[] = [
+                    'value' => 0,
+                    'date' => 'Week ' . (count($weeks) + 1),
+                ];
+            }
+            
+            $series = $weeks;
         } elseif ($period === 'month') {
             // Show all 12 months (Jan-Dec) of selected year or current year
             $year = $this->selectedYear ?? now()->year;
@@ -140,16 +231,20 @@ class ListenerAnalyticsChartWidget extends ChartWidget
                 ];
             }
         } else {
-            // Yearly - last 12 months - real data only
-            for ($i = 11; $i >= 0; $i--) {
-                $monthStart = now()->subMonths($i)->startOfMonth();
-                $monthEnd = now()->subMonths($i)->endOfMonth();
-                $monthValue = \App\Models\AudienceMetric::whereBetween('captured_for', [$monthStart, $monthEnd])
+            // Yearly - show 4 years (current year and 3 previous years)
+            $startYear = $this->selectedYearForYearly ?? now()->year;
+            
+            for ($i = 3; $i >= 0; $i--) {
+                $year = $startYear - $i;
+                $yearStart = \Carbon\Carbon::create($year, 1, 1)->startOfYear();
+                $yearEnd = \Carbon\Carbon::create($year, 12, 31)->endOfYear();
+                
+                $yearValue = \App\Models\AudienceMetric::whereBetween('captured_for', [$yearStart, $yearEnd])
                     ->sum('total_listening_sessions') ?? 0;
                 
                 $series[] = [
-                    'value' => $monthValue,
-                    'date' => $monthStart->format('M Y'),
+                    'value' => $yearValue,
+                    'date' => (string)$year,
                 ];
             }
         }
