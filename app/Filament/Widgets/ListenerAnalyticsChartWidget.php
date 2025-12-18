@@ -20,7 +20,7 @@ class ListenerAnalyticsChartWidget extends ChartWidget
     
     protected static ?string $pollingInterval = '30s';
     
-    public ?string $filter = 'month';
+    public ?string $filter = 'week';
     
     public ?int $selectedYear = null;
     
@@ -29,6 +29,36 @@ class ListenerAnalyticsChartWidget extends ChartWidget
     public ?int $selectedYearForYearly = null;
     
     public ?string $selectedWeek = null; // Format: YYYY-WW (e.g., 2024-01)
+    
+    public function mount(): void
+    {
+        parent::mount();
+        
+        // Auto-select current week for daily view
+        if ($this->filter === 'day' && !$this->selectedWeek) {
+            $this->selectedWeek = now()->format('o-\WW');
+        }
+        
+        // Auto-select current month and year for weekly view
+        if ($this->filter === 'week') {
+            if (!$this->selectedYear) {
+                $this->selectedYear = now()->year;
+            }
+            if (!$this->selectedMonth) {
+                $this->selectedMonth = now()->month;
+            }
+        }
+        
+        // Auto-select current year for monthly view
+        if ($this->filter === 'month' && !$this->selectedYear) {
+            $this->selectedYear = now()->year;
+        }
+        
+        // Auto-select current year for yearly view
+        if ($this->filter === 'year' && !$this->selectedYearForYearly) {
+            $this->selectedYearForYearly = now()->year;
+        }
+    }
 
     protected function getFilters(): ?array
     {
@@ -80,13 +110,14 @@ class ListenerAnalyticsChartWidget extends ChartWidget
             ->get();
         
         foreach ($weeksWithData as $weekData) {
-            $weekKey = $weekData->year . '-' . str_pad($weekData->week, 2, '0', STR_PAD_LEFT);
+            // Use ISO week format: YYYY-WW (e.g., 2024-W01)
+            $weekKey = $weekData->year . '-W' . str_pad($weekData->week, 2, '0', STR_PAD_LEFT);
             $weekStart = \Carbon\Carbon::now()->setISODate($weekData->year, $weekData->week)->startOfWeek();
             $weekEnd = $weekStart->copy()->endOfWeek();
             $weeks[$weekKey] = "Week {$weekData->week}, {$weekData->year} ({$weekStart->format('M d')} - {$weekEnd->format('M d')})";
         }
         
-        // Always include current week
+        // Always include current week (auto-updates)
         $currentWeek = now()->format('o-\WW');
         if (!isset($weeks[$currentWeek])) {
             $weekStart = now()->startOfWeek();
@@ -194,13 +225,21 @@ class ListenerAnalyticsChartWidget extends ChartWidget
         $series = [];
         
         if ($period === 'day') {
-            // Show Mon-Sun of selected week or current week
+            // Show Mon-Sun of selected week or current week (auto-update to current week)
             if ($this->selectedWeek) {
-                // Parse week string (format: YYYY-WW)
-                [$year, $week] = explode('-', $this->selectedWeek);
-                $weekStart = \Carbon\Carbon::now()->setISODate($year, $week)->startOfWeek();
+                // Parse week string (format: YYYY-WW or YYYY-W01)
+                if (preg_match('/(\d{4})-W?(\d{1,2})/', $this->selectedWeek, $matches)) {
+                    $year = (int)$matches[1];
+                    $week = (int)$matches[2];
+                    $weekStart = \Carbon\Carbon::now()->setISODate($year, $week)->startOfWeek();
+                } else {
+                    // Fallback to current week if parsing fails
+                    $weekStart = now()->startOfWeek();
+                    $this->selectedWeek = now()->format('o-\WW');
+                }
             } else {
-                // Default to current week
+                // Default to current week (auto-updates)
+                $this->selectedWeek = now()->format('o-\WW');
                 $weekStart = now()->startOfWeek();
             }
             
@@ -221,9 +260,19 @@ class ListenerAnalyticsChartWidget extends ChartWidget
                 ];
             }
         } elseif ($period === 'week') {
-            // Show 4 weeks of selected month/year or current month
+            // Show 4 weeks of selected month/year or current month (auto-updates)
             $year = $this->selectedYear ?? now()->year;
             $month = $this->selectedMonth ?? now()->month;
+            
+            // Auto-update to current month/year if not set
+            if (!$this->selectedYear) {
+                $this->selectedYear = now()->year;
+                $year = now()->year;
+            }
+            if (!$this->selectedMonth) {
+                $this->selectedMonth = now()->month;
+                $month = now()->month;
+            }
             
             $monthStart = \Carbon\Carbon::create($year, $month, 1)->startOfMonth();
             $monthEnd = \Carbon\Carbon::create($year, $month, 1)->endOfMonth();

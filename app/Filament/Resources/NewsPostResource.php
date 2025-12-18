@@ -7,6 +7,8 @@ use App\Models\NewsPost;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -68,10 +70,10 @@ class NewsPostResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('hero_image')
                             ->image()
+                            ->disk('public')
                             ->directory('news')
-                            ->imageEditor()
-                            ->maxSize(5120)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->helperText('If no image is uploaded, a default image will be used.'),
                     ]),
                 Forms\Components\Section::make('Metadata')
                     ->schema([
@@ -125,9 +127,9 @@ class NewsPostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('hero_image')
-                    ->size(50)
-                    ->circular(),
+                Tables\Columns\ViewColumn::make('hero_image')
+                    ->label('Hero Image')
+                    ->view('filament.tables.columns.hero-image'),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
@@ -150,9 +152,14 @@ class NewsPostResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('view_count')
+                    ->label('Views')
                     ->numeric()
                     ->sortable()
-                    ->label('Views'),
+                    ->default(0)
+                    ->formatStateUsing(fn ($state) => number_format($state ?? 0))
+                    ->color(fn ($state) => $state > 0 ? 'success' : 'gray')
+                    ->icon(fn ($state) => $state > 0 ? 'heroicon-o-eye' : null)
+                    ->alignCenter(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -187,11 +194,66 @@ class NewsPostResource extends Resource
             ->defaultSort('published_at', 'desc');
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make('Content')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('title'),
+                        Infolists\Components\TextEntry::make('slug'),
+                        Infolists\Components\TextEntry::make('excerpt'),
+                        Infolists\Components\TextEntry::make('body')
+                            ->html()
+                            ->columnSpanFull(),
+                    ]),
+                Infolists\Components\Section::make('Media')
+                    ->schema([
+                        Infolists\Components\ImageEntry::make('hero_image')
+                            ->disk('public')
+                            ->defaultImageUrl(url('/assets/images/studio.jpg'))
+                            ->columnSpanFull(),
+                    ]),
+                Infolists\Components\Section::make('Metadata')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('author_name'),
+                        Infolists\Components\TextEntry::make('reading_time'),
+                        Infolists\Components\TextEntry::make('tags')
+                            ->badge()
+                            ->separator(','),
+                    ])
+                    ->columns(3),
+                Infolists\Components\Section::make('Publishing')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('status')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'draft' => 'warning',
+                                'scheduled' => 'info',
+                                'published' => 'success',
+                                default => 'gray',
+                            }),
+                        Infolists\Components\IconEntry::make('is_featured')
+                            ->boolean()
+                            ->label('Featured'),
+                        Infolists\Components\TextEntry::make('published_at')
+                            ->dateTime(),
+                        Infolists\Components\TextEntry::make('view_count')
+                            ->label('Views')
+                            ->formatStateUsing(fn ($state) => number_format($state ?? 0))
+                            ->color('success')
+                            ->icon('heroicon-o-eye'),
+                    ])
+                    ->columns(4),
+            ]);
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListNewsPosts::route('/'),
             'create' => Pages\CreateNewsPost::route('/create'),
+            'view' => Pages\ViewNewsPost::route('/{record}'),
             'edit' => Pages\EditNewsPost::route('/{record}/edit'),
         ];
     }

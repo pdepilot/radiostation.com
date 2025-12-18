@@ -76,11 +76,6 @@ class AdminPanelProvider extends PanelProvider
 
         FilamentView::registerRenderHook(
             'panels::body.end',
-            fn(): View => view('filament.widgets.listener-count-reset-script')
-        );
-
-        FilamentView::registerRenderHook(
-            'panels::body.end',
             fn(): View => view('filament.widgets.listener-analytics-reset-script')
         );
     }

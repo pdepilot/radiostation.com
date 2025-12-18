@@ -23,6 +23,12 @@ class ChatbotKnowledgeResource extends Resource
     
     protected static ?int $navigationSort = 10;
 
+    // Commented out - Chatbot Knowledge disabled in admin panel
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

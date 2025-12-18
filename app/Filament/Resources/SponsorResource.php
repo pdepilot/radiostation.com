@@ -103,7 +103,8 @@ class SponsorResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('logo')
                     ->size(50)
-                    ->circular(),
+                    ->circular()
+                    ->defaultImageUrl(asset('assets/images/logo1.jpg')),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),

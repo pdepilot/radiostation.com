@@ -7,7 +7,7 @@ use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\ListenerAnalyticsChartWidget;
 use App\Filament\Widgets\MessagesFeedbackWidget;
 use App\Filament\Widgets\ShowsScheduleWidget;
-use App\Filament\Widgets\ChatbotInfoWidget;
+// use App\Filament\Widgets\ChatbotInfoWidget;
 use App\Filament\Widgets\TrafficAnalyticsWidget;
 use App\Filament\Widgets\AdsDealsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;

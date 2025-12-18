@@ -3,7 +3,12 @@
     <div class="sticky-player-content">
         {{-- Play/Pause Button --}}
         <button id="stickyPlayBtn" class="sticky-player-btn" aria-label="Play/Pause" style="position: relative; z-index: 10;">
-            <i class="fas fa-play" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: white !important; font-size: 1.2rem !important;"></i>
+            <svg class="play-icon" style="width: 1.2rem; height: 1.2rem; fill: white; display: block;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg class="pause-icon" style="width: 1.2rem; height: 1.2rem; fill: white; display: none;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+            </svg>
         </button>
         
         {{-- Stream Info --}}

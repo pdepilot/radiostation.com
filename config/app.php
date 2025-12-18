@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Africa/Lagos', // WAT (West Africa Time, UTC+1)
 
     /*
     |--------------------------------------------------------------------------

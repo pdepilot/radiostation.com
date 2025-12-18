@@ -88,8 +88,11 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('avatar_url')
-                    ->searchable(),
+                Tables\Columns\ImageColumn::make('avatar_url')
+                    ->label('Avatar')
+                    ->size(50)
+                    ->circular()
+                    ->defaultImageUrl(asset('assets/images/logo1.jpg')),
                 Tables\Columns\TextColumn::make('role'),
                 Tables\Columns\TextColumn::make('bio')
                     ->searchable(),

@@ -129,7 +129,8 @@ class EventResource extends Resource
                 Tables\Columns\ImageColumn::make('hero_image')
                     ->label('Banner')
                     ->size(50)
-                    ->circular(),
+                    ->circular()
+                    ->defaultImageUrl(asset('assets/images/studio.jpg')),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()

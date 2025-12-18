@@ -116,7 +116,33 @@
                         <li class="show-item" style="padding: 15px 0; border-bottom: 1px solid var(--glass-border); {{ !$loop->last ? '' : 'border-bottom: none;' }}">
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <span style="color: var(--accent); font-weight: 700; font-size: 1.2rem; min-width: 30px;">#{{ $index + 1 }}</span>
-                                <div class="show-avatar" style="background-image: url('{{ $show->hero_image ?? asset('assets/images/studio.jpg') }}')"></div>
+                                @php
+                                    $showImageUrl = asset('assets/images/studio.jpg');
+                                    if ($show->hero_image) {
+                                        $imagePath = trim($show->hero_image);
+                                        
+                                        // Check if it's already a full URL
+                                        if (str_starts_with($imagePath, 'http://') || str_starts_with($imagePath, 'https://')) {
+                                            $showImageUrl = $imagePath;
+                                        }
+                                        // Check if it's already an absolute path starting with /storage
+                                        elseif (str_starts_with($imagePath, '/storage/')) {
+                                            $showImageUrl = $imagePath;
+                                        }
+                                        // Check if it starts with storage/ (relative)
+                                        elseif (str_starts_with($imagePath, 'storage/')) {
+                                            $showImageUrl = asset($imagePath);
+                                        }
+                                        // It's a storage path without storage/ prefix - Filament stores as 'shows/filename.jpg'
+                                        else {
+                                            // Remove any leading slashes
+                                            $imagePath = ltrim($imagePath, '/');
+                                            // Add storage/ prefix
+                                            $showImageUrl = asset('storage/' . $imagePath);
+                                        }
+                                    }
+                                @endphp
+                                <img src="{{ $showImageUrl }}" alt="{{ $show->title }}" class="show-avatar" style="width: 50px !important; height: 50px !important; border-radius: 10px !important; object-fit: cover !important; display: block !important; flex-shrink: 0;" onerror="this.src='{{ asset('assets/images/studio.jpg') }}';">
                                 <div class="show-details" style="flex: 1;">
                                     <div class="show-name">{{ $show->title }}</div>
                                     <div class="show-host">{{ $show->dj?->stage_name ?? $show->dj?->name ?? 'TBA' }}</div>

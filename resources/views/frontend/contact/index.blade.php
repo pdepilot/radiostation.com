@@ -112,9 +112,15 @@
                         </div>
                         <h3 class="info-title" style="font-family: 'Orbitron', sans-serif; color: var(--accent); font-size: 1.3rem; margin-bottom: 15px;">Email Addresses</h3>
                         <div class="info-content" style="color: var(--light); line-height: 1.8;">
-                            <p><strong>General:</strong> <a href="mailto:info@darlingfm.ng" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">info@darlingfm.ng</a></p>
-                            <p><strong>Music:</strong> <a href="mailto:music@darlingfm.ng" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">music@darlingfm.ng</a></p>
-                            <p><strong>Partnerships:</strong> <a href="mailto:partners@darlingfm.ng" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">partners@darlingfm.ng</a></p>
+                            @php
+                                $contactSettings = \App\Models\ContactPageSettings::pluck('value', 'key')->toArray();
+                                $generalEmail = $contactSettings['general_email'] ?? 'info@darlingfm.ng';
+                                $musicEmail = $contactSettings['music_email'] ?? 'music@darlingfm.ng';
+                                $partnershipsEmail = $contactSettings['partnerships_email'] ?? 'partners@darlingfm.ng';
+                            @endphp
+                            <p><strong>General:</strong> <a href="mailto:{{ $generalEmail }}" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">{{ $generalEmail }}</a></p>
+                            <p><strong>Music:</strong> <a href="mailto:{{ $musicEmail }}" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">{{ $musicEmail }}</a></p>
+                            <p><strong>Partnerships:</strong> <a href="mailto:{{ $partnershipsEmail }}" style="color: var(--accent); text-decoration: none; transition: all 0.3s; display: inline-block; position: relative; z-index: 10; pointer-events: auto;" onmouseover="this.style.color='var(--light)'; this.style.textDecoration='underline'" onmouseout="this.style.color='var(--accent)'; this.style.textDecoration='none'">{{ $partnershipsEmail }}</a></p>
                         </div>
                     </div>
         </section>

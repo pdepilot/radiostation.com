@@ -34,9 +34,31 @@ class NewsController extends Controller
 
     public function show(NewsPost $newsPost)
     {
+        // Increment view count when post is viewed
+        // Only count views for published posts
+        // Use session to ensure same session doesn't increment multiple times
+        if ($newsPost->status === 'published') {
+            // Get or initialize viewed posts array from session
+            $viewedPosts = session('viewed_news_posts', []);
+            
+            // Check if this post hasn't been viewed in this session
+            if (!in_array($newsPost->id, $viewedPosts)) {
+                // Increment view count
+                $newsPost->incrementViews();
+                
+                // Add this post ID to viewed posts in session
+                $viewedPosts[] = $newsPost->id;
+                session(['viewed_news_posts' => $viewedPosts]);
+            }
+        }
+        
         return view('frontend.news.show', [
             'post' => $newsPost,
-            'related' => NewsPost::where('id', '!=', $newsPost->id)->latest('published_at')->take(4)->get(),
+            'related' => NewsPost::where('id', '!=', $newsPost->id)
+                ->where('status', 'published')
+                ->latest('published_at')
+                ->take(4)
+                ->get(),
         ]);
     }
 

@@ -18,11 +18,15 @@
 
     {{-- Live Stream CTA --}}
     <section style="padding: 40px 20px; text-align: center; background: var(--glass); backdrop-filter: blur(16px); border-radius: 24px; max-width: 560px; margin: 40px auto; border: 1px solid rgba(255,255,255,0.1);">
-        <div id="liveNowBadge" style="display: none; background: #ff0000; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
+        <div id="liveNowBadge" style="display: {{ ($currentShow && $currentShow->status !== 'completed') ? 'inline-block' : 'none' }}; background: #ff0000; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
             ● LIVE NOW
         </div>
         <h2 id="streamTitle" style="font-size: 2.4rem; margin: 12px 0; color: var(--light); font-weight: 800; letter-spacing: -0.5px;">
-            Morning Charge
+            @if($currentShow && $currentShow->status !== 'completed')
+                {{ $currentShow->title }}
+            @else
+                Darling FM Live
+            @endif
         </h2>
         <p style="color: var(--text-secondary); margin: 8px 0 32px; font-size: 1.1rem; font-weight: 600;">
             107.3 FM
@@ -33,8 +37,13 @@
         <button
            id="homePlayButton"
            type="button"
-           style="display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; background: #ff0000; color: white; font-size: 3rem; border-radius: 50%; box-shadow: 0 12px 40px rgba(255,0,0,0.45); transition: transform 0.2s; border: none; cursor: pointer;">
-            <i class="fas fa-play" style="margin-left: 6px;"></i>
+           style="display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; background: #ff0000; color: white; border-radius: 50%; box-shadow: 0 12px 40px rgba(255,0,0,0.45); transition: transform 0.2s; border: none; cursor: pointer; position: relative;">
+            <svg class="home-play-icon" style="width: 2.5rem; height: 2.5rem; fill: white; display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg class="home-pause-icon" style="width: 2.5rem; height: 2.5rem; fill: white; display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+            </svg>
         </button>
     </section>
 
@@ -474,94 +483,44 @@
 
 @push('scripts')
     <script>
-        // Hero play/pause button -> toggle global audio playback
+        // Hero play/pause button -> uses global togglePlayback function from hls-live-player.js
         document.addEventListener('DOMContentLoaded', function() {
             const btn = document.getElementById('homePlayButton');
-            const icon = btn?.querySelector('i');
+            if (!btn) return;
+            
+            // Initial icon state - ensure only play icon is visible initially
+            const playIcon = btn.querySelector('.home-play-icon');
+            const pauseIcon = btn.querySelector('.home-pause-icon');
+            if (playIcon) playIcon.style.display = 'block';
+            if (pauseIcon) pauseIcon.style.display = 'none';
 
-            if (!btn || !icon) return;
-
-            // Function to update button state
-            function updateButtonState(isPlaying) {
-                if (isPlaying) {
-                    icon.className = 'fas fa-pause';
-                    icon.style.marginLeft = '0';
-                    btn.setAttribute('aria-label', 'Pause live stream');
+            // Handle button clicks - use global toggle function
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Wait a moment to ensure audio system is ready
+                if (window.DarlingFMAudio && window.DarlingFMAudio.toggle) {
+                    window.DarlingFMAudio.toggle();
                 } else {
-                    icon.className = 'fas fa-play';
-                    icon.style.marginLeft = '6px';
-                    btn.setAttribute('aria-label', 'Play live stream');
-                }
-            }
-
-            // Function to check and update button state
-            function checkAndUpdateState() {
-                if (window.DarlingFMAudio && window.DarlingFMAudio.player) {
-                    const audioElement = window.DarlingFMAudio.player;
-                    const isPlaying = audioElement && !audioElement.paused && !audioElement.ended;
-                    updateButtonState(isPlaying);
-                    console.log('Button state updated - isPlaying:', isPlaying);
-                }
-            }
-
-            // Listen for global audio state changes
-            if (window.DarlingFMAudio) {
-                window.DarlingFMAudio.listeners.play.push(function(isPlaying) {
-                    updateButtonState(isPlaying);
-                });
-
-                // Initial state check with a small delay to ensure audio is loaded
-                setTimeout(checkAndUpdateState, 100);
-            }
-
-            // Handle button clicks
-            btn.addEventListener('click', async function() {
-                if (!window.DarlingFMAudio) {
-                    // Fallback: open stream in new window
-                    window.open('https://phoebe.streamerr.co:7572/stream', 'darlingfm-stream');
-                    return;
-                }
-
-                // Check actual audio element state instead of global variable
-                const audioElement = window.DarlingFMAudio.player;
-                const isCurrentlyPlaying = audioElement && !audioElement.paused;
-
-                console.log('Button clicked - isCurrentlyPlaying:', isCurrentlyPlaying);
-
-                if (isCurrentlyPlaying) {
-                    // Currently playing, so pause
-                    console.log('Pausing audio...');
-                    try {
-                        audioElement.pause();
-                        // Force state update
-                        window.DarlingFMAudio.isPlaying = false;
-                        updateButtonState(false);
-                        console.log('Audio paused successfully');
-                    } catch (err) {
-                        console.error('Failed to pause:', err);
-                    }
-                } else {
-                    // Currently paused/stopped, so play
-                    console.log('Starting audio...');
-                    try {
-                        await window.DarlingFMAudio.switchStream('main');
-                        await window.DarlingFMAudio.play();
-                        updateButtonState(true);
-                        console.log('Audio started successfully');
-                    } catch (err) {
-                        console.error('Primary play failed, trying backup:', err);
-                        try {
-                            await window.DarlingFMAudio.switchStream('backup');
-                            await window.DarlingFMAudio.play();
-                            updateButtonState(true);
-                        } catch (err2) {
-                            console.error('Backup play failed:', err2);
-                            // Final fallback: open in new window
-                            window.open('https://phoebe.streamerr.co:7567/stream', 'darlingfm-stream-backup');
+                    // Wait for audio system to initialize
+                    setTimeout(function() {
+                        if (window.DarlingFMAudio && window.DarlingFMAudio.toggle) {
+                            window.DarlingFMAudio.toggle();
+                        } else {
+                            // Final fallback: open stream in new window
+                            window.open('https://phoebe.streamerr.co:7572/stream', 'darlingfm-stream');
                         }
-                    }
+                    }, 100);
                 }
             });
+            
+            // Initial state update - wait for audio system to be ready
+            setTimeout(function() {
+                if (window.DarlingFMAudio && window.DarlingFMAudio.updateHomeButton) {
+                    window.DarlingFMAudio.updateHomeButton();
+                }
+            }, 500);
         });
 
         document.addEventListener('DOMContentLoaded', function() {

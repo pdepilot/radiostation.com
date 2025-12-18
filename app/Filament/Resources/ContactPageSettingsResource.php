@@ -107,8 +107,7 @@ class ContactPageSettingsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListContactPageSettings::route('/'),
-            'edit' => Pages\EditContactPageSettings::route('/{record}/edit'),
+            'index' => Pages\ManageContactPageSettings::route('/'),
         ];
     }
     

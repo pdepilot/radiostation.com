@@ -22,9 +22,9 @@ class ShowResource extends Resource
     protected static ?string $model = Show::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-radio';
-    
+
     protected static ?string $navigationLabel = 'Shows';
-    
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -37,7 +37,7 @@ class ShowResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                            ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
@@ -83,9 +83,12 @@ class ShowResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('hero_image')
                             ->image()
+                            ->disk('public')
                             ->directory('shows')
-                            ->imageEditor()
+                            ->visibility('public')
                             ->maxSize(5120)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'])
+                            ->helperText('Upload an image for the show. Recommended size: 1920x1080px')
                             ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Stream Settings')
@@ -135,8 +138,8 @@ class ShowResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('hero_image')
-                    ->size(50)
-                    ->circular(),
+                    ->disk('public')
+                    ->defaultImageUrl(asset('assets/images/studio.jpg')),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
@@ -157,7 +160,7 @@ class ShowResource extends Resource
                     ->label('Live'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'scheduled' => 'warning',
                         'live' => 'success',
                         'completed' => 'gray',

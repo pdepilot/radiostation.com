@@ -74,49 +74,117 @@ class LiveStreamController extends Controller
     public function getActiveStream()
     {
         try {
-            // Get the active live stream (status = 'live') or latest stream
+            // Check for currently scheduled show (based on day/time) FIRST
+            // This ensures immediate update when show starts, even if command hasn't run yet
+            $currentShow = Show::getCurrentActiveShow();
+            
+            // Default fallback values
+            $defaultStreamUrl = 'https://phoebe.streamerr.co:7572/stream';
+            $defaultTitle = '107.3 FM';
+            
+            // Priority 1: If we have a current show (based on time), use it if not completed
+            // This ensures immediate update when show starts, even if command hasn't run yet
+            if ($currentShow && $currentShow->status !== 'completed') {
+                // Double-check if show has actually reached its start time and hasn't passed end time
+                $now = \Carbon\Carbon::now();
+                $currentTime = $now->format('H:i:s');
+                
+                // Handle start_time - it's a TIME column, so it's already a string
+                $startTime = $currentShow->start_time;
+                if ($startTime && !is_string($startTime)) {
+                    $startTime = is_object($startTime) ? $startTime->format('H:i:s') : (string)$startTime;
+                }
+                
+                // Handle end_time - it's a TIME column, so it's already a string
+                $endTime = $currentShow->end_time;
+                if ($endTime && !is_string($endTime)) {
+                    $endTime = is_object($endTime) ? $endTime->format('H:i:s') : (string)$endTime;
+                }
+                
+                $isWithinTime = false;
+                if ($startTime && $endTime) {
+                    if ($startTime > $endTime) {
+                        // Show spans midnight (e.g., 22:00 - 02:00)
+                        $isWithinTime = ($currentTime >= $startTime || $currentTime <= $endTime);
+                    } else {
+                        // Normal show - must be after start AND before or equal to end
+                        $isWithinTime = ($currentTime >= $startTime && $currentTime <= $endTime);
+                    }
+                }
+                
+                // If show is within its scheduled time and not completed, use it
+                if ($isWithinTime) {
+                    return response()->json([
+                        'stream_url' => $currentShow->stream_url ?? $defaultStreamUrl,
+                        'title' => $currentShow->title ?? $defaultTitle,
+                        'status' => 'live',
+                        'show' => $currentShow->title,
+                        'dj' => $currentShow->dj?->stage_name,
+                        'listener_count' => $currentShow->listener_count ?? 0,
+                    ], 200, [], JSON_UNESCAPED_UNICODE);
+                }
+            }
+
+            // Priority 2: Get the active live stream with status = 'live' and a live show (not completed)
             $liveStream = LiveStream::where('status', 'live')
+                ->whereHas('show', function($query) {
+                    $query->where('status', 'live')
+                          ->where('status', '!=', 'completed');
+                })
                 ->latest('updated_at')
                 ->with(['show', 'dj'])
                 ->first();
 
-            // If no live stream, get the latest one as fallback
+            // Priority 3: Get any live stream with status = 'live' (not from completed show)
             if (!$liveStream) {
-                $liveStream = LiveStream::latest('updated_at')
+                $liveStream = LiveStream::where('status', 'live')
+                    ->whereDoesntHave('show', function($query) {
+                        $query->where('status', 'completed');
+                    })
+                    ->latest('updated_at')
                     ->with(['show', 'dj'])
                     ->first();
             }
 
-            // Default fallback values
-            $defaultStreamUrl = 'https://phoebe.streamerr.co:7572/stream';
-            $defaultTitle = '107.3 FM';
-
-            if ($liveStream) {
+            // If we have a live stream with a live show (not completed), use it
+            if ($liveStream && $liveStream->show && $liveStream->show->status === 'live' && $liveStream->show->status !== 'completed') {
                 return response()->json([
                     'stream_url' => $liveStream->stream_url ?? $defaultStreamUrl,
                     'title' => $liveStream->title ?? $defaultTitle,
-                    'status' => $liveStream->status ?? 'offline',
-                    'show' => $liveStream->show?->title,
-                    'dj' => $liveStream->dj?->stage_name,
+                    'status' => 'live',
+                    'show' => $liveStream->show->title,
+                    'dj' => $liveStream->dj?->stage_name ?? $liveStream->show->dj?->stage_name,
                     'listener_count' => $liveStream->listener_count ?? 0,
                 ]);
             }
 
-            // Return defaults if no stream exists
+            // Priority 4: Check if live stream is the default "Darling FM Live" stream
+            if ($liveStream && $liveStream->status === 'live' && $liveStream->title === 'Darling FM Live' && !$liveStream->show_id) {
+                return response()->json([
+                    'stream_url' => $liveStream->stream_url ?? $defaultStreamUrl,
+                    'title' => 'Darling FM Live',
+                    'status' => 'live',
+                    'show' => null,
+                    'dj' => null,
+                    'listener_count' => $liveStream->listener_count ?? 0,
+                ]);
+            }
+
+            // Default to "Darling FM Live" when no active show
             return response()->json([
                 'stream_url' => $defaultStreamUrl,
-                'title' => $defaultTitle,
-                'status' => 'offline',
+                'title' => 'Darling FM Live',
+                'status' => 'live',
                 'show' => null,
                 'dj' => null,
-                'listener_count' => 0,
+                'listener_count' => $liveStream->listener_count ?? 0,
             ]);
         } catch (\Exception $e) {
             \Log::error('Active stream API error: ' . $e->getMessage());
             return response()->json([
                 'stream_url' => 'https://phoebe.streamerr.co:7572/stream',
-                'title' => '107.3 FM',
-                'status' => 'offline',
+                'title' => 'Darling FM Live',
+                'status' => 'live',
                 'show' => null,
                 'dj' => null,
                 'listener_count' => 0,

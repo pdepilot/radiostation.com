@@ -137,7 +137,10 @@
                 <div class="shows-simple-grid">
                     @foreach($shows as $show)
                         <a href="{{ route('shows.show', $show) }}" class="show-simple-card">
-                            <div class="show-simple-image" style="background-image: url('{{ $show->hero_image ?? asset('assets/images/studio.jpg') }}')">
+                            @php
+                                $imageUrl = $show->hero_image_url;
+                            @endphp
+                            <div class="show-simple-image" style="background-image: url('{{ $imageUrl }}')">
                                 @if($show->is_featured ?? false)
                                     <div class="show-simple-badge">FEATURED</div>
                                 @elseif($loop->first)

@@ -234,7 +234,10 @@
 @section('content')
     <div class="show-detail-page">
         <div class="container">
-            <div class="show-hero-section" style="background-image: url('{{ $show->hero_image ?? asset('assets/images/darling studio.jpg') }}')">
+            @php
+                $heroImageUrl = $show->hero_image_url;
+            @endphp
+            <div class="show-hero-section" style="background-image: url('{{ $heroImageUrl }}')">
                 <div class="show-hero-overlay">
                     <h1>{{ $show->title }}</h1>
                     @if($show->tagline)
@@ -274,7 +277,10 @@
                 <div class="related-shows-grid">
                     @foreach($related as $item)
                         <a href="{{ route('shows.show', $item) }}" class="related-show-card">
-                            <div class="related-show-image" style="background-image: url('{{ $item->hero_image ?? asset('assets/images/studio.jpg') }}')"></div>
+                            @php
+                                $relatedImageUrl = $item->hero_image_url;
+                            @endphp
+                            <div class="related-show-image" style="background-image: url('{{ $relatedImageUrl }}')"></div>
                             <div class="related-show-content">
                                 <h3>{{ $item->title }}</h3>
                                 <p>{{ Str::limit($item->description ?? 'Amazing radio show', 100) }}</p>

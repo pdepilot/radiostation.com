@@ -23,7 +23,6 @@ class TrafficAnalyticsWidget extends BaseWidget
         $totalNewsViews = NewsPost::sum('view_count');
         $totalShowViews = Show::sum('view_count') ?? 0;
         $totalUsers = User::where('role', 'user')->count();
-        $avgNewsViews = NewsPost::where('view_count', '>', 0)->avg('view_count') ?? 0;
 
         return [
             Stat::make('News Views', number_format($totalNewsViews))
@@ -38,10 +37,6 @@ class TrafficAnalyticsWidget extends BaseWidget
                 ->description('Total user accounts')
                 ->descriptionIcon('heroicon-o-users')
                 ->color('warning'),
-            Stat::make('Avg News Views', number_format($avgNewsViews, 0))
-                ->description('Per article average')
-                ->descriptionIcon('heroicon-o-chart-bar')
-                ->color('primary'),
         ];
     }
 }

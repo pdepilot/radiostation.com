@@ -127,7 +127,8 @@ class DjResource extends Resource
                 Tables\Columns\ImageColumn::make('avatar_url')
                     ->label('Avatar')
                     ->size(50)
-                    ->circular(),
+                    ->circular()
+                    ->defaultImageUrl(asset('assets/images/logo1.jpg')),
                 Tables\Columns\TextColumn::make('stage_name')
                     ->label('Stage Name')
                     ->searchable()

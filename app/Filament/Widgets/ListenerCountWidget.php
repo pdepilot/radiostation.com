@@ -41,13 +41,5 @@ class ListenerCountWidget extends BaseWidget
                 ]),
         ];
     }
-
-    public function resetListenerCount()
-    {
-        $liveStream = LiveStream::where('status', 'live')->first();
-        if ($liveStream) {
-            $liveStream->update(['listener_count' => 0]);
-        }
-    }
 }
 

@@ -1,0 +1,14 @@
+<x-filament-panels::page>
+    <form wire:submit="save">
+        {{ $this->form }}
+
+        <x-filament-actions::modals />
+
+        <div class="mt-6 flex justify-end">
+            @foreach ($this->getFormActions() as $action)
+            {{ $action }}
+            @endforeach
+        </div>
+    </form>
+</x-filament-panels::page>
+

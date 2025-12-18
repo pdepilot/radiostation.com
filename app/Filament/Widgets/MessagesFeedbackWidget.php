@@ -18,28 +18,6 @@ class MessagesFeedbackWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $totalMessages = ContactMessage::count();
-        $newMessages = ContactMessage::whereIn('status', ['new', 'pending'])->count();
-        $feedbackCount = ContactMessage::where('type', 'feedback')->count();
-        $unreadCount = ContactMessage::where('status', 'new')->count();
-
-        return [
-            Stat::make('Total Messages', $totalMessages)
-                ->description('All contact messages')
-                ->descriptionIcon('heroicon-o-envelope')
-                ->color('info'),
-            Stat::make('New Messages', $newMessages)
-                ->description('Unread & pending')
-                ->descriptionIcon('heroicon-o-envelope-open')
-                ->color('warning'),
-            Stat::make('Feedback', $feedbackCount)
-                ->description('Feedback submissions')
-                ->descriptionIcon('heroicon-o-chat-bubble-left-right')
-                ->color('success'),
-            Stat::make('Unread', $unreadCount)
-                ->description('Requires attention')
-                ->descriptionIcon('heroicon-o-exclamation-circle')
-                ->color('danger'),
-        ];
+        return [];
     }
 }

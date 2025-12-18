@@ -260,22 +260,29 @@
         video.addEventListener('play', () => {
             isPlaying = true;
             savePosition();
-            updateUI();
-            // Track listener count - increment when play starts
+            updateUI('Live');
             trackListenerCount('start');
         });
 
         video.addEventListener('pause', () => {
             isPlaying = false;
             savePosition();
-            updateUI();
-            // Track listener count - decrement when pause
+            updateUI('Paused');
             trackListenerCount('stop');
+        });
+        
+        video.addEventListener('ended', () => {
+            isPlaying = false;
+            savePosition();
+            updateUI('Tap to play');
         });
 
         video.addEventListener('loadedmetadata', () => {
             console.log('HLS metadata loaded');
-            updateUI('Live');
+            // Only update UI to Live if actually playing
+            if (video && !video.paused) {
+                updateUI('Live');
+            }
         });
 
         video.addEventListener('waiting', () => {
@@ -435,38 +442,51 @@
             const response = await fetch('/api/active-stream', {
                 method: 'GET',
                 cache: 'no-cache',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
             });
             
             if (response.ok) {
                 activeStreamData = await response.json();
+                console.log('🔄 [Stream Update] Active stream data:', activeStreamData);
+                console.log('🔄 [Stream Update] Show:', activeStreamData.show || 'None', '| Title:', activeStreamData.title);
                 updateHomepageUI(activeStreamData);
                 return activeStreamData;
+            } else {
+                console.error('❌ [Stream Update] API response not OK:', response.status, response.statusText);
             }
         } catch (error) {
-            console.warn('Failed to fetch active stream:', error);
+            console.error('❌ [Stream Update] Failed to fetch active stream:', error);
         }
         
         // Fallback
         activeStreamData = {
             stream_url: STREAM_URLS.main,
-            title: '107.3 FM',
-            status: 'offline'
+            title: 'Darling FM Live',
+            status: 'live'
         };
         updateHomepageUI(activeStreamData);
         return activeStreamData;
     }
     
     function updateHomepageUI(data) {
+        console.log('Updating homepage UI with:', data);
         const titleEl = document.getElementById('streamTitle');
         if (titleEl) {
-            // Use show name if available, otherwise use title
-            titleEl.textContent = data.show || data.title || '107.3 FM';
+            // Priority: show name > title > default
+            const displayText = data.show || data.title || 'Darling FM Live';
+            titleEl.textContent = displayText;
+            console.log('Updated streamTitle to:', displayText);
         }
         
         const badgeEl = document.getElementById('liveNowBadge');
         if (badgeEl) {
-            badgeEl.style.display = data.status === 'live' ? 'inline-block' : 'none';
+            // Show badge if there's a show name (indicates live show) or status is live
+            const shouldShow = (data.show && data.status === 'live') ? true : false;
+            badgeEl.style.display = shouldShow ? 'inline-block' : 'none';
+            console.log('Updated liveNowBadge display:', shouldShow ? 'visible' : 'hidden');
         }
         
         // Update sticky player title with show name (or title if no show)
@@ -548,29 +568,25 @@
                 console.log('Resuming from saved position. Elapsed:', elapsed, 'seconds');
             }
 
-            // Play
             await video.play();
             
-            // Seek to live position after a short delay
             setTimeout(() => {
                 syncPosition();
             }, 1000);
 
-            // Start position updates
             startPositionUpdates();
 
-            // Broadcast play event
             if (broadcastChannel) {
                 broadcastChannel.postMessage({
                     type: 'play',
-                    streamUrl: streamUrl
+                    streamUrl: streamUrl,
+                    tabId: tabId
                 });
             }
 
             isPlaying = true;
             savePosition();
             updateUI('Live');
-            // Track listener count - increment when stream starts playing
             trackListenerCount('start');
         } catch (error) {
             console.error('Play error:', error);
@@ -580,16 +596,23 @@
     }
 
     function pauseStream() {
-        if (!video) return;
+        // Set flag immediately to prevent any race conditions
+        isPlaying = false;
+        
+        if (!video) {
+            updateUI('Tap to play');
+            return;
+        }
 
+        // Pause the video
         video.pause();
+        
+        // Update UI immediately
         isPlaying = false;
         savePosition();
         updateUI('Paused');
-        // Track listener count - decrement when stream pauses
         trackListenerCount('stop');
 
-        // Broadcast pause event with tab ID
         if (broadcastChannel) {
             broadcastChannel.postMessage({
                 type: 'pause',
@@ -601,10 +624,27 @@
     }
 
     function togglePlayback() {
-        if (isPlaying && video && !video.paused) {
+        // Check actual video state - this is the source of truth
+        if (!video) {
+            // No video element yet, start playing
+            playStream().catch((error) => {
+                console.error('Play error:', error);
+                isPlaying = false;
+                updateUI('Tap to play');
+            });
+            return;
+        }
+        
+        const currentlyPlaying = !video.paused;
+        
+        if (currentlyPlaying) {
             pauseStream();
         } else {
-            playStream();
+            playStream().catch((error) => {
+                console.error('Play error:', error);
+                isPlaying = false;
+                updateUI('Tap to play');
+            });
         }
     }
 
@@ -662,19 +702,21 @@
 
         player.style.display = 'flex';
 
-        const icon = playBtn.querySelector('i');
-        if (icon) {
-            if (isPlaying && video && !video.paused) {
-                icon.className = 'fas fa-pause';
-                icon.style.display = 'inline-block';
-                icon.style.visibility = 'visible';
-                icon.style.opacity = '1';
+        // Update SVG icons
+        const playIcon = playBtn.querySelector('.play-icon');
+        const pauseIcon = playBtn.querySelector('.pause-icon');
+        
+        if (playIcon && pauseIcon) {
+            const videoIsPlaying = video && !video.paused;
+            const shouldShowPause = videoIsPlaying;
+            
+            if (shouldShowPause) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
                 playBtn.setAttribute('aria-label', 'Pause');
             } else {
-                icon.className = 'fas fa-play';
-                icon.style.display = 'inline-block';
-                icon.style.visibility = 'visible';
-                icon.style.opacity = '1';
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
                 playBtn.setAttribute('aria-label', 'Play');
             }
         }
@@ -685,6 +727,36 @@
             statusEl.textContent = 'Live';
         } else {
             statusEl.textContent = 'Tap to play';
+        }
+        
+        // Also update homepage button
+        updateHomeButton();
+    }
+    
+    // =============================================
+    // HOMEPAGE BUTTON UPDATES
+    // =============================================
+    function updateHomeButton() {
+        const homePlayBtn = document.getElementById('homePlayButton');
+        if (!homePlayBtn) return;
+
+        // Update SVG icons
+        const playIcon = homePlayBtn.querySelector('.home-play-icon');
+        const pauseIcon = homePlayBtn.querySelector('.home-pause-icon');
+        
+        if (playIcon && pauseIcon) {
+            const videoIsPlaying = video && !video.paused;
+            const shouldShowPause = videoIsPlaying;
+            
+            if (shouldShowPause) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                homePlayBtn.setAttribute('aria-label', 'Pause live stream');
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                homePlayBtn.setAttribute('aria-label', 'Play live stream');
+            }
         }
     }
 
@@ -759,20 +831,23 @@
         // Fetch active stream data from API
         await fetchActiveStream();
         
-        // Refresh stream data every 5 minutes
-        setInterval(fetchActiveStream, 5 * 60 * 1000);
+        // Refresh stream data every 10 seconds to catch show start times almost immediately
+        setInterval(fetchActiveStream, 10 * 1000);
 
         // Setup UI controls
         const playBtn = document.getElementById('stickyPlayBtn');
-        const homePlayBtn = document.getElementById('homePlayButton');
 
         if (playBtn) {
-            playBtn.addEventListener('click', togglePlayback);
+            playBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                togglePlayback();
+            });
         }
 
-        if (homePlayBtn) {
-            homePlayBtn.addEventListener('click', togglePlayback);
-        }
+        // Note: homepage button listener is handled in home.blade.php
+        // Just update the icon state here
+        updateHomeButton();
 
         // Page visibility handlers
         document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -798,7 +873,8 @@
         toggle: togglePlayback,
         isPlaying: () => isPlaying,
         getCurrentUrl: () => currentStreamUrl,
-        syncServerTime: syncServerTime
+        syncServerTime: syncServerTime,
+        updateHomeButton: updateHomeButton
     };
 
     // =============================================

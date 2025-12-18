@@ -45,4 +45,31 @@ class LiveStream extends Model
     {
         return $this->belongsTo(Dj::class);
     }
+
+    public function listenerSessions()
+    {
+        return $this->hasMany(ListenerSession::class);
+    }
+
+    /**
+     * Get the total count of all listeners who have tuned into this live stream
+     * This counts all listener sessions (including inactive ones)
+     */
+    public function getTotalListenersCountAttribute()
+    {
+        return $this->listenerSessions()->count();
+    }
+
+    /**
+     * Get the count of unique listeners who have tuned into this live stream
+     * This counts unique users/IPs or unique sessions
+     */
+    public function getUniqueListenersCountAttribute()
+    {
+        // Count unique sessions (each session represents a listener tuning in)
+        // If you want truly unique users, you could group by user_id or ip_address
+        return $this->listenerSessions()
+            ->distinct('session_id')
+            ->count();
+    }
 }

@@ -89,10 +89,15 @@ class LiveStreamResource extends Resource
                 Forms\Components\Section::make('Statistics')
                     ->schema([
                         Forms\Components\TextInput::make('listener_count')
+                            ->label('Current Listeners')
                             ->numeric()
                             ->default(0)
                             ->disabled()
-                            ->helperText('Auto-updated during live stream'),
+                            ->helperText('Current active listeners (auto-updated during live stream)'),
+                        Forms\Components\Placeholder::make('total_listeners')
+                            ->label('Total Listeners (All Time)')
+                            ->content(fn ($record) => $record ? number_format($record->listenerSessions()->count()) : '0')
+                            ->helperText('Total count of all listeners who have tuned into this stream'),
                     ])
                     ->collapsible()
                     ->collapsed(),
@@ -125,9 +130,18 @@ class LiveStreamResource extends Resource
                     })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('listener_count')
-                    ->label('Listeners')
+                    ->label('Current Listeners')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->description(fn ($record) => 'Active now'),
+                Tables\Columns\TextColumn::make('listener_sessions_count')
+                    ->label('Total Listeners')
+                    ->numeric()
+                    ->sortable()
+                    ->description(fn ($record) => 'All listeners who tuned in')
+                    ->counts('listenerSessions')
+                    ->weight('bold')
+                    ->color('success'),
                 Tables\Columns\TextColumn::make('scheduled_for')
                     ->dateTime()
                     ->sortable(),
