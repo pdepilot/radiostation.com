@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class AdsDealsWidget extends BaseWidget
 {
-    protected static ?int $sort = 7;
+    protected static ?int $sort = 32; // Section 4: Content & Operations (Business)
 
     protected function getStats(): array
     {

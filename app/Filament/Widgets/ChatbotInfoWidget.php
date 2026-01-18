@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class ChatbotInfoWidget extends BaseWidget
 {
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 40; // Section 5: Additional Tools (Optional - empty for now)
 
     protected function getStats(): array
     {

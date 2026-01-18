@@ -48,8 +48,12 @@ Route::get('/api/news/search', [NewsController::class, 'search'])->name('news.se
 Route::get('/api/listener-count', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'getListenerCount'])->name('api.listener-count');
 Route::get('/api/active-stream', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'getActiveStream'])->name('api.active-stream');
 Route::post('/api/listener/track', [\App\Http\Controllers\Frontend\LiveStreamController::class, 'trackListener'])->name('api.listener.track');
-Route::post('/admin/api/analytics/reset', [\App\Http\Controllers\Admin\AnalyticsController::class, 'resetAnalytics'])->name('admin.api.analytics.reset')->middleware('auth');
+Route::post('/admin/api/analytics/reset', [\App\Http\Controllers\Admin\AnalyticsController::class, 'resetAnalytics'])->name('admin.api.analytics.reset')->middleware(['auth', 'admin.access']);
 Route::get('/api/server-time', [\App\Http\Controllers\Api\ServerTimeController::class, 'index'])->name('api.server-time');
+
+// Real-time content updates
+Route::get('/api/realtime/poll', [\App\Http\Controllers\Api\RealtimeController::class, 'poll'])->name('api.realtime.poll');
+Route::get('/api/realtime/content', [\App\Http\Controllers\Api\RealtimeController::class, 'getContent'])->name('api.realtime.content');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
@@ -57,12 +61,6 @@ Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('even
 // Comments
 Route::post('/news/{newsPost:slug}/comments', [\App\Http\Controllers\Frontend\CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [\App\Http\Controllers\Frontend\CommentController::class, 'destroy'])->middleware('auth')->name('comments.destroy');
-
-// Likes (protected with CSRF)
-Route::middleware('web')->group(function () {
-    Route::post('/api/news/{newsPost}/like', [\App\Http\Controllers\Frontend\LikeController::class, 'toggle'])->name('likes.toggle');
-    Route::get('/api/news/{newsPost}/like/check', [\App\Http\Controllers\Frontend\LikeController::class, 'check'])->name('likes.check');
-});
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -112,20 +110,27 @@ Route::middleware('auth')->group(function () {
 // Admin routes are now handled by Filament at /admin
 // Old admin routes removed - using Filament 3 panel instead
 
-// Admin API routes for real-time updates
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+// Admin API routes for real-time updates (with HTTPS, throttling, and IP whitelist)
+Route::prefix('admin')->middleware(['auth', 'admin.access'])->group(function () {
     Route::get('/api/realtime/stream', [\App\Http\Controllers\Admin\RealtimeController::class, 'stream'])->name('admin.api.realtime.stream');
     Route::get('/api/realtime/poll', [\App\Http\Controllers\Admin\RealtimeController::class, 'poll'])->name('admin.api.realtime.poll');
+    // Hybrid: API endpoint for social media settings
+    Route::post('/api/social-media-settings', [\App\Http\Controllers\Admin\SettingsController::class, 'saveSocialMedia'])->name('admin.api.social-media-settings');
 });
 
 // ========================
-// AUTH ROUTES (OTP-based authentication)
+// AUTH ROUTES (Laravel Breeze + Socialite)
 // ========================
-Route::get('/login', [\App\Http\Controllers\Auth\OtpController::class, 'showLogin'])->name('login');
-Route::post('/login', [\App\Http\Controllers\Auth\OtpController::class, 'login'])->name('login.post');
-Route::get('/register', [\App\Http\Controllers\Auth\OtpController::class, 'showRegister'])->name('register');
-Route::post('/register', [\App\Http\Controllers\Auth\OtpController::class, 'register'])->name('register.post');
-Route::get('/verify-otp', [\App\Http\Controllers\Auth\OtpController::class, 'showVerify'])->name('otp.verify');
-Route::post('/verify-otp', [\App\Http\Controllers\Auth\OtpController::class, 'verify'])->name('otp.verify.post');
-Route::post('/resend-otp', [\App\Http\Controllers\Auth\OtpController::class, 'resendOtp'])->name('otp.resend');
-Route::post('/logout', [\App\Http\Controllers\Auth\OtpController::class, 'logout'])->name('logout');
+// Include Breeze auth routes
+require __DIR__ . '/auth.php';
+
+// Socialite OAuth routes
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/{provider}', [\App\Http\Controllers\Auth\SocialiteController::class, 'redirect'])
+        ->where('provider', 'google|facebook|twitter')
+        ->name('socialite.redirect');
+
+    Route::get('/auth/{provider}/callback', [\App\Http\Controllers\Auth\SocialiteController::class, 'callback'])
+        ->where('provider', 'google|facebook|twitter')
+        ->name('socialite.callback');
+});

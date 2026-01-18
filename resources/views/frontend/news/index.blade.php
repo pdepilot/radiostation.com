@@ -24,7 +24,7 @@
 
         <div class="posts-grid">
             @foreach($posts as $post)
-                <a href="{{ route('news.show', $post->slug) }}" style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ route('news.show', $post->slug) }}" data-modal="news" data-id="{{ $post->id }}" data-slug="{{ $post->slug }}" style="text-decoration: none; color: inherit; display: block;">
                     <div class="post-card" data-post-id="{{ $post->id }}">
                         @php
                             $imageUrl = $post->hero_image ?? asset('assets/images/darling studio.jpg');

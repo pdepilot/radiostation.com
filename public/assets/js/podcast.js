@@ -120,36 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Like Functionality
-  const likeButtons = document.querySelectorAll(
-    ".like-podcast-btn, #heroLikeBtn"
-  );
-  likeButtons.forEach((button) => {
-    button.addEventListener("click", function (e) {
-      e.stopPropagation();
-      const podcastId = this.getAttribute("data-podcast-id");
-      const icon = this.querySelector("i");
-      const countElement =
-        this.querySelector(".like-count") ||
-        document.getElementById("heroLikes");
-
-      if (icon.classList.contains("liked")) {
-        // Unlike
-        icon.classList.remove("liked");
-        let currentCount = parseInt(countElement.textContent);
-        countElement.textContent = (currentCount - 1).toString();
-      } else {
-        // Like
-        icon.classList.add("liked");
-        let currentCount = parseInt(countElement.textContent);
-        countElement.textContent = (currentCount + 1).toString();
-      }
-
-      // In a real app, you would send this to a backend
-      console.log(`Podcast ${podcastId} like status toggled`);
-    });
-  });
-
   // Share Functionality
   const shareModal = document.getElementById("shareModal");
   const closeShare = document.getElementById("closeShare");

@@ -239,7 +239,7 @@
             @endphp
             <div class="show-hero-section" style="background-image: url('{{ $heroImageUrl }}')">
                 <div class="show-hero-overlay">
-                    <h1>{{ $show->title }}</h1>
+                    <h1 class="section-title" style="text-align: left; margin-bottom: 10px; font-size: 3rem; text-transform: none; letter-spacing: normal;">{{ $show->title }}</h1>
                     @if($show->tagline)
                         <p class="show-tagline">{{ $show->tagline }}</p>
                     @endif
@@ -269,6 +269,21 @@
                     </div>
                 </div>
                 @endif
+                
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--glass-border);">
+                    <button
+                        id="showShareButton"
+                        type="button"
+                        data-share-type="show"
+                        data-share-title="{{ $show->title }}"
+                        data-share-url="{{ route('shows.show', $show, true) }}"
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: var(--accent); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s; cursor: pointer; font-weight: 600; font-size: 0.95rem;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.transform='translateY(-2px)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(0)'">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
+                </div>
             </div>
             
             @if($related->count() > 0)
@@ -292,4 +307,93 @@
             @endif
         </div>
     </div>
+
+    {{-- Share Modal --}}
+    @include('components.share-modal', ['shareId' => 'Show'])
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const shareModal = document.getElementById('shareModalShow');
+            const shareButton = document.getElementById('showShareButton');
+            const closeModalBtn = shareModal?.querySelector('.close-share-modal');
+            const shareOptions = shareModal?.querySelectorAll('.share-option-btn');
+
+            if (!shareButton || !shareModal) return;
+
+            shareButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                shareModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    shareModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                });
+            }
+
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) {
+                    shareModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+
+            if (shareOptions) {
+                shareOptions.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const platform = this.getAttribute('data-platform');
+                        const shareTitle = shareButton.getAttribute('data-share-title') || '';
+                        const shareUrl = shareButton.getAttribute('data-share-url') || window.location.href;
+                        const customMessage = document.getElementById('shareMessageShow')?.value || '';
+                        const message = customMessage.trim() || `Check out "${shareTitle}" on Darling FM!`;
+                        const fullText = `${message} ${shareUrl}`;
+
+                        if (platform === 'copy') {
+                            navigator.clipboard.writeText(shareUrl).then(() => {
+                                const span = this.querySelector('span');
+                                if (span) {
+                                    const original = span.textContent;
+                                    span.textContent = 'Copied!';
+                                    setTimeout(() => span.textContent = original, 2000);
+                                }
+                            });
+                            return;
+                        }
+
+                        const encodedUrl = encodeURIComponent(shareUrl);
+                        const encodedText = encodeURIComponent(fullText);
+                        let shareUrlPlatform = '';
+
+                        switch (platform) {
+                            case 'facebook':
+                                shareUrlPlatform = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodeURIComponent(message)}`;
+                                break;
+                            case 'twitter':
+                                shareUrlPlatform = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+                                break;
+                            case 'whatsapp':
+                                shareUrlPlatform = `https://api.whatsapp.com/send?text=${encodedText}`;
+                                break;
+                            case 'telegram':
+                                shareUrlPlatform = `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`;
+                                break;
+                            case 'linkedin':
+                                shareUrlPlatform = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+                                break;
+                        }
+
+                        if (shareUrlPlatform) {
+                            window.open(shareUrlPlatform, 'shareWindow', 'width=600,height=400,scrollbars=yes,resizable=yes');
+                            shareModal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    @endpush
 @endsection

@@ -14,7 +14,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class TrafficAnalyticsWidget extends BaseWidget
 {
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 13; // Section 2: Site Analytics Overview (Engagement)
     
     protected static ?string $pollingInterval = '60s';
 

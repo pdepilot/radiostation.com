@@ -25,7 +25,13 @@
     <meta property="twitter:description" content="{{ $description ?? 'Darling FM 107.3 - Owerri\'s premier radio station. Listen live, discover shows, news, events, and connect with your favorite on-air personalities.' }}">
     <meta property="twitter:image" content="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/index.css') }}">
@@ -33,6 +39,10 @@
     <link rel="stylesheet" href="{{ asset('assets/css/news-search.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('styles')
+    
+    <!-- Real-time Updates & Modal System -->
+    <script src="{{ asset('assets/js/realtime-updates.js') }}" defer></script>
+    <script src="{{ asset('assets/js/modal-system.js') }}" defer></script>
 </head>
 
 <body>
@@ -106,13 +116,23 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <img src="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}" alt="Darling FM">
-                    <p>The future of radio streaming. Experience sound in a whole new dimension.</p>
+                    <p>Darling 107.3 FM is Nigeria’s leading healthy lifestyle and edutainment radio station, blending urban and contemporary music with news, talk, and engaging conversations that inform, inspire, and entertain.</p>
                     <div class="social-links">
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        @if(!empty($twitterUrl))
+                        <a href="{{ $twitterUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        @endif
+                        @if(!empty($instagramUrl))
+                        <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        @endif
+                        @if(!empty($facebookUrl))
+                        <a href="{{ $facebookUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        @endif
+                        @if(!empty($youtubeUrl))
+                        <a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        @endif
+                        @if(!empty($tiktokUrl))
+                        <a href="{{ $tiktokUrl }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        @endif
                     </div>
                 </div>
                 <div class="footer-section">
@@ -308,29 +328,6 @@
             });
         }
 
-        // Like functionality
-        window.toggleLike = function(postId) {
-            const likeBtn = document.querySelector(`.like-btn[data-post-id="${postId}"]`);
-            const likeCount = likeBtn?.querySelector('.like-count');
-            const icon = likeBtn?.querySelector('i');
-
-            if (likeBtn && likeCount) {
-                const currentCount = parseInt(likeCount.textContent) || 0;
-                const isLiked = icon?.classList.contains('fas');
-
-                if (isLiked) {
-                    icon.classList.remove('fas');
-                    icon.classList.add('far');
-                    likeCount.textContent = currentCount - 1;
-                    likeBtn.style.color = '';
-                } else {
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    likeCount.textContent = currentCount + 1;
-                    likeBtn.style.color = 'var(--accent)';
-                }
-            }
-        };
 
         // Share functionality
         window.sharePost = function(title, url) {

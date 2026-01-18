@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class ListenerCountWidget extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 1; // Section 1: Live & Real-time (Priority)
     
     protected static ?string $pollingInterval = '2s';
 

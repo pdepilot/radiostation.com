@@ -16,7 +16,15 @@ class ListenerAnalyticsChartWidget extends ChartWidget
 {
     protected static ?string $heading = 'Listener Analytics';
     
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 22; // Section 3: Analytics Charts - Listener Metrics
+    
+    public function getColumnSpan(): int | array
+    {
+        return [
+            'md' => 2,
+            'xl' => 2,
+        ];
+    }
     
     protected static ?string $pollingInterval = '30s';
     

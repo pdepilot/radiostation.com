@@ -163,14 +163,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Add event listeners for like buttons
-    document.querySelectorAll(".like-track-btn").forEach((btn) => {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        const trackId = parseInt(this.getAttribute("data-track-id"));
-        toggleLike(trackId);
-      });
-    });
   }
 
   // Update track count display
@@ -208,9 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 track.duration
               )}</div>
               <div class="queue-item-actions">
-                <button class="queue-item-btn like-queue-btn" data-track-id="${trackId}">
-                  <i class="${isLiked(trackId) ? "fas" : "far"} fa-heart"></i>
-                </button>
                 <button class="queue-item-btn">
                   <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -219,14 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
       queueItems.appendChild(queueItem);
     });
 
-    // Add event listeners for queue like buttons
-    document.querySelectorAll(".like-queue-btn").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const trackId = parseInt(this.getAttribute("data-track-id"));
-        toggleLike(trackId);
-        renderQueue();
-      });
-    });
   }
 
   // Load and play a track
@@ -335,47 +316,6 @@ document.addEventListener("DOMContentLoaded", function () {
     audioPlayer.currentTime = percent * audioPlayer.duration;
   }
 
-  // Check if a track is liked
-  function isLiked(trackId) {
-    return localStorage.getItem(`liked_${trackId}`) === "true";
-  }
-
-  // Toggle like status
-  function toggleLike(trackId) {
-    const currentlyLiked = isLiked(trackId);
-    localStorage.setItem(`liked_${trackId}`, !currentlyLiked);
-
-    // Update like count in tracks data
-    if (!currentlyLiked) {
-      tracks[trackId].likes += 1;
-    } else {
-      tracks[trackId].likes -= 1;
-    }
-
-    // Update like buttons
-    updateLikeButtons(trackId);
-  }
-
-  // Update like buttons for a track
-  function updateLikeButtons(trackId) {
-    const isTrackLiked = isLiked(trackId);
-
-    // Update like buttons in track cards
-    document
-      .querySelectorAll(`.like-track-btn[data-track-id="${trackId}"]`)
-      .forEach((btn) => {
-        const icon = btn.querySelector("i");
-        icon.className = isTrackLiked ? "fas fa-heart liked" : "far fa-heart";
-      });
-
-    // Update like buttons in queue
-    document
-      .querySelectorAll(`.like-queue-btn[data-track-id="${trackId}"]`)
-      .forEach((btn) => {
-        const icon = btn.querySelector("i");
-        icon.className = isTrackLiked ? "fas fa-heart liked" : "far fa-heart";
-      });
-  }
 
   // Play next track in queue
   function playNext() {
@@ -482,10 +422,6 @@ document.addEventListener("DOMContentLoaded", function () {
     shuffleQueueBtn.addEventListener("click", shuffleQueue);
     clearQueueBtn.addEventListener("click", clearQueue);
 
-    // Initialize like buttons
-    Object.keys(tracks).forEach((trackId) => {
-      updateLikeButtons(parseInt(trackId));
-    });
   }
 
   // Mobile menu functionality

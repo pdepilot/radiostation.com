@@ -15,7 +15,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class DashboardStatsWidget extends BaseWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 12; // Section 2: Site Analytics Overview
 
     protected function getStats(): array
     {

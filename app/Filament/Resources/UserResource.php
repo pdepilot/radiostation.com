@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use App\Models\SiteAnalytics;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\Filter;
+use Illuminate\Support\Facades\DB;
 
 class UserResource extends Resource
 {
@@ -59,10 +61,6 @@ class UserResource extends Resource
                     ->maxLength(800)
                     ->default(null),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('otp_code')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\DateTimePicker::make('otp_expires_at'),
                 Forms\Components\Toggle::make('is_verified')
                     ->required(),
                 Forms\Components\TextInput::make('password')
@@ -84,10 +82,52 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('state')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('latest_city')
+                    ->label('City')
+                    ->getStateUsing(function ($record) {
+                        $latest = $record->latestSiteAnalytics;
+                        return $latest?->city ?? ($record->city ?? 'Guest');
+                    })
+                    ->searchable(
+                        query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('latestSiteAnalytics', function ($q) use ($search) {
+                                $q->where('city', 'like', "%{$search}%");
+                            })->orWhere('city', 'like', "%{$search}%");
+                        }
+                    )
+                    ->sortable(
+                        query: function (Builder $query, string $direction): Builder {
+                            return $query->leftJoin('site_analytics as latest_sa', function ($join) {
+                                $join->on('users.id', '=', 'latest_sa.user_id')
+                                    ->whereRaw('latest_sa.id = (SELECT id FROM site_analytics WHERE user_id = users.id ORDER BY created_at DESC LIMIT 1)');
+                            })
+                            ->orderBy('latest_sa.city', $direction)
+                            ->select('users.*');
+                        }
+                    ),
+                Tables\Columns\TextColumn::make('latest_state')
+                    ->label('State')
+                    ->getStateUsing(function ($record) {
+                        $latest = $record->latestSiteAnalytics;
+                        return $latest?->state ?? ($record->state ?? 'Guest');
+                    })
+                    ->searchable(
+                        query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('latestSiteAnalytics', function ($q) use ($search) {
+                                $q->where('state', 'like', "%{$search}%");
+                            })->orWhere('state', 'like', "%{$search}%");
+                        }
+                    )
+                    ->sortable(
+                        query: function (Builder $query, string $direction): Builder {
+                            return $query->leftJoin('site_analytics as latest_sa', function ($join) {
+                                $join->on('users.id', '=', 'latest_sa.user_id')
+                                    ->whereRaw('latest_sa.id = (SELECT id FROM site_analytics WHERE user_id = users.id ORDER BY created_at DESC LIMIT 1)');
+                            })
+                            ->orderBy('latest_sa.state', $direction)
+                            ->select('users.*');
+                        }
+                    ),
                 Tables\Columns\ImageColumn::make('avatar_url')
                     ->label('Avatar')
                     ->size(50)
@@ -97,11 +137,6 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('bio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('otp_code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('otp_expires_at')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_verified')
@@ -122,28 +157,34 @@ class UserResource extends Resource
                         'admin' => 'Admin',
                         'dj' => 'DJ',
                     ]),
-                Tables\Filters\Filter::make('state')
+                Tables\Filters\Filter::make('latest_state')
+                    ->label('State')
                     ->form([
                         Forms\Components\TextInput::make('state')
                             ->label('State')
-                            ->placeholder('Filter by state'),
+                            ->placeholder('Filter by latest state'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
                             $data['state'],
-                            fn (Builder $query, $state): Builder => $query->where('state', 'like', "%{$state}%"),
+                            fn (Builder $query, $state): Builder => $query->whereHas('latestSiteAnalytics', function ($q) use ($state) {
+                                $q->where('state', 'like', "%{$state}%");
+                            })->orWhere('state', 'like', "%{$state}%"),
                         );
                     }),
-                Tables\Filters\Filter::make('city')
+                Tables\Filters\Filter::make('latest_city')
+                    ->label('City')
                     ->form([
                         Forms\Components\TextInput::make('city')
                             ->label('City')
-                            ->placeholder('Filter by city'),
+                            ->placeholder('Filter by latest city'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
                             $data['city'],
-                            fn (Builder $query, $city): Builder => $query->where('city', 'like', "%{$city}%"),
+                            fn (Builder $query, $city): Builder => $query->whereHas('latestSiteAnalytics', function ($q) use ($city) {
+                                $q->where('city', 'like', "%{$city}%");
+                            })->orWhere('city', 'like', "%{$city}%"),
                         );
                     }),
                 Tables\Filters\Filter::make('created_at')

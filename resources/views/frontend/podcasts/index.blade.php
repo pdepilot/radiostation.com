@@ -112,9 +112,6 @@
                                 <a href="{{ route('podcasts.show', $heroPodcast) }}" class="action-btn primary-btn">
                                     <i class="fas fa-play"></i> Play Now
                                 </a>
-                                <button class="action-btn secondary-btn" id="heroLikeBtn">
-                                    <i class="fas fa-heart"></i> <span>{{ rand(100, 2000) }}</span>
-                                </button>
                                 <button class="action-btn secondary-btn" id="heroShareBtn" data-podcast="{{ $heroPodcast->slug }}">
                                     <i class="fas fa-share"></i> Share
                                 </button>

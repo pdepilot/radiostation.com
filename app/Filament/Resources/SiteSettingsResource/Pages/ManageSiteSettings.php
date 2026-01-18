@@ -48,34 +48,29 @@ class ManageSiteSettings extends Page implements HasForms
                     ->schema([
                         Forms\Components\TextInput::make('facebook_url')
                             ->label('Facebook URL')
-                            ->url()
                             ->maxLength(255)
                             ->placeholder('https://facebook.com/darlingfm')
-                            ->helperText('Full URL to your Facebook page'),
+                            ->helperText('Full URL to your Facebook page (leave empty to hide icon)'),
                         Forms\Components\TextInput::make('twitter_url')
                             ->label('Twitter/X URL')
-                            ->url()
                             ->maxLength(255)
                             ->placeholder('https://twitter.com/darlingfm')
-                            ->helperText('Full URL to your Twitter/X profile'),
+                            ->helperText('Full URL to your Twitter/X profile (leave empty to hide icon)'),
                         Forms\Components\TextInput::make('instagram_url')
                             ->label('Instagram URL')
-                            ->url()
                             ->maxLength(255)
                             ->placeholder('https://instagram.com/darlingfm')
-                            ->helperText('Full URL to your Instagram profile'),
+                            ->helperText('Full URL to your Instagram profile (leave empty to hide icon)'),
                         Forms\Components\TextInput::make('youtube_url')
                             ->label('YouTube URL')
-                            ->url()
                             ->maxLength(255)
                             ->placeholder('https://youtube.com/@darlingfm')
-                            ->helperText('Full URL to your YouTube channel'),
+                            ->helperText('Full URL to your YouTube channel (leave empty to hide icon)'),
                         Forms\Components\TextInput::make('tiktok_url')
                             ->label('TikTok URL')
-                            ->url()
                             ->maxLength(255)
                             ->placeholder('https://tiktok.com/@darlingfm')
-                            ->helperText('Full URL to your TikTok profile'),
+                            ->helperText('Full URL to your TikTok profile (leave empty to hide icon)'),
                     ])
                     ->columns(1),
             ])
@@ -84,30 +79,62 @@ class ManageSiteSettings extends Page implements HasForms
 
     public function save(): void
     {
+        try {
         $data = $this->form->getState();
 
-        // Save each setting
+            // Save each setting - allow empty values to remove links
         foreach ($data as $key => $value) {
+                // Trim whitespace and convert empty strings to null
+                $cleanValue = is_string($value) ? trim($value) : ($value ?? null);
+                $cleanValue = $cleanValue === '' ? null : $cleanValue;
+                
             SiteSetting::updateOrCreate(
                 ['key' => $key],
-                ['value' => $value ?? '']
-            );
-        }
+                    [
+                        'value' => $cleanValue,
+                        'type' => 'text',
+                    ]
+                );
+            }
+
+            // Reload form with fresh data to reset dirty state
+            $settings = SiteSetting::pluck('value', 'key')->toArray();
+            $this->data = [
+                'facebook_url' => $settings['facebook_url'] ?? '',
+                'twitter_url' => $settings['twitter_url'] ?? '',
+                'instagram_url' => $settings['instagram_url'] ?? '',
+                'youtube_url' => $settings['youtube_url'] ?? '',
+                'tiktok_url' => $settings['tiktok_url'] ?? '',
+            ];
+            $this->form->fill($this->data);
+            
+            // Reset form to clear dirty state
+            $this->form->model(null);
+            $this->form->fill($this->data);
 
         \Filament\Notifications\Notification::make()
             ->title('Settings saved successfully')
             ->success()
             ->send();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Filament\Notifications\Notification::make()
+                ->title('Validation error')
+                ->body('Please check your input and try again.')
+                ->danger()
+                ->send();
+        } catch (\Exception $e) {
+            \Filament\Notifications\Notification::make()
+                ->title('Error saving settings')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
     protected function getFormActions(): array
     {
-        return [
-            Actions\Action::make('save')
-                ->label('Save Settings')
-                ->submit('save')
-                ->color('primary'),
-        ];
+        // Return empty array - we're using AJAX save button instead
+        return [];
     }
 
     public function getTitle(): string | Htmlable

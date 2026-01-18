@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class MessagesFeedbackWidget extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 31; // Section 4: Content & Operations
     
     protected static ?string $pollingInterval = '30s';
 

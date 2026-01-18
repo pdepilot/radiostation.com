@@ -23,52 +23,91 @@ class ChatbotKnowledgeResource extends Resource
     
     protected static ?int $navigationSort = 10;
 
-    // Commented out - Chatbot Knowledge disabled in admin panel
     public static function shouldRegisterNavigation(): bool
     {
-        return false;
+        return true;
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Knowledge Entry')
+                Forms\Components\Section::make('Create New Chatbot Knowledge Entry')
+                    ->description('Add a new knowledge entry to help AskDarling respond to user questions')
                     ->schema([
                         Forms\Components\TextInput::make('keyword')
+                            ->label('Keyword')
                             ->required()
-                            ->maxLength(255)
                             ->unique(ignoreRecord: true)
-                            ->placeholder('e.g., ad rates, contact, shows')
-                            ->helperText('Primary keyword that triggers this response'),
+                            ->maxLength(255)
+                            ->placeholder('e.g. ad rates')
+                            ->helperText('The main keyword that triggers this response. Must be unique.'),
                         Forms\Components\Textarea::make('response')
+                            ->label('Response')
                             ->required()
-                            ->rows(4)
-                            ->maxLength(1000)
-                            ->placeholder('The response message for this keyword'),
-                        Forms\Components\Textarea::make('question_patterns')
-                            ->label('Question Patterns (JSON array)')
-                            ->rows(3)
-                            ->placeholder('["/ad rate/i", "/ads/i", "/advertising/i"]')
-                            ->helperText('JSON array of regex patterns that match this topic'),
+                            ->rows(5)
+                            ->placeholder('The full answer the bot should give...')
+                            ->helperText('The complete response message AskDarling will provide when this keyword is matched.'),
+                        Forms\Components\Repeater::make('question_patterns')
+                            ->label('Additional Matching Patterns')
+                            ->helperText('Add alternative phrases or variations that should also trigger this response (e.g., "advert cost", "sponsorship price")')
+                            ->schema([
+                                Forms\Components\TextInput::make('pattern')
+                                    ->label('Pattern')
+                                    ->placeholder('e.g. advert cost')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                            ->itemLabel(fn (array $state): ?string => $state['pattern'] ?? null)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add Pattern')
+                            ->collapsible()
+                            ->collapsed()
+                            ->hydrateStateUsing(function (?array $state): array {
+                                if (empty($state)) {
+                                    return [];
+                                }
+                                // Convert array of strings to array of objects with 'pattern' key
+                                return array_map(fn ($pattern) => ['pattern' => $pattern], $state);
+                            })
+                            ->dehydrateStateUsing(function (?array $state): array {
+                                if (empty($state)) {
+                                    return [];
+                                }
+                                // Convert array of objects back to array of strings
+                                return array_column($state, 'pattern');
+                            })
+                            ->default([]),
                         Forms\Components\Select::make('category')
+                            ->label('Category')
                             ->options([
                                 'advertising' => 'Advertising',
                                 'contact' => 'Contact',
                                 'shows' => 'Shows',
                                 'events' => 'Events',
+                                'contests' => 'Contests',
                                 'technical' => 'Technical',
                                 'general' => 'General',
                             ])
-                            ->nullable(),
+                            ->placeholder('Select a category (optional)')
+                            ->helperText('Categorize this entry for better organization')
+                            ->nullable()
+                            ->searchable(),
                         Forms\Components\TextInput::make('priority')
+                            ->label('Priority')
                             ->numeric()
                             ->default(0)
-                            ->helperText('Higher priority entries are checked first'),
+                            ->helperText('Higher = checked first. Use higher numbers for more important responses.')
+                            ->minValue(0)
+                            ->maxValue(100),
                         Forms\Components\Toggle::make('is_active')
                             ->label('Active')
-                            ->default(true),
-                    ]),
+                            ->helperText('Only active entries will be used by AskDarling')
+                            ->default(true)
+                            ->inline(false),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
             ]);
     }
 

@@ -60,4 +60,20 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    /**
+     * Get the site analytics records for the user.
+     */
+    public function siteAnalytics()
+    {
+        return $this->hasMany(SiteAnalytics::class);
+    }
+
+    /**
+     * Get the latest site analytics record for the user.
+     */
+    public function latestSiteAnalytics()
+    {
+        return $this->hasOne(SiteAnalytics::class)->latestOfMany('created_at');
+    }
 }

@@ -692,29 +692,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Like button functionality
-    const likeButtons = document.querySelectorAll(".like-btn");
-
-    likeButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            const heartIcon = this.querySelector("i");
-            const likeCount = this.querySelector(".like-count");
-            let count = parseInt(likeCount.textContent);
-            
-            if (heartIcon.classList.contains("far")) {
-                heartIcon.classList.remove("far");
-                heartIcon.classList.add("fas");
-                heartIcon.style.color = "#ff0000";
-                likeCount.textContent = count + 1;
-            } else {
-                heartIcon.classList.remove("fas");
-                heartIcon.classList.add("far");
-                heartIcon.style.color = "";
-                likeCount.textContent = count - 1;
-            }
-        });
-    });
-
     // Feedback form submission
     const submitBtn = document.querySelector('.submit-btn');
     submitBtn.addEventListener('click', function() {

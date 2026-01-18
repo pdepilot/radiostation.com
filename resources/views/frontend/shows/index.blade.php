@@ -136,7 +136,7 @@
             @if($shows->count() > 0)
                 <div class="shows-simple-grid">
                     @foreach($shows as $show)
-                        <a href="{{ route('shows.show', $show) }}" class="show-simple-card">
+                        <a href="{{ route('shows.show', $show) }}" data-modal="show" data-id="{{ $show->id }}" data-slug="{{ $show->slug }}" class="show-simple-card">
                             @php
                                 $imageUrl = $show->hero_image_url;
                             @endphp

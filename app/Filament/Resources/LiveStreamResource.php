@@ -75,9 +75,6 @@ class LiveStreamResource extends Resource
                             ])
                             ->default('scheduled')
                             ->required(),
-                        Forms\Components\Toggle::make('chat_enabled')
-                            ->label('Enable Chat')
-                            ->default(true),
                     ]),
                 Forms\Components\Section::make('Schedule')
                     ->schema([

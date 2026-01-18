@@ -13,7 +13,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class ShowsScheduleWidget extends BaseWidget
 {
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 30; // Section 4: Content & Operations
     
     protected static ?string $pollingInterval = '30s';
 

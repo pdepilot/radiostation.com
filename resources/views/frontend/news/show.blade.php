@@ -84,7 +84,7 @@
                         <span><i class="fas fa-user"></i> {{ $post->author_name }}</span>
                     @endif
                 </div>
-                <h1>{{ $post->title }}</h1>
+                <h1 class="section-title" style="text-align: left; margin-bottom: 20px; font-size: 2.5rem; text-transform: none; letter-spacing: normal;">{{ $post->title }}</h1>
                 @if($post->hero_image)
                     <img src="{{ $post->hero_image }}" alt="{{ $post->title }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);" onerror="this.src='{{ asset('assets/images/studio.jpg') }}'; this.onerror=null;">
                 @else
@@ -95,6 +95,20 @@
                 @endif
                 <div class="article-body">
                     {!! $post->body ?? '<p>Content coming soon...</p>' !!}
+                </div>
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--glass-border);">
+                    <button
+                        id="newsShareButton"
+                        type="button"
+                        data-share-type="news"
+                        data-share-title="{{ $post->title }}"
+                        data-share-url="{{ route('news.show', $post, true) }}"
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: var(--accent); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s; cursor: pointer; font-weight: 600; font-size: 0.95rem;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.transform='translateY(-2px)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(0)'">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
                 </div>
                 @if(!empty($post->tags) && is_array($post->tags))
                     <p class="tags">
@@ -109,7 +123,7 @@
         <!-- Comments Section -->
         <section class="container" id="comments" style="max-width: 900px; margin-top: 60px; padding: 0 20px;">
             <div style="background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; border: 1px solid var(--glass-border);">
-                <h2 style="font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 30px; font-size: 1.8rem;">COMMENTS</h2>
+                <h2 class="section-title" style="text-align: left; margin-bottom: 30px; font-size: 1.8rem;">COMMENTS</h2>
                 @auth
                     <form method="POST" action="{{ route('comments.store', $post->slug) }}" style="margin-bottom: 30px;">
                         @csrf
@@ -152,7 +166,7 @@
         <!-- More News Section -->
         @if($related->count() > 0)
         <section class="container" style="margin-top: 80px; padding: 0 20px;">
-            <h2 style="font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 40px; font-size: 2rem; text-align: center;">MORE NEWS</h2>
+            <h2 class="section-title" style="margin-bottom: 40px; font-size: 2rem;">MORE NEWS</h2>
             <div class="posts-grid">
                 @foreach($related as $item)
                     <div class="post-card">
@@ -174,4 +188,97 @@
         </section>
         @endif
     </div>
+
+    {{-- Share Modal --}}
+    @include('components.share-modal', ['shareId' => 'News'])
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const shareModal = document.getElementById('shareModalNews');
+            const shareButton = document.getElementById('newsShareButton');
+            const closeModalBtn = shareModal?.querySelector('.close-share-modal');
+            const shareOptions = shareModal?.querySelectorAll('.share-option-btn');
+
+            if (!shareButton || !shareModal) return;
+
+            // Open modal
+            shareButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                shareModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close modal
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    shareModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Close on backdrop
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) {
+                    shareModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Handle share
+            if (shareOptions) {
+                shareOptions.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const platform = this.getAttribute('data-platform');
+                        const shareTitle = shareButton.getAttribute('data-share-title') || '';
+                        const shareUrl = shareButton.getAttribute('data-share-url') || window.location.href;
+                        const customMessage = document.getElementById('shareMessageNews')?.value || '';
+                        const message = customMessage.trim() || `Check out "${shareTitle}" on Darling FM!`;
+                        const fullText = `${message} ${shareUrl}`;
+
+                        if (platform === 'copy') {
+                            navigator.clipboard.writeText(shareUrl).then(() => {
+                                const span = this.querySelector('span');
+                                if (span) {
+                                    const original = span.textContent;
+                                    span.textContent = 'Copied!';
+                                    setTimeout(() => span.textContent = original, 2000);
+                                }
+                            });
+                            return;
+                        }
+
+                        const encodedUrl = encodeURIComponent(shareUrl);
+                        const encodedText = encodeURIComponent(fullText);
+                        let shareUrlPlatform = '';
+
+                        switch (platform) {
+                            case 'facebook':
+                                shareUrlPlatform = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodeURIComponent(message)}`;
+                                break;
+                            case 'twitter':
+                                shareUrlPlatform = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+                                break;
+                            case 'whatsapp':
+                                shareUrlPlatform = `https://api.whatsapp.com/send?text=${encodedText}`;
+                                break;
+                            case 'telegram':
+                                shareUrlPlatform = `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`;
+                                break;
+                            case 'linkedin':
+                                shareUrlPlatform = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+                                break;
+                        }
+
+                        if (shareUrlPlatform) {
+                            window.open(shareUrlPlatform, 'shareWindow', 'width=600,height=400,scrollbars=yes,resizable=yes');
+                            shareModal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    @endpush
 @endsection

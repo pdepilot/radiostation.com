@@ -10,7 +10,7 @@
             <!-- OAP Profile Header - Inspired by thebeat99.com -->
             <div style="text-align: center; margin-bottom: 60px;">
                 <div style="width: 200px; height: 200px; border-radius: 50%; background-image: url('{{ $dj->avatar_url ?? asset('assets/images/face.jpg') }}'); background-size: cover; background-position: center; margin: 0 auto 30px; border: 3px solid var(--accent); box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);"></div>
-                <h1 style="font-family: 'Orbitron', sans-serif; color: var(--accent); font-size: 3rem; margin-bottom: 15px; font-weight: 700;">{{ strtoupper($dj->stage_name ?? $dj->name) }}</h1>
+                <h1 class="section-title" style="text-align: center; margin-bottom: 15px; font-size: 3rem; text-transform: none; letter-spacing: normal;">{{ strtoupper($dj->stage_name ?? $dj->name) }}</h1>
                 @if($dj->specialty)
                     <p style="color: var(--light); font-size: 1.3rem; margin-bottom: 30px; font-weight: 300;">{{ $dj->specialty }}</p>
                 @endif
@@ -60,7 +60,7 @@
             <!-- Related DJs -->
             @if($related->count() > 0)
                 <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--glass-border);">
-                    <h2 class="section-title" style="font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 30px; text-align: center; font-size: 2rem;">PRESENTERS</h2>
+                    <h2 class="section-title" style="margin-bottom: 30px; font-size: 2rem;">PRESENTERS</h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px;">
                         @foreach($related as $relatedDj)
                             <a href="{{ route('djs.show', $relatedDj) }}" style="text-decoration: none; color: inherit;">

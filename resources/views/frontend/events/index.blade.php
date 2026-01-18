@@ -15,10 +15,10 @@
         <!-- Upcoming Events -->
         @if($upcomingEvents->count() > 0)
         <section style="margin-bottom: 80px;">
-            <h2 class="section-title" style="font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 40px; font-size: 2rem; text-align: center;">UPCOMING EVENTS</h2>
+            <h2 class="section-title" style="margin-bottom: 40px; font-size: 2rem;">UPCOMING EVENTS</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px;">
                 @foreach($upcomingEvents as $event)
-                <div class="event-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'" onclick="window.location.href='{{ route('events.show', $event->slug) }}'">
+                <a href="{{ route('events.show', $event->slug) }}" data-modal="event" data-id="{{ $event->id }}" data-slug="{{ $event->slug }}" class="event-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; cursor: pointer; text-decoration: none; color: inherit; display: block;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
                     <div class="event-image" style="height: 250px; background-image: url('{{ $event->hero_image ?? asset('assets/images/studio.jpg') }}'); background-size: cover; background-position: center; position: relative;">
                         @if($event->is_featured)
                         <div style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Featured</div>
@@ -78,7 +78,7 @@
         <!-- Past Events -->
         @if($pastEvents->count() > 0)
         <section>
-            <h2 class="section-title" style="font-family: 'Orbitron', sans-serif; color: var(--text-secondary); margin-bottom: 40px; font-size: 1.8rem; text-align: center; opacity: 0.8;">PAST EVENTS</h2>
+            <h2 class="section-title" style="margin-bottom: 40px; font-size: 1.8rem; opacity: 0.8;">PAST EVENTS</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
                 @foreach($pastEvents->take(6) as $event)
                 <div class="past-event-card" style="background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; border: 1px solid var(--glass-border); opacity: 0.7; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.transform='translateY(-5px)'" onmouseout="this.style.opacity='0.7'; this.style.transform='translateY(0)'">

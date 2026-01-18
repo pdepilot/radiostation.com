@@ -61,8 +61,6 @@ class UserController extends Controller
             \DB::transaction(function () use ($user) {
                 // Delete user's comments
                 $user->comments()->delete();
-                // Delete user's likes
-                \DB::table('post_likes')->where('user_id', $user->id)->delete();
                 // Delete user
                 $user->delete();
             });

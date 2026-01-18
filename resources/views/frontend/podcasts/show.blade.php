@@ -21,7 +21,7 @@
                     </div>
                     <div class="podcast-info-large">
                         <span class="podcast-type-badge">PODCAST EPISODE</span>
-                        <h1>{{ $podcast->title }}</h1>
+                        <h1 class="section-title" style="text-align: left; margin-bottom: 15px; font-size: 2.5rem; text-transform: none; letter-spacing: normal;">{{ $podcast->title }}</h1>
                         <p class="podcast-host-large">Host: {{ $podcast->host }}</p>
                         <p class="podcast-description-large">{{ $podcast->description }}</p>
                         <div class="podcast-meta-large">
@@ -44,9 +44,6 @@
                                     <i class="fas fa-play"></i> Play Episode
                                 </button>
                             @endif
-                            <button class="action-btn secondary-btn" id="likePodcastBtn">
-                                <i class="fas fa-heart"></i> <span>{{ rand(50, 500) }}</span>
-                            </button>
                             <button class="action-btn secondary-btn" id="sharePodcastBtn" data-podcast="{{ $podcast->slug }}">
                                 <i class="fas fa-share"></i> Share
                             </button>

@@ -22,7 +22,7 @@ class SiteSettingsResource extends Resource
 
     protected static ?string $navigationLabel = 'Site Settings';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $modelLabel = 'Site Setting';
 
@@ -37,31 +37,31 @@ class SiteSettingsResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('facebook_url')
                             ->label('Facebook URL')
-                            ->url()
+                            ->nullable()
                             ->maxLength(255)
                             ->placeholder('https://facebook.com/darlingfm')
                             ->helperText('Full URL to your Facebook page'),
                         Forms\Components\TextInput::make('twitter_url')
                             ->label('Twitter/X URL')
-                            ->url()
+                            ->nullable()
                             ->maxLength(255)
                             ->placeholder('https://twitter.com/darlingfm')
                             ->helperText('Full URL to your Twitter/X profile'),
                         Forms\Components\TextInput::make('instagram_url')
                             ->label('Instagram URL')
-                            ->url()
+                            ->nullable()
                             ->maxLength(255)
                             ->placeholder('https://instagram.com/darlingfm')
                             ->helperText('Full URL to your Instagram profile'),
                         Forms\Components\TextInput::make('youtube_url')
                             ->label('YouTube URL')
-                            ->url()
+                            ->nullable()
                             ->maxLength(255)
                             ->placeholder('https://youtube.com/@darlingfm')
                             ->helperText('Full URL to your YouTube channel'),
                         Forms\Components\TextInput::make('tiktok_url')
                             ->label('TikTok URL')
-                            ->url()
+                            ->nullable()
                             ->maxLength(255)
                             ->placeholder('https://tiktok.com/@darlingfm')
                             ->helperText('Full URL to your TikTok profile'),
