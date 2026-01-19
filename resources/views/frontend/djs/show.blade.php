@@ -45,7 +45,7 @@
                     </a>
                 @endif
                 @if($dj->youtube)
-                    <a href="{{ $dj->youtube }}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: #FF0000; color: white; border-radius: 30px; text-decoration: none; font-weight: 600; transition: transform 0.2s; font-size: 1rem;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <a href="{{ $dj->youtube }}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: #c8102e; color: white; border-radius: 30px; text-decoration: none; font-weight: 600; transition: transform 0.2s; font-size: 1rem;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                         <i class="fab fa-youtube"></i> YouTube
                     </a>
                 @endif

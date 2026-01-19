@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('subject');
-            $table->enum('type', ['general', 'advertising', 'playlist', 'technical'])->default('general');
+            $table->enum('type', ['general', 'advertising', 'shoutout', 'technical', 'event_partnership', 'feedback'])->default('general');
             $table->text('message');
             $table->enum('status', ['new', 'in_progress', 'resolved'])->default('new');
             $table->foreignId('handled_by')->nullable()->constrained('users')->nullOnDelete();

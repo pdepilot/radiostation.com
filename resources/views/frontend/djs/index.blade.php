@@ -160,8 +160,8 @@
                 <div class="mixes-section">
                     <div class="section-header">
                         <h2 class="section-title">LATEST MIXES</h2>
-                        <a href="{{ route('playlist.index') }}" class="view-all">
-                            View All Mixes
+                        <a href="{{ route('shows.index') }}" class="view-all">
+                            View All Shows
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>

@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             
             // Change button state
-            this.innerhtml = '<i class="fas fa-bell"></i> Reminder Set';
+            this.innerHTML = '<i class="fas fa-bell"></i> Reminder Set';
             this.style.background = 'var(--accent)';
             this.style.color = 'white';
             this.style.borderColor = 'var(--accent)';
@@ -109,11 +109,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const streamTitleInput = document.getElementById('streamTitleInput');
     const streamDescriptionInput = document.getElementById('streamDescriptionInput');
     const updateStreamBtn = document.getElementById('updateStreamBtn');
-    const liveChat = document.getElementById('liveChat');
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const chatSend = document.getElementById('chatSend');
-    const chatListenerCount = document.getElementById('chatListenerCount');
     
     // Stream State
     let isStreaming = false;
@@ -154,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
             streamInfo.style.display = 'block';
             oapControls.style.display = 'block';
-            liveChat.style.display = 'flex';
             
             statusIndicator.style.background = '#00ff00';
             statusIndicator.style.boxShadow = '0 0 10px #00ff00';
@@ -163,8 +157,6 @@ document.addEventListener("DOMContentLoaded", function() {
             startStreamBtn.disabled = true;
             stopStreamBtn.disabled = false;
             
-            addChatMessage('System', 'Live stream has started!', true);
-            simulateListenerJoin();
         }
     });
     
@@ -182,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
             streamInfo.style.display = 'none';
             oapControls.style.display = 'none';
-            liveChat.style.display = 'none';
             
             statusIndicator.style.background = '#ff3333';
             statusIndicator.style.boxShadow = '0 0 10px #ff3333';
@@ -193,9 +184,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
             currentListeners = 0;
             listenerCount.textContent = '0';
-            chatListenerCount.textContent = '0';
-            
-            chatMessages.innerhtml = '';
             
             if (isListening) {
                 isListening = false;
@@ -216,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     updateStreamUI();
                     
                     streamInfo.style.display = 'block';
-                    liveChat.style.display = 'flex';
                     
                     joinStreamBtn.disabled = true;
                     leaveStreamBtn.disabled = false;
@@ -224,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     currentListeners++;
                     updateListenerCount();
                     
-                    addChatMessage('System', 'You joined the live stream', true);
                     // Connected to OAP live stream
                 })
                 .catch(e => {
@@ -246,7 +232,6 @@ document.addEventListener("DOMContentLoaded", function() {
             updateStreamUI();
             
             streamInfo.style.display = 'none';
-            liveChat.style.display = 'none';
             
             joinStreamBtn.disabled = false;
             leaveStreamBtn.disabled = true;
@@ -256,7 +241,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateListenerCount();
             }
             
-            addChatMessage('System', 'You left the live stream', true);
         }
     });
     
@@ -275,69 +259,28 @@ document.addEventListener("DOMContentLoaded", function() {
             streamDescriptionInput.value = description;
         }
         
-        if (typeof showSuccess === 'function') {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Stream information updated!',
+                timer: 2000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                background: 'var(--glass)',
+                color: 'var(--text-primary)',
+                confirmButtonColor: '#c8102e'
+            });
+        } else if (typeof showSuccess === 'function') {
             showSuccess('Stream information updated!');
         } else if (window.notifications) {
             window.notifications.success('Stream information updated!');
-        } else {
-            alert('Stream information updated!');
         }
     });
-    
-    // Chat functionality
-    chatSend.addEventListener('click', sendChatMessage);
-    chatInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') sendChatMessage();
-    });
-    
-    function sendChatMessage() {
-        const message = chatInput.value.trim();
-        
-        if (message && (isStreaming || isListening)) {
-            const username = userRole === 'oap' ? 'You (OAP)' : 'You';
-            addChatMessage(username, message, true);
-            chatInput.value = '';
-            
-            // Simulate responses
-            if (Math.random() > 0.5) {
-                setTimeout(() => {
-                    const randomUser = getRandomName();
-                    const responses = [
-                        'Great stream!',
-                        'Love this song!',
-                        'Can you play my request?',
-                        'Hello from the chat!',
-                        'The audio quality is amazing!'
-                    ];
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    addChatMessage(randomUser, randomResponse, false);
-                }, 1000 + Math.random() * 3000);
-            }
-        }
-    }
-    
-    function addChatMessage(author, message, isUser) {
-        const messageEl = document.createElement('div');
-        messageEl.className = 'chat-message';
-        
-        const now = new Date();
-        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        messageEl.innerhtml = `
-            <div class="message-header">
-                <span class="message-author" style="color: ${isUser ? '#ff3333' : '#ffffff'}">${author}</span>
-                <span class="message-time">${timeString}</span>
-            </div>
-            <p>${message}</p>
-        `;
-        
-        chatMessages.appendChild(messageEl);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
     
     function updateStreamUI() {
         listenerCount.textContent = currentListeners;
-        chatListenerCount.textContent = currentListeners;
         
         if (userRole === 'oap') {
             startStreamBtn.disabled = isStreaming;
@@ -350,37 +293,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
     function updateListenerCount() {
         listenerCount.textContent = currentListeners;
-        chatListenerCount.textContent = currentListeners;
     }
     
-    function simulateListenerJoin() {
-        const interval = setInterval(() => {
-            if (isStreaming) {
-                currentListeners += Math.floor(Math.random() * 3);
-                updateListenerCount();
-                
-                if (Math.random() > 0.7) {
-                    const randomUser = getRandomName();
-                    const greetings = [
-                        'Hello everyone!',
-                        'Just tuned in, sounds great!',
-                        'This is awesome!',
-                        'Hey from the chat!',
-                        'Love the music selection!'
-                    ];
-                    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-                    addChatMessage(randomUser, randomGreeting, false);
-                }
-            } else {
-                clearInterval(interval);
-            }
-        }, 5000);
-    }
-    
-    function getRandomName() {
-        const names = ['Alex', 'Sam', 'Jordan', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn', 'Dakota'];
-        return names[Math.floor(Math.random() * names.length)];
-    }
     
     // Initialize UI
     updateStreamUI();
@@ -465,14 +379,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 // Add social media handles
                 const socialContainer = document.getElementById('modalProfileSocial');
-                socialContainer.innerhtml = '';
+                socialContainer.innerHTML = '';
                 
                 oap.social.forEach(social => {
                     const socialLink = document.createElement('a');
                     socialLink.href = social.url;
                     socialLink.target = '_blank';
                     socialLink.className = 'social-handle';
-                    socialLink.innerhtml = `
+                    socialLink.innerHTML = `
                         <i class="fab fa-${social.platform}"></i>
                         <span>${social.handle}</span>
                     `;
@@ -484,113 +398,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Podcast data with video URLs
-    const podcastData = {
-        'behind-the-music': {
-            title: 'Behind the Music',
-            description: 'Dive deep into the stories behind your favorite songs and artists with host DJ Alex. In this episode, we explore the making of the iconic album "Midnight Dreams" and interview the producer who made it all happen.',
-            image: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
-            duration: '45:30',
-            video: 'VIDEOS/vMbuJi9yg7_jV01c.mp4'
-        },
-        'sound-waves': {
-            title: 'Sound Waves',
-            description: 'Exploring the science and psychology of sound and music with expert guests. This episode features Dr. Elena Martinez discussing how different frequencies affect our brain waves and emotional states.',
-            image: 'https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
-            duration: '60:15',
-            video: 'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-dj-mixing-music-39854-large.mp4'
-        },
-        'artist-spotlight': {
-            title: 'Artist Spotlight',
-            description: 'Intimate conversations with emerging and established music artists. This week we sit down with indie sensation River Moon to discuss her creative process and upcoming tour.',
-            image: 'https://images.unsplash.com/photo-1571974599782-87624638275f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
-            duration: '55:45',
-            video: 'https://assets.mixkit.co/videos/preview/mixkit-woman-singing-into-a-microphone-39853-large.mp4'
-        }
-    };
-
-    // Podcast functionality
-    const podcastModal = document.getElementById('podcastModal');
-    const podcastButtons = document.querySelectorAll('.podcast-play-btn');
-    const podcastPlayBtn = document.getElementById('podcastPlayBtn');
-    const videoPodcast = document.getElementById('videoPodcast');
-    const podcastProgressBar = document.getElementById('podcastProgressBar');
-    const currentTimeEl = document.getElementById('currentTime');
-    const durationEl = document.getElementById('duration');
-    const rewindBtn = document.getElementById('rewindBtn');
-    const forwardBtn = document.getElementById('forwardBtn');
-    
-    let isPodcastPlaying = false;
-
-    // Open podcast modal
-    podcastButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const podcastId = this.getAttribute('data-podcast');
-            const podcast = podcastData[podcastId];
-            
-            if (podcast) {
-                document.getElementById('modalPodcastTitle').textContent = podcast.title;
-                document.getElementById('modalPodcastDescription').textContent = podcast.description;
-                document.getElementById('modalPodcastImage').style.backgroundImage = `url('${podcast.image}')`;
-                durationEl.textContent = podcast.duration;
-                
-                // Set video source
-                videoPodcast.src = podcast.video;
-                
-                // Reset player
-                podcastProgressBar.style.width = '0%';
-                currentTimeEl.textContent = '0:00';
-                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
-                isPodcastPlaying = false;
-                
-                podcastModal.style.display = 'flex';
-            }
-        });
-    });
-
-    // Podcast player controls
-    podcastPlayBtn.addEventListener('click', function() {
-        if (isPodcastPlaying) {
-            // Pause podcast
-            videoPodcast.pause();
-            podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
-        } else {
-            // Play podcast
-            videoPodcast.play();
-            podcastPlayBtn.innerhtml = '<i class="fas fa-pause"></i>';
-        }
-        
-        isPodcastPlaying = !isPodcastPlaying;
-    });
-
-    // Update progress bar and time
-    videoPodcast.addEventListener('timeupdate', function() {
-        const progress = (videoPodcast.currentTime / videoPodcast.duration) * 100;
-        podcastProgressBar.style.width = `${progress}%`;
-        
-        // Update time display
-        const currentMinutes = Math.floor(videoPodcast.currentTime / 60);
-        const currentSeconds = Math.floor(videoPodcast.currentTime % 60);
-        currentTimeEl.textContent = `${currentMinutes}:${currentSeconds < 10 ? '0' : ''}${currentSeconds}`;
-        
-        const durationMinutes = Math.floor(videoPodcast.duration / 60);
-        const durationSeconds = Math.floor(videoPodcast.duration % 60);
-        durationEl.textContent = `${durationMinutes}:${durationSeconds < 10 ? '0' : ''}${durationSeconds}`;
-    });
-
-    rewindBtn.addEventListener('click', function() {
-        videoPodcast.currentTime -= 10;
-    });
-
-    forwardBtn.addEventListener('click', function() {
-        videoPodcast.currentTime += 10;
-    });
-
-    // Reset play button when video ends
-    videoPodcast.addEventListener('ended', function() {
-        podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
-        isPodcastPlaying = false;
-    });
 
     // Comment functionality
     const commentToggleButtons = document.querySelectorAll(".comment-toggle-btn");
@@ -617,7 +424,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
-                newComment.innerhtml = `
+                newComment.innerHTML = `
                     <div class="comment-header">
                         <span class="comment-author">You</span>
                         <span class="comment-date">Just now</span>
@@ -855,10 +662,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.stopPropagation(); 
                 if (video.paused) {
                     video.play();
-                    playPauseBtn.innerhtml = '<i class="fas fa-pause"></i>';
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 } else {
                     video.pause();
-                    playPauseBtn.innerhtml = '<i class="fas fa-play"></i>';
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
                 }
             });
             
@@ -866,7 +673,7 @@ document.addEventListener("DOMContentLoaded", function() {
             muteBtn.addEventListener("click", (e) => {
                 e.stopPropagation(); 
                 video.muted = !video.muted;
-                muteBtn.innerhtml = video.muted ? 
+                muteBtn.innerHTML = video.muted ? 
                     '<i class="fas fa-volume-mute"></i>' : 
                     '<i class="fas fa-volume-up"></i>';
                 volumeSlider.value = video.muted ? 0 : video.volume;
@@ -877,7 +684,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.stopPropagation(); 
                 video.volume = volumeSlider.value;
                 video.muted = (volumeSlider.value == 0);
-                muteBtn.innerhtml = video.muted ? 
+                muteBtn.innerHTML = video.muted ? 
                     '<i class="fas fa-volume-mute"></i>' : 
                     '<i class="fas fa-volume-up"></i>';
             });
@@ -910,7 +717,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             // Update play/pause button when video ends (for looping)
             video.addEventListener("ended", () => {
-                playPauseBtn.innerhtml = '<i class="fas fa-play"></i>';
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             });
             
             // Show controls when hovering over video
@@ -928,15 +735,7 @@ document.addEventListener("DOMContentLoaded", function() {
     closeModalButtons.forEach(button => {
         button.addEventListener('click', function() {
             profileModal.style.display = 'none';
-            podcastModal.style.display = 'none';
             shareModal.style.display = 'none';
-            
-            // Stop podcast if playing
-            if (isPodcastPlaying) {
-                videoPodcast.pause();
-                isPodcastPlaying = false;
-                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
-            }
         });
     });
 
@@ -945,16 +744,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (event.target === profileModal) {
             profileModal.style.display = 'none';
         }
-        if (event.target === podcastModal) {
-            podcastModal.style.display = 'none';
-            
-            // Stop podcast if playing
-            if (isPodcastPlaying) {
-                videoPodcast.pause();
-                isPodcastPlaying = false;
-                podcastPlayBtn.innerhtml = '<i class="fas fa-play"></i>';
-            }
-        }
         if (event.target === shareModal) {
             shareModal.style.display = 'none';
         }
@@ -962,7 +751,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Scroll reveal animation
     function revealOnScroll() {
-        const elements = document.querySelectorAll('.post-card, .aop-card, .podcast-card');
+        const elements = document.querySelectorAll('.post-card, .aop-card');
         
         elements.forEach(element => {
             const elementTop = element.getBoundingClientRect().top;
@@ -1031,7 +820,6 @@ document.addEventListener("DOMContentLoaded", function() {
             e.stopPropagation();
             e.stopImmediatePropagation();
             
-            console.log('Prev button clicked, current position:', currentScrollPosition);
             currentScrollPosition = Math.max(0, currentScrollPosition - scrollAmount);
             aopsCarousel.style.transform = `translateX(-${currentScrollPosition}px)`;
             updateButtonVisibility();
@@ -1043,7 +831,6 @@ document.addEventListener("DOMContentLoaded", function() {
             e.stopPropagation();
             e.stopImmediatePropagation();
             
-            console.log('Next button clicked, current position:', currentScrollPosition);
             const wrapperWidth = aopsWrapper.clientWidth;
             const carouselWidth = aopsCarousel.scrollWidth;
             const maxScroll = Math.max(0, carouselWidth - wrapperWidth);

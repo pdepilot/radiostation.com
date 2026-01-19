@@ -292,8 +292,6 @@
                 <li><a href="{{ route('admin.audience.index') }}" class="{{ request()->routeIs('admin.audience.*') ? 'active' : '' }}"><i class="fas fa-comments"></i> <span>Feedback</span></a></li>
                 
                 <li class="menu-label">Content</li>
-                <li><a href="{{ route('admin.podcasts.index') }}" class="{{ request()->routeIs('admin.podcasts.*') ? 'active' : '' }}"><i class="fas fa-podcast"></i> <span>Podcasts</span></a></li>
-                <li><a href="{{ route('admin.playlist.index') }}" class="{{ request()->routeIs('admin.playlist.*') ? 'active' : '' }}"><i class="fas fa-play-circle"></i> <span>Playlists</span></a></li>
                 <li><a href="{{ route('admin.news.index') }}" class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}"><i class="fas fa-newspaper"></i> <span>News</span></a></li>
                 
                 <li class="menu-label">Analytics</li>

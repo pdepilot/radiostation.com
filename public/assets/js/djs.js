@@ -259,7 +259,17 @@
             if (socialUrl) {
               window.open(socialUrl, "_blank");
             } else {
-              alert("Social media link not available for this DJ");
+              if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                  icon: 'info',
+                  title: 'Not Available',
+                  text: 'Social media link not available for this DJ',
+                  confirmButtonColor: '#c8102e',
+                  background: 'var(--glass)',
+                  color: 'var(--text-primary)',
+                  backdrop: 'rgba(0,0,0,0.8)'
+                });
+              }
             }
           });
         });
@@ -349,10 +359,33 @@
 
         footerButton.addEventListener("click", function () {
           if (footerInput.value.trim() !== "" && footerInput.checkValidity()) {
-            alert(`Thank you for subscribing with: ${footerInput.value}`);
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'success',
+                title: 'Subscribed!',
+                text: `Thank you for subscribing with: ${footerInput.value}`,
+                timer: 2000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                background: 'var(--glass)',
+                color: 'var(--text-primary)',
+                confirmButtonColor: '#c8102e'
+              });
+            }
             footerInput.value = "";
           } else {
-            alert("Please enter a valid email address");
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Email',
+                text: 'Please enter a valid email address',
+                confirmButtonColor: '#c8102e',
+                background: 'var(--glass)',
+                color: 'var(--text-primary)',
+                backdrop: 'rgba(0,0,0,0.8)'
+              });
+            }
           }
         });
 

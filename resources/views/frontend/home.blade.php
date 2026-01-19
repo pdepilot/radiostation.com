@@ -10,16 +10,16 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 style="font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: 900; margin-bottom: 10px; line-height: 1.1; letter-spacing: 5px; color: #ff0000;">DARLING FM</h1>
-                <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 400; margin-bottom: 30px; letter-spacing: 3px; color: #ffffff;">OWERRI</h2>
+                <h1 style="font-family: 'Oxanium', sans-serif; font-size: 5rem; font-weight: 900; margin-bottom: 10px; line-height: 1.1; letter-spacing: 5px; color: #c8102e;">DARLING FM</h1>
+                <h2 style="font-family: 'Oxanium', sans-serif; font-size: 2.5rem; font-weight: 400; margin-bottom: 30px; letter-spacing: 3px; color: #ffffff;">OWERRI</h2>
             </div>
         </div>
     </section>
 
     {{-- Live Stream CTA --}}
     <section style="padding: 40px 20px; text-align: center; background: var(--glass); backdrop-filter: blur(16px); border-radius: 24px; max-width: 560px; margin: 40px auto; border: 1px solid rgba(255,255,255,0.1);">
-        <div id="liveNowBadge" style="display: {{ ($currentShow && $currentShow->status !== 'completed') ? 'inline-block' : 'none' }}; background: #ff0000; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
-            ● LIVE NOW
+        <div id="liveNowBadge" style="display: {{ ($currentShow && $currentShow->status !== 'completed') ? 'inline-block' : 'none' }}; background: #c8102e; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; margin-bottom: 16px;">
+            <span class="live-dot-pulse">●</span> LIVE NOW
         </div>
         <h2 id="streamTitle" style="font-size: 2.4rem; margin: 12px 0; color: var(--light); font-weight: 800; letter-spacing: -0.5px;">
             @if($currentShow && $currentShow->status !== 'completed')
@@ -38,7 +38,7 @@
             <button
                 id="homePlayButton"
                 type="button"
-                style="display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; background: #ff0000; color: white; border-radius: 50%; box-shadow: 0 12px 40px rgba(255,0,0,0.45); transition: transform 0.2s; border: none; cursor: pointer; position: relative;">
+                style="display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; background: #c8102e; color: white; border-radius: 50%; box-shadow: 0 12px 40px rgba(200,16,46,0.45); transition: transform 0.2s; border: none; cursor: pointer; position: relative;">
                 <svg class="home-play-icon" style="width: 2.5rem; height: 2.5rem; fill: white; display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 5v14l11-7z" />
                 </svg>
@@ -57,6 +57,18 @@
             </button>
         </div>
     </section>
+
+    {{-- Ad Placeholders Under Hero Section --}}
+    <div class="container" style="margin: 40px auto; max-width: 1200px; padding: 0 20px;">
+        <div class="homepage-ads-grid" style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+            <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 250px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.9rem; transition: all 0.3s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <span>Advertisement</span>
+            </div>
+            <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 250px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.9rem; transition: all 0.3s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <span>Advertisement</span>
+            </div>
+        </div>
+    </div>
 
     {{-- Share Modal --}}
     <div id="shareModal" class="share-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 10000; align-items: center; justify-content: center;">
@@ -148,7 +160,7 @@
     {{-- OUR ON-AIR PERSONALITIES — Horizontal Scroll --}}
     <section class="container" id="on-air-personalities" style="margin: 80px 0; padding: 0; width: 100%; max-width: 100%;">
         <h2 class="section-title">OUR ON-AIR PERSONALITIES</h2>
-        <div class="aops-carousel-wrapper" style="position: relative !important; margin: 60px 0; overflow: hidden !important; padding: 80px 100px; width: 100%; transform: none !important;">
+        <div class="aops-carousel-wrapper" style="position: relative !important; margin: 20px 0; overflow: hidden !important; padding: 40px 80px; width: 100%; transform: none !important;">
             <button class="aops-nav-btn aops-nav-prev" id="aopsPrevBtn" style="position: absolute !important; left: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10000 !important;">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -293,33 +305,37 @@
 
 @push('styles')
 <style>
-    .live-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: #ff0066;
+    .live-dot-pulse {
         display: inline-block;
-        margin-right: 8px;
-        animation: pulse 2s infinite;
+        animation: livePulse 1.5s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(255, 0, 102, 0.8);
+    @keyframes livePulse {
+        0%, 100% {
+            opacity: 1;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6);
         }
-
-        70% {
-            box-shadow: 0 0 0 10px rgba(255, 0, 102, 0);
+        50% {
+            opacity: 0.5;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 0, 0, 0.6);
         }
+    }
 
-        100% {
-            box-shadow: 0 0 0 0 rgba(255, 0, 102, 0);
+    @media (min-width: 768px) {
+        .homepage-ads-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .homepage-ads-grid .ad-slot {
+            height: 150px !important;
         }
     }
 
     .aops-carousel-wrapper {
         position: relative;
-        padding: 80px 100px;
+        padding: 60px 80px;
         overflow: visible;
         width: 100%;
         margin-left: 0;
@@ -329,7 +345,7 @@
     .aops-carousel {
         display: flex;
         gap: 40px;
-        padding: 60px 0;
+        padding: 20px 0;
         min-width: max-content;
         width: max-content;
         margin: 0 auto;
@@ -351,13 +367,7 @@
     }
 
     .aop-card {
-        transition: all 0.4s ease !important;
-    }
-
-    .aop-card:hover {
-        transform: translateY(-10px) !important;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4) !important;
-        z-index: 10;
+        /* Transformations removed for cleaner look */
     }
 
     @media (max-width: 768px) {
@@ -643,7 +653,15 @@
                                 }, 2000);
                             }
                         }).catch(() => {
-                            alert('Failed to copy link. Please copy manually: ' + shareUrl);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Copy Failed',
+                                text: 'Failed to copy link. Please copy manually: ' + shareUrl,
+                                confirmButtonColor: '#c8102e',
+                                background: 'var(--glass)',
+                                color: 'var(--text-primary)',
+                                backdrop: 'rgba(0,0,0,0.8)'
+                            });
                         });
                         return;
                     }
@@ -687,15 +705,30 @@
         const carousel = document.getElementById('aopsCarousel');
         const prevBtn = document.getElementById('aopsPrevBtn');
         const nextBtn = document.getElementById('aopsNextBtn');
+        const wrapper = carousel?.parentElement;
 
-        if (carousel && prevBtn && nextBtn) {
+        if (carousel && prevBtn && nextBtn && wrapper) {
             const cardWidth = 300; // min-width of aop-card
             const gap = 40; // gap between cards
             const scrollAmount = cardWidth + gap;
             let scrollPosition = 0;
-            const maxScroll = carousel.scrollWidth - carousel.parentElement.offsetWidth;
+
+            function getMaxScroll() {
+                const carouselWidth = carousel.scrollWidth;
+                const wrapperWidth = wrapper.offsetWidth;
+                return Math.max(0, carouselWidth - wrapperWidth);
+            }
+
+            function updateButtonStates() {
+                const maxScroll = getMaxScroll();
+                prevBtn.style.opacity = scrollPosition <= 0 ? '0.3' : '1';
+                prevBtn.style.pointerEvents = scrollPosition <= 0 ? 'none' : 'auto';
+                nextBtn.style.opacity = scrollPosition >= maxScroll ? '0.3' : '1';
+                nextBtn.style.pointerEvents = scrollPosition >= maxScroll ? 'none' : 'auto';
+            }
 
             nextBtn.addEventListener('click', () => {
+                const maxScroll = getMaxScroll();
                 scrollPosition = Math.min(scrollPosition + scrollAmount, maxScroll);
                 carousel.style.transform = `translateX(-${scrollPosition}px)`;
                 updateButtonStates();
@@ -707,10 +740,17 @@
                 updateButtonStates();
             });
 
-            function updateButtonStates() {
-                prevBtn.style.opacity = scrollPosition <= 0 ? '0.3' : '1';
-                nextBtn.style.opacity = scrollPosition >= maxScroll ? '0.3' : '1';
-            }
+            // Update on window resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const maxScroll = getMaxScroll();
+                    scrollPosition = Math.min(scrollPosition, maxScroll);
+                    carousel.style.transform = `translateX(-${scrollPosition}px)`;
+                    updateButtonStates();
+                }, 250);
+            });
 
             // Initial state
             updateButtonStates();

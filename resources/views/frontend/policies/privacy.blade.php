@@ -3,7 +3,7 @@
 @section('content')
     <div class="main-content" style="padding-top: 120px; min-height: calc(100vh - 200px);">
         <div class="container" style="max-width: 900px;">
-            <h1 style="margin-bottom: 30px;">Privacy Policy</h1>
+            <h1 class="section-title">PRIVACY POLICY</h1>
             <div style="line-height: 1.8; color: var(--text-secondary);">
                 <p style="margin-bottom: 20px;"><strong>Last Updated:</strong> {{ date('F d, Y') }}</p>
                 

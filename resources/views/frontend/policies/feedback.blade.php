@@ -3,7 +3,7 @@
 @section('content')
     <div class="main-content" style="padding-top: 120px; min-height: calc(100vh - 200px);">
         <div class="container" style="max-width: 700px;">
-            <h1 style="margin-bottom: 30px;">Share Your Feedback</h1>
+            <h1 class="section-title">SHARE YOUR FEEDBACK</h1>
             <p style="margin-bottom: 30px; color: var(--text-secondary);">We value your opinion! Your feedback helps us improve our services and provide you with the best radio experience possible.</p>
             
             <div class="contact-form-section">

@@ -45,51 +45,44 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Form submission with animation
-  const contactForm = document.getElementById("contactForm");
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Get form data
-    const formData = {
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      subject: document.getElementById("subject").value,
-      message: document.getElementById("message").value,
-    };
-
-    // Show transmission animation
-    const submitBtn = contactForm.querySelector(".submit-btn");
-    const originalText = submitBtn.innerhtml;
-
-    submitBtn.innerhtml =
-      '<i class="fas fa-satellite-dish"></i> TRANSMITTING...';
-    submitBtn.style.background =
-      "linear-gradient(45deg, var(--cyber-blue), var(--cyber-purple))";
-
-    // Simulate transmission
-    setTimeout(() => {
-      submitBtn.innerhtml =
-        '<i class="fas fa-check"></i> TRANSMISSION COMPLETE';
-      submitBtn.style.background =
-        "linear-gradient(45deg, var(--success), #00cc00)";
-
-      // Reset form
-      contactForm.reset();
-
-      // Show success message
-      showNotification(
-        "Message successfully transmitted through quantum channels!",
-        "success"
-      );
-
-      // Reset button after delay
-      setTimeout(() => {
-        submitBtn.innerhtml = originalText;
-        submitBtn.style.background =
-          "linear-gradient(45deg, var(--accent), var(--accent-glow))";
-      }, 3000);
-    }, 2000);
+  // Form submission - let it submit normally, show SweetAlert2 on success/error
+  // Check for success/error messages on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const successMessage = document.getElementById('success-message');
+    const errorMessages = document.getElementById('error-messages');
+    
+    if (successMessage && typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Message Sent!',
+        text: successMessage.textContent.trim(),
+        confirmButtonColor: '#c8102e',
+        background: 'rgba(15, 15, 17, 0.95)',
+        color: '#f0f0f5',
+        backdrop: 'rgba(0,0,0,0.8)',
+        customClass: {
+          popup: 'swal-dark-popup'
+        }
+      });
+    }
+    
+    if (errorMessages && typeof Swal !== 'undefined') {
+      const errorList = errorMessages.querySelector('ul');
+      const errorText = errorList ? Array.from(errorList.querySelectorAll('li')).map(li => li.textContent).join('\n') : errorMessages.textContent;
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        html: errorText.replace(/\n/g, '<br>'),
+        confirmButtonColor: '#c8102e',
+        background: 'rgba(15, 15, 17, 0.95)',
+        color: '#f0f0f5',
+        backdrop: 'rgba(0,0,0,0.8)',
+        customClass: {
+          popup: 'swal-dark-popup'
+        }
+      });
+    }
   });
 
   // Enhanced Live Chat functionality

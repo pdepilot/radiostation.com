@@ -26,14 +26,15 @@
     <meta property="twitter:image" content="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/sticky-player.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/news-search.css') }}">
@@ -115,7 +116,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <img src="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}" alt="Darling FM">
+                    <img src="{{ asset('assets/images/REAL_LOGO-removebg-preview.png') }}" alt="Darling FM" style="height: 80px; width: auto; max-width: 250px; object-fit: contain; margin-bottom: 20px;">
                     <p>Darling 107.3 FM is Nigeria’s leading healthy lifestyle and edutainment radio station, blending urban and contemporary music with news, talk, and engaging conversations that inform, inspire, and entertain.</p>
                     <div class="social-links">
                         @if(!empty($twitterUrl))
@@ -174,7 +175,7 @@
     <!-- Chatbot Modal -->
     <div id="chatbotModal" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 350px; max-width: 90vw; height: 500px; max-height: calc(100vh - 180px); background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 10000; flex-direction: column; transition: bottom 0.3s;">
         <div style="padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="color: var(--accent); margin: 0; font-family: 'Orbitron', sans-serif;">Ask Darling</h3>
+            <h3 style="color: var(--accent); margin: 0; font-family: 'Oxanium', sans-serif; font-weight: 600; letter-spacing: 0.5px;">Ask Darling</h3>
             <button id="closeChatbot" style="background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
         <div id="chatbotMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
@@ -188,6 +189,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
     <script src="{{ asset('assets/js/form-confirm.js') }}"></script>
     <script src="{{ asset('assets/js/global-audio.js') }}"></script>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\NewsPost;
-use App\Models\Podcast;
 use App\Models\Dj;
 use App\Models\Show;
 use App\Models\LiveStream;

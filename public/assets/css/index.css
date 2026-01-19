@@ -1,17 +1,23 @@
 :root {
-  --primary: #000000;
-  --secondary: #1a1a1a;
-  --accent: #ff0000;
-  --accent-glow: #ff3333;
+  --primary: #c8102e;
+  --primary-600: #a00d25;
+  --gray-950: #0f0f11;
+  --gray-900: #161618;
+  --gray-800: #1e1e21;
+  --gray-100: #f0f0f5;
+  --gray-300: #b0b0c0;
+  --gray-500: #707080;
+  --accent: #c8102e;
+  --accent-soft: #d32f4f;
   --highlight: #ffffff;
-  --light: #f5f5f5;
-  --dark: #0a0a0a;
-  --nav-bg: rgba(0, 0, 0, 0.95);
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --neon-glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
-  --live-green: #00ff00;
-  --live-glow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  --light: #f0f0f5;
+  --dark: #0f0f11;
+  --text-primary: #f0f0f5;
+  --nav-bg: rgba(15, 15, 17, 0.95);
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --live-green: #c8102e;
+  --live-glow: 0 0 8px rgba(200, 16, 46, 0.4);
 }
 
 * {
@@ -21,31 +27,19 @@
 }
 
 body {
-  background-color: #0a0a0a;
-  color: var(--light);
-  font-family: "Exo 2", sans-serif;
+  background-color: var(--gray-950);
+  color: var(--gray-100);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
   line-height: 1.6;
   overflow-x: hidden;
-  background:
-    radial-gradient(ellipse at top left, rgba(255, 0, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(255, 0, 0, 0.02) 0%, transparent 50%),
-    linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+  background: linear-gradient(180deg, var(--gray-950) 0%, var(--gray-900) 100%);
   min-height: 100vh;
   position: relative;
 }
 
 .cyber-grid {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 80px 80px;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.4;
+  display: none;
 }
 
 .container {
@@ -57,20 +51,21 @@ body {
 
 /* Header */
 header {
-  background-color: var(--accent);
+  background-color: var(--gray-900);
   padding: 15px 0;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
   transition: all 0.4s ease;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--glass-border);
 }
 
 header.scrolled {
   padding: 10px 0;
-  box-shadow: 0 5px 30px rgba(255, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background-color: rgba(22, 22, 24, 0.98);
 }
 
 .header-content {
@@ -88,18 +83,15 @@ header.scrolled {
 .logo img {
   width: 120px;
   height: 70px;
-  filter: drop-shadow(0 0 10px var(--accent));
+  filter: none;
 }
 
 .logo-text {
-  font-family: "Orbitron", sans-serif;
-  font-weight: 900;
+  font-family: "Oxanium", sans-serif;
+  font-weight: 700;
   font-size: 1.8rem;
-  background: linear-gradient(45deg, var(--accent), var(--highlight));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+  color: var(--gray-100);
+  letter-spacing: 0.5px;
 }
 
 nav ul {
@@ -145,8 +137,8 @@ nav a:hover::before {
 }
 
 nav a.active {
-  color: var(--dark);
-  text-shadow: 0 0 10px var(--highlight);
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .mobile-menu {
@@ -162,14 +154,14 @@ nav a.active {
   padding: 150px 0 60px;
   text-align: center;
   overflow: hidden;
-  min-height: 400px;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg,
-      rgba(0, 0, 0, 0.85) 0%,
-      rgba(26, 26, 26, 0.75) 50%,
-      rgba(0, 0, 0, 0.85) 100%),
+  background: linear-gradient(180deg,
+      rgba(15, 15, 17, 0.95) 0%,
+      rgba(22, 22, 24, 0.90) 50%,
+      rgba(15, 15, 17, 0.95) 100%),
     url("https://res.cloudinary.com/dl4hjr1p2/image/upload/v1762957221/WhatsApp_Image_2025-11-12_at_11.20.54_77ff1fa8_hbfibv.jpg") center/cover no-repeat;
   background-attachment: fixed;
   width: 100%;
@@ -184,13 +176,7 @@ nav a.active {
   width: 100%;
   height: 100%;
   background: radial-gradient(circle at 20% 50%,
-      rgba(255, 0, 0, 0.15) 0%,
-      transparent 50%),
-    radial-gradient(circle at 80% 20%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%),
-    radial-gradient(circle at 40% 80%,
-      rgba(255, 51, 51, 0.1) 0%,
+      rgba(200, 16, 46, 0.05) 0%,
       transparent 50%);
   z-index: -1;
 }
@@ -203,15 +189,12 @@ nav a.active {
 }
 
 .hero h2 {
-  font-family: "Orbitron", sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-size: 4rem;
+  font-weight: 700;
   margin-bottom: 25px;
-  background: linear-gradient(45deg, var(--accent), var(--highlight));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-  letter-spacing: 2px;
+  color: var(--gray-100);
+  letter-spacing: 0.5px;
 }
 
 .hero p {
@@ -270,26 +253,14 @@ nav a.active {
   border-radius: 50%;
   background-size: cover;
   background-position: center;
-  border: 3px solid var(--live-green);
+  border: 3px solid var(--accent);
   box-shadow: var(--live-glow);
   position: relative;
   overflow: hidden;
 }
 
 .live-oap-avatar::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 50%;
-  background: linear-gradient(45deg,
-      var(--live-green),
-      transparent,
-      var(--live-green));
-  z-index: -1;
-  animation: rotate 3s linear infinite;
+  display: none;
 }
 
 @keyframes rotate {
@@ -310,13 +281,14 @@ nav a.active {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 5px;
-  color: var(--highlight);
-  font-family: "Orbitron", sans-serif;
+  color: var(--gray-100);
+  font-family: "Oxanium", sans-serif;
+  letter-spacing: 0.5px;
 }
 
 .live-oap-show {
   font-size: 1rem;
-  color: var(--live-green);
+  color: var(--accent);
   margin-bottom: 8px;
 }
 
@@ -355,13 +327,13 @@ nav a.active {
 }
 
 .listen-btn {
-  background: linear-gradient(45deg, var(--live-green), #00cc00);
-  color: var(--dark);
+  background: var(--accent);
+  color: var(--gray-100);
   border: none;
   width: 100%;
   padding: 12px 20px;
   border-radius: 30px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;
@@ -420,24 +392,47 @@ nav a.active {
 .section-title {
   text-align: center;
   margin-bottom: 50px;
-  font-size: 2.5rem;
-  font-family: "Orbitron", sans-serif;
+  font-size: 3rem; /* text-5xl equivalent (48px) */
+  font-family: "Oxanium", sans-serif;
   position: relative;
-  color: var(--accent);
+  color: var(--text-primary);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
+  line-height: 1.2;
 }
 
 .section-title::after {
   content: "";
-  display: block;
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--highlight));
-  margin: 15px auto;
+  height: 3px;
+  background: var(--accent);
   border-radius: 2px;
-  box-shadow: 0 0 10px var(--accent);
+  box-shadow: 0 0 8px rgba(200, 16, 46, 0.5);
+}
+
+/* Responsive font sizes */
+@media (max-width: 1024px) {
+  .section-title {
+    font-size: 2.5rem; /* text-4xl equivalent (40px) */
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem; /* text-3xl equivalent (32px) */
+    margin-bottom: 40px;
+  }
+  
+  .section-title::after {
+    width: 80px;
+    height: 2px;
+    bottom: -12px;
+  }
 }
 
 .shows-grid {
@@ -565,92 +560,6 @@ nav a.active {
 .stream-description {
   opacity: 0.9;
   line-height: 1.6;
-}
-
-.live-chat-container {
-  background: var(--glass);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 25px;
-  margin-top: 40px;
-  border: 1px solid var(--glass-border);
-  max-height: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.chat-title {
-  font-size: 1.3rem;
-  color: var(--highlight);
-}
-
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  padding-right: 10px;
-}
-
-.chat-message {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 12px 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border-left: 3px solid var(--accent);
-}
-
-.message-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-}
-
-.message-author {
-  font-weight: 600;
-  color: var(--highlight);
-}
-
-.message-time {
-  opacity: 0.7;
-}
-
-.chat-input-container {
-  display: flex;
-  gap: 10px;
-}
-
-.chat-input {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--glass-border);
-  border-radius: 5px;
-  padding: 12px 15px;
-  color: var(--light);
-}
-
-.chat-send {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-weight: 600;
-}
-
-.chat-send:hover {
-  background: var(--accent-glow);
 }
 
 .oap-stream-controls {
@@ -886,7 +795,7 @@ nav a.active {
 }
 
 .comment-submit:hover {
-  background: var(--accent-glow);
+  background: var(--accent-soft);
 }
 
 /* Share Modal */
@@ -983,7 +892,7 @@ nav a.active {
 }
 
 .close-modal:hover {
-  background: var(--accent-glow);
+  background: var(--accent-soft);
 }
 
 /* OAP Cards */
@@ -1001,40 +910,8 @@ nav a.active {
   border-radius: 15px;
   overflow: hidden;
   text-align: center;
-  transition: all 0.4s ease;
   border: 1px solid var(--glass-border);
   position: relative;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.aop-card.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.aop-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-      rgba(255, 0, 0, 0.1),
-      rgba(255, 255, 255, 0.05));
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.aop-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-}
-
-.aop-card:hover::before {
-  opacity: 1;
 }
 
 .aop-image {
@@ -1081,7 +958,7 @@ nav a.active {
 }
 
 .aop-profile-btn {
-  background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+  background: var(--accent);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -1100,9 +977,9 @@ nav a.active {
 /* OAP Carousel Navigation Buttons */
 .aops-carousel-wrapper {
   position: relative !important;
-  margin: 60px 0;
+  margin: 40px 0;
   overflow: hidden !important;
-  padding: 80px 100px;
+  padding: 60px 80px;
   width: 100%;
   transform: none !important;
 }
@@ -1308,7 +1185,7 @@ nav a.active {
   font-size: 2.2rem;
   margin-bottom: 10px;
   color: var(--highlight);
-  font-family: "Orbitron", sans-serif;
+  font-family: "Oxanium", sans-serif;
 }
 
 .profile-show {
@@ -1424,7 +1301,7 @@ nav a.active {
 }
 
 .podcast-play-btn {
-  background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+  background: var(--accent);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -1571,7 +1448,7 @@ nav a.active {
 }
 
 .podcast-play-pause {
-  background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+  background: var(--accent);
   width: 60px;
   height: 60px;
   font-size: 24px;
@@ -1892,9 +1769,11 @@ footer {
 }
 
 .footer-section img {
-  width: 120px;
-  height: 60px;
-  filter: drop-shadow(0 0 10px var(--accent));
+  height: 80px;
+  width: auto;
+  max-width: 250px;
+  object-fit: contain;
+  margin-bottom: 20px;
 }
 
 .footer-links {
@@ -1991,7 +1870,7 @@ footer {
 }
 
 .footer-input button:hover {
-  background: var(--accent-glow);
+  background: var(--accent-soft);
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -2017,7 +1896,7 @@ footer {
 }
 
 .scroll-to-top:hover {
-  background: var(--accent-glow);
+  background: var(--accent-soft);
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
 }
@@ -2140,6 +2019,7 @@ footer {
   .hero {
     padding: 140px 0 60px;
     overflow: visible;
+    min-height: 80vh;
   }
 
   .hero h2 {

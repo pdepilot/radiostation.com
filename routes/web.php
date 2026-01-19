@@ -1,24 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\AdvertisingController;
-use App\Http\Controllers\Admin\AudienceController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DjController as AdminDjController;
-use App\Http\Controllers\Admin\LiveStreamController as AdminLiveStreamController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
-use App\Http\Controllers\Admin\PlaylistController as AdminPlaylistController;
-use App\Http\Controllers\Admin\PodcastController as AdminPodcastController;
-use App\Http\Controllers\Admin\RevenueController;
 use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\Admin\ShowController as AdminShowController;
 
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DjController;
 use App\Http\Controllers\Frontend\EventController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
-use App\Http\Controllers\Frontend\PlaylistController;
-use App\Http\Controllers\Frontend\PodcastController;
 use App\Http\Controllers\Frontend\ShowController;
 use App\Http\Controllers\ProfileController;
 
@@ -35,12 +23,6 @@ Route::get('/shows/{show:slug}', [ShowController::class, 'show'])->name('shows.s
 // DJs page removed - using on-air personalities section on home page instead
 // Route::get('/djs', [DjController::class, 'index'])->name('djs.index');
 Route::get('/djs/{dj:slug}', [DjController::class, 'show'])->name('djs.show'); // OAP Profile Page
-
-// Route::get('/playlist', [PlaylistController::class, 'index'])->name('playlist.index');
-
-// Commented out for now - might be needed in the future
-// Route::get('/podcasts', [PodcastController::class, 'index'])->name('podcasts.index');
-// Route::get('/podcasts/{podcast:slug}', [PodcastController::class, 'show'])->name('podcasts.show');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{newsPost:slug}', [NewsController::class, 'show'])->name('news.show');
@@ -73,9 +55,6 @@ Route::get('/feedback', function () {
     return redirect()->route('contact.index', ['category' => 'feedback']);
 })->name('feedback');
 
-// Live Chat API
-Route::get('/api/live-chat', [\App\Http\Controllers\Frontend\LiveChatController::class, 'index'])->name('live-chat.index');
-Route::post('/api/live-chat', [\App\Http\Controllers\Frontend\LiveChatController::class, 'store'])->name('live-chat.store');
 
 // Adverts API
 Route::get('/api/adverts', [\App\Http\Controllers\Frontend\AdvertController::class, 'getActiveAdverts'])->name('adverts.index');

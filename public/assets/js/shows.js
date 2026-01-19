@@ -474,10 +474,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   footerButton.addEventListener("click", function () {
     if (footerInput.value.trim() !== "") {
-      alert(`Thank you for subscribing with: ${footerInput.value}`);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Subscribed!',
+          text: `Thank you for subscribing with: ${footerInput.value}`,
+          timer: 2000,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end',
+          background: 'var(--glass)',
+          color: 'var(--text-primary)',
+          confirmButtonColor: '#c8102e'
+        });
+      }
       footerInput.value = "";
     } else {
-      alert("Please enter a valid email address");
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid Email',
+          text: 'Please enter a valid email address',
+          confirmButtonColor: '#c8102e',
+          background: 'var(--glass)',
+          color: 'var(--text-primary)',
+          backdrop: 'rgba(0,0,0,0.8)'
+        });
+      }
     }
   });
 

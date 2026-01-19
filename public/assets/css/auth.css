@@ -41,7 +41,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+    background: var(--accent);
     z-index: 1;
 }
 
@@ -59,7 +59,6 @@
 .auth-logo img {
     height: 80px;
     width: auto;
-    filter: drop-shadow(0 0 15px var(--accent));
 }
 
 .auth-title {
@@ -264,7 +263,7 @@
 }
 
 .forgot-link:hover {
-    color: var(--accent-glow);
+    color: var(--accent-soft);
     text-decoration: underline;
 }
 
@@ -272,7 +271,7 @@
 .auth-submit-btn {
     width: 100%;
     padding: 16px 24px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+    background: var(--accent);
     color: white;
     border: none;
     border-radius: 12px;
@@ -294,7 +293,7 @@
 .auth-submit-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(255, 0, 0, 0.4);
-    background: linear-gradient(135deg, var(--accent-glow), var(--accent));
+    background: var(--accent);
 }
 
 .auth-submit-btn:active {
@@ -327,7 +326,7 @@
 }
 
 .auth-link:hover {
-    color: var(--accent-glow);
+    color: var(--accent-soft);
     text-decoration: underline;
 }
 

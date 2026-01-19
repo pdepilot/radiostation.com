@@ -8,8 +8,6 @@ use App\Models\ContactMessage;
 use App\Models\Dj;
 use App\Models\LiveStream;
 use App\Models\NewsPost;
-use App\Models\PlaylistTrack;
-use App\Models\Podcast;
 use App\Models\RevenueRecord;
 use App\Models\Show;
 use App\Models\SiteSetting;
@@ -139,9 +137,7 @@ class DatabaseSeeder extends Seeder
             NewsPostsTableSeeder::class,
             DjsTableSeeder::class,
             ShowsTableSeeder::class,
-            PodcastsTableSeeder::class,
         ]);
-        PlaylistTrack::factory(15)->create();
         AdvertisingPackage::factory(4)->create();
         RevenueRecord::factory(6)->create();
         AudienceMetric::factory(10)->create();

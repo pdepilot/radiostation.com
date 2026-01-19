@@ -1,21 +1,25 @@
 :root {
-  --primary: #000000;
-  --secondary: #1a1a1a;
-  --accent: #ff0000;
-  --accent-glow: #ff3333;
+  --primary: #c8102e;
+  --primary-600: #a00d25;
+  --gray-950: #0f0f11;
+  --gray-900: #161618;
+  --gray-800: #1e1e21;
+  --gray-100: #f0f0f5;
+  --gray-300: #b0b0c0;
+  --gray-500: #707080;
+  --accent: #c8102e;
+  --accent-soft: #d32f4f;
   --highlight: #ffffff;
-  --light: #f5f5f5;
-  --dark: #0a0a0a;
-  --nav-bg: rgba(0, 0, 0, 0.95);
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --neon-glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
-  --text: #ffffff;
-  --text-secondary: #cccccc;
-  --danger: #ff3333;
-  --success: #00ff00;
-  --cyber-blue: #00f0ff;
-  --cyber-purple: #b967ff;
+  --light: #f0f0f5;
+  --dark: #0f0f11;
+  --nav-bg: rgba(15, 15, 17, 0.95);
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text: #f0f0f5;
+  --text-secondary: #b0b0c0;
+  --danger: #c8102e;
+  --success: #c8102e;
+  --secondary: #1e1e21;
 }
 
 * {
@@ -25,30 +29,18 @@
 }
 
 body {
-  background-color: var(--primary);
-  color: var(--light);
-  font-family: "Exo 2", sans-serif;
+  background-color: var(--gray-950);
+  color: var(--gray-100);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
   line-height: 1.6;
   overflow-x: hidden;
-  background: radial-gradient(
-    ellipse at center,
-    var(--secondary) 0%,
-    var(--primary) 70%
-  );
+  background: linear-gradient(180deg, var(--gray-950) 0%, var(--gray-900) 100%);
   min-height: 100vh;
 }
 
 .cyber-grid {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: -1;
-  pointer-events: none;
+  display: none;
 }
 
 .container {
@@ -60,20 +52,21 @@ body {
 
 /* Header */
 header {
-  background-color: var(--accent);
+  background-color: var(--gray-900);
   padding: 15px 0;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
   transition: all 0.4s ease;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--glass-border);
 }
 
 header.scrolled {
   padding: 10px 0;
-  box-shadow: 0 5px 30px rgba(255, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background-color: rgba(22, 22, 24, 0.98);
 }
 
 .header-content {
@@ -92,18 +85,15 @@ header.scrolled {
 .logo img {
   width: 120px;
   height: 60px;
-  filter: drop-shadow(0 0 10px var(--accent));
+  filter: none;
 }
 
 .logo-text {
-  font-family: "Orbitron", sans-serif;
-  font-weight: 900;
+  font-family: "Oxanium", sans-serif;
+  font-weight: 700;
   font-size: 1.8rem;
-  background: linear-gradient(45deg, var(--accent), var(--highlight));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+  color: var(--gray-100);
+  letter-spacing: 0.5px;
 }
 
 nav ul {
@@ -140,7 +130,6 @@ nav a:hover::before {
 
 nav a.active {
   color: var(--dark);
-  text-shadow: 0 0 10px var(--highlight);
 }
 
 .mobile-menu {
@@ -214,17 +203,8 @@ nav a.active {
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   margin-bottom: 15px;
-  background: linear-gradient(
-    45deg,
-    var(--accent),
-    var(--cyber-blue),
-    var(--cyber-purple)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-  font-family: "Orbitron", sans-serif;
+  color: var(--gray-100);
+  font-family: "Oxanium", sans-serif;
   letter-spacing: 2px;
   line-height: 1.2;
 }
@@ -294,7 +274,7 @@ nav a.active {
   width: min(300px, 70vw);
   height: min(300px, 70vw);
   border-radius: 50%;
-  background: linear-gradient(45deg, var(--accent), var(--cyber-blue));
+  background: var(--accent);
   position: relative;
   display: flex;
   align-items: center;
@@ -315,7 +295,7 @@ nav a.active {
   background: linear-gradient(
     45deg,
     var(--accent),
-    var(--cyber-blue),
+    var(--accent-soft),
     transparent
   );
   z-index: -1;
@@ -350,13 +330,13 @@ nav a.active {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Oxanium", sans-serif;
   line-height: 1.2;
 }
 
 .dj-tagline {
   font-size: clamp(1.2rem, 4vw, 1.5rem);
-  color: var(--cyber-blue);
+  color: var(--accent);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -512,7 +492,7 @@ nav a.active {
   }
   100% {
     height: 25px;
-    background: var(--cyber-blue);
+    background: var(--accent);
   }
 }
 
@@ -533,7 +513,7 @@ nav a.active {
 .section-title {
   font-size: clamp(1.8rem, 5vw, 2.5rem);
   font-weight: 700;
-  background: linear-gradient(45deg, var(--accent), var(--cyber-blue));
+  background: var(--accent);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -651,7 +631,7 @@ nav a.active {
 }
 
 .dj-card-role {
-  color: var(--cyber-blue);
+  color: var(--accent);
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -771,7 +751,7 @@ nav a.active {
 
 .play-mix:hover {
   transform: scale(1.1);
-  background: var(--accent-glow);
+  background: var(--accent-soft);
 }
 
 .play-mix.playing {
@@ -845,7 +825,7 @@ nav a.active {
   }
   100% {
     height: 15px;
-    background: var(--cyber-blue);
+    background: var(--accent);
   }
 }
 
@@ -872,7 +852,7 @@ footer {
 .footer-section img {
   width: 120px;
   height: 60px;
-  filter: drop-shadow(0 0 10px var(--accent));
+  filter: none;
 }
 
 .footer-links {
@@ -968,7 +948,7 @@ footer {
 }
 
 .footer-input button:hover {
-  background: var(--accent-glow);
+  background: var(--accent-soft);
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -1089,7 +1069,7 @@ footer {
       inset 0 0 30px rgba(255, 255, 255, 0.1);
   }
   100% {
-    box-shadow: 0 0 40px var(--cyber-blue), 0 0 80px var(--cyber-blue),
+    box-shadow: 0 0 8px rgba(200, 16, 46, 0.4),
       inset 0 0 40px rgba(255, 255, 255, 0.2);
   }
 }

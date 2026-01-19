@@ -3,7 +3,7 @@
 @section('content')
     <div class="main-content" style="padding-top: 120px; min-height: calc(100vh - 200px);">
         <div class="container" style="max-width: 900px;">
-            <h1 style="margin-bottom: 30px;">Frequently Asked Questions</h1>
+            <h1 class="section-title">FREQUENTLY ASKED QUESTIONS</h1>
             <div style="line-height: 1.8; color: var(--text-secondary);">
                 
                 <div style="margin-bottom: 30px;">
@@ -13,7 +13,7 @@
                 
                 <div style="margin-bottom: 30px;">
                     <h2 style="margin-bottom: 10px; color: var(--highlight);">How can I request a song?</h2>
-                    <p>You can request songs through our contact form by selecting "Playlist Request" as the message category. Include the song title, artist name, and any special message you'd like to share.</p>
+                    <p>You can request songs through our contact form. Include the song title, artist name, and any special message you'd like to share. Our DJs will do their best to play your request during their shows.</p>
                 </div>
                 
                 <div style="margin-bottom: 30px;">

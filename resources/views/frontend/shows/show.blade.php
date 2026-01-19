@@ -249,6 +249,11 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Top Banner Ad Slot -->
+            <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 40px; color: var(--text-secondary); font-size: 0.9rem; transition: all 0.3s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <span>Advertisement</span>
+            </div>
             
             <div class="show-content-section">
                 @if($show->description)

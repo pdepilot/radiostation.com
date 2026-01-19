@@ -2,6 +2,29 @@
 
 @push('styles')
 <style>
+    .ad-slot {
+        background: var(--gray-800);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+    
+    .ad-slot:hover {
+        border-color: var(--accent);
+    }
+    
+    @media (max-width: 768px) {
+        .ad-slot {
+            height: 80px !important;
+            font-size: 0.8rem;
+        }
+    }
+    
     .news-article {
         max-width: 900px;
         margin: 0 auto;
@@ -77,6 +100,11 @@
 @section('content')
     <div style="padding-top: 120px;">
         <section class="container">
+            <!-- Top Banner Ad Slot -->
+            <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 40px; color: var(--text-secondary); font-size: 0.9rem;">
+                <span>Advertisement</span>
+            </div>
+            
             <article class="news-article">
                 <div class="post-meta">
                     <span><i class="far fa-calendar"></i> {{ optional($post->published_at)->format('M d, Y') }}</span>
@@ -93,6 +121,12 @@
                 @if($post->excerpt)
                     <p class="post-excerpt">{{ $post->excerpt }}</p>
                 @endif
+                
+                <!-- Interstitial Ad Slot - Before article body -->
+                <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 100px; display: flex; align-items: center; justify-content: center; margin: 30px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    <span>Advertisement</span>
+                </div>
+                
                 <div class="article-body">
                     {!! $post->body ?? '<p>Content coming soon...</p>' !!}
                 </div>
@@ -166,6 +200,11 @@
         <!-- More News Section -->
         @if($related->count() > 0)
         <section class="container" style="margin-top: 80px; padding: 0 20px;">
+            <!-- Sidebar Ad Slot -->
+            <div class="ad-slot" style="background: var(--gray-800); border: 1px solid var(--glass-border); border-radius: 12px; height: 250px; display: flex; align-items: center; justify-content: center; margin-bottom: 40px; color: var(--text-secondary); font-size: 0.9rem;">
+                <span>Advertisement</span>
+            </div>
+            
             <h2 class="section-title" style="margin-bottom: 40px; font-size: 2rem;">MORE NEWS</h2>
             <div class="posts-grid">
                 @foreach($related as $item)

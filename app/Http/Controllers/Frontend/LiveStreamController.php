@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\LiveStream;
 use App\Models\Show;
-use App\Models\PlaylistTrack;
 use App\Models\AudienceMetric;
 use App\Models\ListenerSession;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LiveStreamController extends Controller
 {
@@ -20,22 +18,12 @@ class LiveStreamController extends Controller
 
             return view('frontend.livestream', [
                 'liveStream' => $liveStream,
-                'playlistTracks' => PlaylistTrack::where(function($query) {
-                        $query->whereNull('sponsor_end_date')
-                            ->orWhere('sponsor_end_date', '>=', now());
-                    })
-                    ->orderByRaw('CASE WHEN spot_position IS NOT NULL THEN spot_position ELSE 999 END')
-                    ->orderByDesc('scheduled_for')
-                    ->orderByDesc('is_featured')
-                    ->take(20)
-                    ->get(),
                 'history' => LiveStream::latest('created_at')->take(5)->get(),
             ]);
         } catch (\Exception $e) {
             \Log::error('Live stream page error: ' . $e->getMessage());
             return view('frontend.livestream', [
                 'liveStream' => null,
-                'playlistTracks' => collect(),
                 'history' => collect(),
             ]);
         }

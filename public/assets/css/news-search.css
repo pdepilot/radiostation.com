@@ -26,7 +26,7 @@
 }
 
 .nav-search-results::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-glow);
+    background: var(--accent-soft);
 }
 
 /* Search Result Item */
@@ -163,7 +163,7 @@
 }
 
 .view-all-link:hover {
-    background: var(--accent-glow);
+    background: var(--accent-soft);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
 }
