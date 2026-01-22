@@ -295,8 +295,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Reset listener count button
   const resetBtn = document.getElementById('resetListenerCount');
   if (resetBtn) {
-    resetBtn.addEventListener('click', function() {
-      if (confirm('Are you sure you want to reset the listener count to 0? This will affect the current live stream.')) {
+    resetBtn.addEventListener('click', async function() {
+      const confirmed = await (window.confirmAction || window.confirm)('Are you sure you want to reset the listener count to 0? This will affect the current live stream.');
+      if (confirmed) {
         fetch('/api/listener/reset', {
           method: 'POST',
           headers: {
@@ -307,16 +308,16 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            alert('Listener count reset to 0 successfully!');
+            (window.showSuccess || window.showNotification)('Listener count reset to 0 successfully!', 'success');
             // Immediately update the display
             updateLiveListenerCount();
           } else {
-            alert('Failed to reset listener count: ' + (data.message || 'Unknown error'));
+            (window.showError || window.showNotification)('Failed to reset listener count: ' + (data.message || 'Unknown error'), 'error');
           }
         })
         .catch(error => {
           console.error('Reset error:', error);
-          alert('Failed to reset listener count. Check console for details.');
+          (window.showError || window.showNotification)('Failed to reset listener count. Check console for details.', 'error');
         });
       }
     });

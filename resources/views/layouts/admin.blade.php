@@ -338,6 +338,16 @@
     {{-- HLS.js CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
+    {{-- SweetAlert2 for notifications --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    {{-- Unified Notification System --}}
+    <x-notification-system />
+    
+    {{-- Form confirmation handler --}}
+    <script src="{{ asset('assets/js/form-confirm.js') }}" defer></script>
+    
     <script src="{{ asset('assets/js/admin-dash.js') }}" defer></script>
     <script src="{{ asset('assets/js/hls-live-player.js') }}" defer></script>
     @stack('scripts')

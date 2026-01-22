@@ -121,14 +121,14 @@
             $postImageUrl = $post->hero_image ?? 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80';
             @endphp
             <div class="post-card" data-post-id="{{ $post->id }}">
-                <a href="{{ route('news.show', $post->slug) }}" style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ route('news.show', $post->slug) }}" wire:navigate style="text-decoration: none; color: inherit; display: block;">
                     <div class="post-image" style="background-image: url('{{ $postImageUrl }}'); background-size: cover; background-position: center; height: 200px;"></div>
                 </a>
                 <div class="post-content">
                     <div class="post-meta">
                         <span><i class="far fa-calendar"></i> {{ optional($post->published_at)->format('M d, Y') }}</span>
                     </div>
-                    <a href="{{ route('news.show', $post->slug) }}" style="text-decoration: none; color: inherit;">
+                    <a href="{{ route('news.show', $post->slug) }}" wire:navigate style="text-decoration: none; color: inherit;">
                         <h3 class="post-title">{{ $post->title }}</h3>
                         <p class="post-excerpt">{{ $post->excerpt }}</p>
                     </a>
@@ -161,10 +161,10 @@
     <section class="container" id="on-air-personalities" style="margin: 80px 0; padding: 0; width: 100%; max-width: 100%;">
         <h2 class="section-title">OUR ON-AIR PERSONALITIES</h2>
         <div class="aops-carousel-wrapper" style="position: relative !important; margin: 20px 0; overflow: hidden !important; padding: 40px 80px; width: 100%; transform: none !important;">
-            <button class="aops-nav-btn aops-nav-prev" id="aopsPrevBtn" style="position: absolute !important; left: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10000 !important;">
+            <button class="aops-nav-btn aops-nav-prev" id="aopsPrevBtn" style="position: absolute !important; left: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="aops-nav-btn aops-nav-next" id="aopsNextBtn" style="position: absolute !important; right: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10000 !important;">
+            <button class="aops-nav-btn aops-nav-next" id="aopsNextBtn" style="position: absolute !important; right: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;">
                 <i class="fas fa-chevron-right"></i>
             </button>
             <div class="aops-carousel" id="aopsCarousel" style="display: flex; gap: 40px; padding: 20px 0; min-width: max-content; width: max-content; margin: 0 auto; transition: transform 0.5s ease; overflow: visible; position: relative; z-index: 1;">
@@ -181,7 +181,7 @@
                 $djSlug = isset($dj->slug) ? $dj->slug : (isset($dj->id) ? 'dj-' . $dj->id : 'dj-' . $loop->index);
                 @endphp
                 <div class="aop-card" style="min-width: 300px; max-width: 300px; flex-shrink: 0; width: 300px; --index: {{ $loop->index }}; cursor: pointer;">
-                    <a href="{{ route('djs.show', $djSlug) }}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                    <a href="{{ route('djs.show', $djSlug) }}" wire:navigate style="text-decoration: none; color: inherit; display: block; height: 100%;">
                         <div class="aop-image" style="background-image: url('{{ $djAvatarUrl }}')"></div>
                         <div class="aop-info">
                             <h3 class="aop-name">{{ strtoupper($dj->stage_name ?? $dj->name) }}</h3>
@@ -253,6 +253,53 @@
             </div>
         </div>
     </section>
+
+    {{-- Music Promotion Section --}}
+    @if($musicPromotions->count() > 0)
+    <section class="music-promotion-section" style="margin: 60px 0; width: 100%;">
+        <div class="container" style="width: 90%; max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 class="section-title" style="margin: 0;">SPOTLIGHT TRACKS</h2>
+            </div>
+            <div class="music-promotions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; width: 100%;">
+                @foreach($musicPromotions as $promotion)
+                <div class="music-promotion-card" data-promotion-id="{{ $promotion->id }}" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; position: relative; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div class="promotion-image-container" style="position: relative; height: 250px; overflow: hidden; background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.3));">
+                        @if($promotion->cover_image)
+                        <div style="height: 100%; background-size: cover; background-position: center; background-image: url('{{ asset('storage/' . $promotion->cover_image) }}')"></div>
+                        @else
+                        <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-music" style="font-size: 5rem; color: rgba(255,255,255,0.3);"></i>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="promotion-content" style="padding: 25px; flex: 1; display: flex; flex-direction: column;">
+                        <h3 style="color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 8px; font-weight: 700;">{{ $promotion->track_title }}</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px; font-weight: 600;">{{ $promotion->artist_name }}</p>
+                        @if($promotion->description)
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">{{ \Illuminate\Support\Str::limit($promotion->description, 100) }}</p>
+                        @endif
+                        @if($promotion->audio_embed_url)
+                        <div style="margin-bottom: 15px;">
+                            <iframe src="{{ $promotion->audio_embed_url }}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media" style="border-radius: 8px;"></iframe>
+                        </div>
+                        @endif
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
+                            @if($promotion->cta_url)
+                            <a href="{{ $promotion->cta_url }}" target="_blank" class="promotion-cta-link" data-promotion-id="{{ $promotion->id }}" style="color: var(--light); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--light)'">Listen Now</a>
+                            @else
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Featured Track</span>
+                            @endif
+                            <i class="fas fa-arrow-right" style="color: var(--accent); transition: transform 0.3s;"></i>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
 
     {{-- OAP Profile Modal --}}
     <div class="profile-modal" id="profileModal">
@@ -770,6 +817,66 @@
                 }, 4000);
             }
         }
+    });
+
+    // Music Promotion CTA Click Tracking
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctaLinks = document.querySelectorAll('.promotion-cta-link');
+        ctaLinks.forEach(link => {
+            link.addEventListener('click', async function(e) {
+                const promotionId = this.getAttribute('data-promotion-id');
+                
+                // Track in database
+                try {
+                    await fetch(`/promotions/${promotionId}/track-click`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        },
+                    });
+                } catch (error) {
+                    console.error('Error tracking click:', error);
+                }
+
+                // Track in Google Analytics (if available)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click', {
+                        'event_category': 'Music Promotion',
+                        'event_label': 'CTA Click',
+                        'value': promotionId
+                    });
+                }
+            });
+        });
+
+        // Track impressions when promotions are visible
+        const promotionCards = document.querySelectorAll('.music-promotion-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const promotionId = entry.target.getAttribute('data-promotion-id');
+                    
+                    // Track impression (only once per page load)
+                    if (!entry.target.dataset.impressionTracked) {
+                        entry.target.dataset.impressionTracked = 'true';
+                        
+                        // Track in Google Analytics
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'view', {
+                                'event_category': 'Music Promotion',
+                                'event_label': 'Impression',
+                                'value': promotionId
+                            });
+                        }
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        promotionCards.forEach(card => {
+            observer.observe(card);
+        });
     });
 </script>
 @endpush

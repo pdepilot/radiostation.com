@@ -296,7 +296,7 @@
                 <h2>Related Shows</h2>
                 <div class="related-shows-grid">
                     @foreach($related as $item)
-                        <a href="{{ route('shows.show', $item) }}" class="related-show-card">
+                        <a href="{{ route('shows.show', $item) }}" wire:navigate class="related-show-card">
                             @php
                                 $relatedImageUrl = $item->hero_image_url;
                             @endphp

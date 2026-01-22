@@ -5,28 +5,22 @@
 @endpush
 
 @section('content')
-<section class="container" style="padding-top: 120px; padding-bottom: 80px;">
+<section class="container" style="padding-top: 120px; padding-bottom: 80px; width: 90%; max-width: 1400px; margin: 0 auto; padding-left: 20px; padding-right: 20px;">
     <div style="text-align: center; margin-bottom: 60px; padding: 48px 0;">
         <h1 class="section-title" style="font-size: 3rem; margin-bottom: 0;">CONTACT US</h1>
     </div>
 
     <!-- Contact Grid -->
-    <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px;">
+    <div class="contact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 40px; margin-bottom: 60px; width: 100%;">
         <!-- Contact Form -->
         <section class="contact-form-section">
             <div class="form-container" style="background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; border: 1px solid var(--glass-border);">
                 <h2 class="form-title" style="font-family: 'Oxanium', sans-serif; color: var(--accent); font-size: 1.8rem; margin-bottom: 30px; font-weight: 700;">Send Us a Message</h2>
-                @if(session('status'))
-                <div id="success-message" style="display: none;">{{ session('status') }}</div>
+                @if(session('success'))
+                <div id="success-message" data-message="{{ session('success') }}" style="display: none;"></div>
                 @endif
                 @if($errors->any())
-                <div id="error-messages" style="display: none;">
-                    <ul style="margin: 0; padding-left: 20px;">
-                        @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <div id="error-messages" data-errors="{{ json_encode($errors->all()) }}" style="display: none;"></div>
                 @endif
                 <form method="POST" action="{{ route('contact.store') }}" id="contactForm">
                     @csrf
@@ -62,6 +56,7 @@
                         <textarea class="form-textarea" id="message" name="message" placeholder=" " required style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--light); outline: none; font-size: 1rem; min-height: 150px; resize: vertical; transition: border-color 0.3s;">{{ old('message') }}</textarea>
                         <label for="message" class="form-label" style="position: absolute; left: 15px; top: 15px; color: var(--text-secondary); pointer-events: none; transition: all 0.3s; font-size: 1rem;">Your Message</label>
                     </div>
+                    
                     <button type="submit" class="submit-btn" style="width: 100%; padding: 15px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
                         <i class="fas fa-paper-plane"></i> Send Message
                     </button>

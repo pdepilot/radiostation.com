@@ -21,14 +21,23 @@ class RealtimeController extends Controller
      */
     public function poll(Request $request): JsonResponse
     {
-        $lastUpdate = $request->input('last_update', 0);
-        $currentTime = time();
-        
-        // Get updates since last check
-        $updates = [];
-        
-        // Check news updates
-        $lastUpdateDate = date('Y-m-d H:i:s', $lastUpdate);
+        try {
+            $lastUpdate = $request->input('last_update', 0);
+            $currentTime = time();
+            
+            // Validate last_update parameter - ensure it's a valid number
+            if (!is_numeric($lastUpdate) || $lastUpdate < 0) {
+                $lastUpdate = 0;
+            }
+            
+            // Convert to integer to ensure type safety
+            $lastUpdate = (int) $lastUpdate;
+            
+            // Get updates since last check
+            $updates = [];
+            
+            // Check news updates
+            $lastUpdateDate = $lastUpdate > 0 ? date('Y-m-d H:i:s', $lastUpdate) : '1970-01-01 00:00:00';
         $newsUpdates = NewsPost::where('status', 'published')
             ->where(function($q) use ($lastUpdateDate) {
                 $q->where('updated_at', '>', $lastUpdateDate)
@@ -57,14 +66,19 @@ class RealtimeController extends Controller
             ];
         }
         
-        // Check show updates
-        $showUpdates = Show::where(function($q) use ($lastUpdateDate) {
-                $q->where('updated_at', '>', $lastUpdateDate)
-                  ->orWhere('created_at', '>', $lastUpdateDate);
-            })
-            ->latest('updated_at')
-            ->take(3)
-            ->get(['id', 'title', 'slug', 'hero_image_url', 'updated_at', 'created_at']);
+        // Check show updates - handle potential missing columns gracefully
+        try {
+            $showUpdates = Show::where(function($q) use ($lastUpdateDate) {
+                    $q->where('updated_at', '>', $lastUpdateDate)
+                      ->orWhere('created_at', '>', $lastUpdateDate);
+                })
+                ->latest('updated_at')
+                ->take(3)
+                ->get(['id', 'title', 'slug', 'hero_image_url', 'updated_at', 'created_at']);
+        } catch (\Exception $e) {
+            \Log::warning('Show updates query failed: ' . $e->getMessage());
+            $showUpdates = collect([]);
+        }
         
         foreach ($showUpdates as $show) {
             $createdTs = $show->created_at->timestamp;
@@ -110,14 +124,27 @@ class RealtimeController extends Controller
             ];
         }
         
-        // Sort by timestamp
-        usort($updates, fn($a, $b) => $b['timestamp'] <=> $a['timestamp']);
-        
-        return response()->json([
-            'updates' => $updates,
-            'current_time' => $currentTime,
-            'has_updates' => count($updates) > 0,
-        ]);
+            // Sort by timestamp
+            usort($updates, fn($a, $b) => $b['timestamp'] <=> $a['timestamp']);
+            
+            return response()->json([
+                'updates' => $updates,
+                'current_time' => $currentTime,
+                'has_updates' => count($updates) > 0,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Realtime poll error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return 200 with empty updates instead of 500 to prevent polling loops
+            return response()->json([
+                'error' => 'Failed to fetch updates',
+                'updates' => [],
+                'current_time' => time(),
+                'has_updates' => false,
+            ], 200);
+        }
     }
     
     /**

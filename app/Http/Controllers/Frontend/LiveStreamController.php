@@ -16,15 +16,19 @@ class LiveStreamController extends Controller
         try {
             $liveStream = LiveStream::with(['show', 'dj'])->latest('updated_at')->first();
 
+            $shows = Show::where('status', '!=', 'cancelled')->orderBy('day_of_week')->orderBy('start_time')->get();
+
             return view('frontend.livestream', [
                 'liveStream' => $liveStream,
                 'history' => LiveStream::latest('created_at')->take(5)->get(),
+                'shows' => $shows,
             ]);
         } catch (\Exception $e) {
             \Log::error('Live stream page error: ' . $e->getMessage());
             return view('frontend.livestream', [
                 'liveStream' => null,
                 'history' => collect(),
+                'shows' => collect(),
             ]);
         }
     }
@@ -106,7 +110,10 @@ class LiveStreamController extends Controller
                         'stream_url' => $currentShow->stream_url ?? $defaultStreamUrl,
                         'title' => $currentShow->title ?? $defaultTitle,
                         'status' => 'live',
-                        'show' => $currentShow->title,
+                        'show' => [
+                            'id' => $currentShow->id,
+                            'title' => $currentShow->title,
+                        ],
                         'dj' => $currentShow->dj?->stage_name,
                         'listener_count' => $currentShow->listener_count ?? 0,
                     ], 200, [], JSON_UNESCAPED_UNICODE);
@@ -135,12 +142,15 @@ class LiveStreamController extends Controller
             }
 
             // If we have a live stream with a live show (not completed), use it
-            if ($liveStream && $liveStream->show && $liveStream->show->status === 'live' && $liveStream->show->status !== 'completed') {
+            if ($liveStream && $liveStream->show && $liveStream->show->status === 'live') {
                 return response()->json([
                     'stream_url' => $liveStream->stream_url ?? $defaultStreamUrl,
                     'title' => $liveStream->title ?? $defaultTitle,
                     'status' => 'live',
-                    'show' => $liveStream->show->title,
+                    'show' => [
+                        'id' => $liveStream->show->id,
+                        'title' => $liveStream->show->title,
+                    ],
                     'dj' => $liveStream->dj?->stage_name ?? $liveStream->show->dj?->stage_name,
                     'listener_count' => $liveStream->listener_count ?? 0,
                 ]);
@@ -192,9 +202,9 @@ class LiveStreamController extends Controller
                 return response()->json(['success' => false, 'message' => 'Invalid action'], 400);
             }
 
-            // Validate session_id
+            // Generate session_id if not provided (fallback for legacy clients)
             if (!$sessionId) {
-                return response()->json(['success' => false, 'message' => 'Session ID required'], 400);
+                $sessionId = 'session_' . now()->timestamp . '_' . uniqid();
             }
 
             // Find the active live stream

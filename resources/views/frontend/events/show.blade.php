@@ -108,18 +108,18 @@
             <h2 class="section-title" style="margin-bottom: 30px; font-size: 2rem;">Other Events</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
                 @foreach($related as $relatedEvent)
-                <div style="background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='{{ route('events.show', $relatedEvent->slug) }}'">
+                <a href="{{ route('events.show', $relatedEvent->slug) }}" wire:navigate style="display: block; background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: inherit;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                     <div style="height: 200px; background-image: url('{{ $relatedEvent->hero_image ?? asset('assets/images/studio.jpg') }}'); background-size: cover; background-position: center;"></div>
                     <div style="padding: 20px;">
                         <h4 style="color: var(--accent); font-family: 'Orbitron', sans-serif; margin-bottom: 10px; font-size: 1.2rem;">{{ $relatedEvent->title }}</h4>
                         <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">
                             <i class="far fa-calendar-alt" style="margin-right: 5px;"></i>{{ $relatedEvent->event_date->format('M d, Y') }}
                         </div>
-                        <a href="{{ route('events.show', $relatedEvent->slug) }}" style="color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem;">
+                        <span style="color: var(--accent); font-weight: 600; font-size: 0.9rem;">
                             View Details <i class="fas fa-arrow-right" style="margin-left: 5px; font-size: 0.8rem;"></i>
-                        </a>
+                        </span>
                     </div>
-                </div>
+                </a>
                 @endforeach
             </div>
         </section>

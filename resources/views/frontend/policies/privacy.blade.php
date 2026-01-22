@@ -34,7 +34,7 @@
                 <p style="margin-bottom: 15px;">You have the right to access, update, or delete your personal information at any time. You can also opt-out of receiving promotional communications from us.</p>
                 
                 <h2 style="margin-top: 40px; margin-bottom: 20px; color: var(--highlight);">6. Contact Us</h2>
-                <p style="margin-bottom: 15px;">If you have any questions about this Privacy Policy, please contact us at <a href="/contact" style="color: var(--accent);">contact@darlingfm.ng</a>.</p>
+                <p style="margin-bottom: 15px;">If you have any questions about this Privacy Policy, please contact us at <a href="{{ route('contact.index') }}" wire:navigate style="color: var(--accent);">contact@darlingfm.ng</a>.</p>
             </div>
         </div>
     </div>

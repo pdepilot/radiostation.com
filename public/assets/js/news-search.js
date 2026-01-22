@@ -263,14 +263,24 @@
          */
         function handleEnterKey() {
             if (searchResultsData.length > 0) {
-                // Navigate to first result
+                // Navigate to first result using Livewire SPA navigation
                 const firstResult = searchResults.querySelector('.search-result-item');
                 if (firstResult) {
-                    window.location.href = firstResult.href;
+                    const href = firstResult.href;
+                    if (window.Livewire && window.Livewire.navigate) {
+                        window.Livewire.navigate(href);
+                    } else {
+                        window.location.href = href;
+                    }
                 }
             } else if (currentQuery.length >= 2) {
-                // Navigate to search page with query
-                window.location.href = `/news?search=${encodeURIComponent(currentQuery)}`;
+                // Navigate to search page with query using Livewire SPA navigation
+                const searchUrl = `/news?search=${encodeURIComponent(currentQuery)}`;
+                if (window.Livewire && window.Livewire.navigate) {
+                    window.Livewire.navigate(searchUrl);
+                } else {
+                    window.location.href = searchUrl;
+                }
             }
         }
 

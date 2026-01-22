@@ -77,6 +77,8 @@ class AppServiceProvider extends ServiceProvider
             $schedule->command('listeners:reset-monthly')->yearlyOn(1, 1, '00:00');
             // Schedule yearly listener count reset - runs on January 1st at midnight
             $schedule->command('listeners:reset-yearly')->yearly();
+            // Schedule music promotion expiration - runs daily at midnight
+            $schedule->command('promotions:expire')->daily();
         });
     }
 }

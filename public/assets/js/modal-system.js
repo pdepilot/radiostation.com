@@ -61,9 +61,13 @@
             
         } catch (error) {
             console.error('Modal load error:', error);
-            // Fallback: navigate to full page
+            // Fallback: navigate to full page using Livewire SPA navigation
             if (url) {
-                window.location.href = url;
+                if (window.Livewire && window.Livewire.navigate) {
+                    window.Livewire.navigate(url);
+                } else {
+                    window.location.href = url;
+                }
             }
         }
     }

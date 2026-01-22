@@ -134,6 +134,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            RolePermissionSeeder::class,
             NewsPostsTableSeeder::class,
             DjsTableSeeder::class,
             ShowsTableSeeder::class,

@@ -1,14 +1,36 @@
-// Main radio stream URL (24/7 broadcast) - Lower port = primary/default listener endpoint
-const MAIN_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
+// Main radio stream URL (24/7 broadcast) - Port 7572 = primary/default listener endpoint
+// Use window property to avoid redeclaration errors during Livewire navigation
+if (typeof window.MAIN_STREAM_URL === 'undefined') {
+    window.MAIN_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
+}
+// Reference window property directly - no local variable to avoid redeclaration
+if (typeof MAIN_STREAM_URL === 'undefined') {
+    var MAIN_STREAM_URL = window.MAIN_STREAM_URL;
+}
 
 // OAP Live Stream URL (for special broadcasts)
-const OAP_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
+if (typeof window.OAP_STREAM_URL === 'undefined') {
+    window.OAP_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
+}
+if (typeof OAP_STREAM_URL === 'undefined') {
+    var OAP_STREAM_URL = window.OAP_STREAM_URL;
+}
 
-// Backup stream URL (Higher port = secondary/failover)
-const BACKUP_STREAM_URL = "https://phoebe.streamerr.co:7572/stream";
+// Backup stream URL (Port 7567 = secondary/failover)
+if (typeof window.BACKUP_STREAM_URL === 'undefined') {
+    window.BACKUP_STREAM_URL = "https://phoebe.streamerr.co:7567/stream";
+}
+if (typeof BACKUP_STREAM_URL === 'undefined') {
+    var BACKUP_STREAM_URL = window.BACKUP_STREAM_URL;
+}
 
 
-document.addEventListener("DOMContentLoaded", function() {
+// Prevent re-execution during Livewire navigation
+(function() {
+    if (window.indexJsInitialized) return;
+    window.indexJsInitialized = true;
+    
+    function initIndexJs() {
     // Prevent pull-to-refresh duplicate navbar
     let lastScrollTop = 0;
     let isScrolling = false;
@@ -73,8 +95,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const remindBtns = document.querySelectorAll('.remind-btn');
     remindBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            const showName = this.closest('.show-card').querySelector('.show-name').textContent;
-            const showTime = this.closest('.show-card').querySelector('.show-time span').textContent;
+            const showCard = this.closest('.show-card');
+            if (!showCard) return;
+            const showNameEl = showCard.querySelector('.show-name');
+            const showTimeEl = showCard.querySelector('.show-time span');
+            if (!showNameEl || !showTimeEl) return;
+            const showName = showNameEl.textContent;
+            const showTime = showTimeEl.textContent;
             
             if (typeof showSuccess === 'function') {
                 showSuccess(`Reminder set for ${showName} at ${showTime}`);
@@ -124,175 +151,191 @@ document.addEventListener("DOMContentLoaded", function() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('role') === 'oap') {
         userRole = 'oap';
-        startStreamBtn.style.display = 'flex';
-        stopStreamBtn.style.display = 'flex';
-        joinStreamBtn.style.display = 'none';
-        leaveStreamBtn.style.display = 'none';
+        if (startStreamBtn) startStreamBtn.style.display = 'flex';
+        if (stopStreamBtn) stopStreamBtn.style.display = 'flex';
+        if (joinStreamBtn) joinStreamBtn.style.display = 'none';
+        if (leaveStreamBtn) leaveStreamBtn.style.display = 'none';
     } else {
-        startStreamBtn.style.display = 'none';
-        stopStreamBtn.style.display = 'none';
-        joinStreamBtn.style.display = 'flex';
-        leaveStreamBtn.style.display = 'flex';
+        if (startStreamBtn) startStreamBtn.style.display = 'none';
+        if (stopStreamBtn) stopStreamBtn.style.display = 'none';
+        if (joinStreamBtn) joinStreamBtn.style.display = 'flex';
+        if (leaveStreamBtn) leaveStreamBtn.style.display = 'flex';
     }
     
     // Start Stream (OAP only)
-    startStreamBtn.addEventListener('click', function() {
-        if (!isStreaming) {
-            // Set up OAP live stream
-            liveStream.src = OAP_STREAM_URL;
-            
-            // For a real implementation, OAP url will be here when i get it
-            // OAP stream started - connecting to stream
-            
-            isStreaming = true;
-            updateStreamUI();
-            
-            streamInfo.style.display = 'block';
-            oapControls.style.display = 'block';
-            
-            statusIndicator.style.background = '#00ff00';
-            statusIndicator.style.boxShadow = '0 0 10px #00ff00';
-            statusText.textContent = 'Live Now';
-            
-            startStreamBtn.disabled = true;
-            stopStreamBtn.disabled = false;
-            
-        }
-    });
+    if (startStreamBtn) {
+        startStreamBtn.addEventListener('click', function() {
+            if (!isStreaming) {
+                // Set up OAP live stream
+                liveStream.src = window.OAP_STREAM_URL || OAP_STREAM_URL;
+                
+                // For a real implementation, OAP url will be here when i get it
+                // OAP stream started - connecting to stream
+                
+                isStreaming = true;
+                updateStreamUI();
+                
+                if (streamInfo) streamInfo.style.display = 'block';
+                if (oapControls) oapControls.style.display = 'block';
+                
+                if (statusIndicator) {
+                    statusIndicator.style.background = '#00ff00';
+                    statusIndicator.style.boxShadow = '0 0 10px #00ff00';
+                }
+                if (statusText) statusText.textContent = 'Live Now';
+                
+                startStreamBtn.disabled = true;
+                if (stopStreamBtn) stopStreamBtn.disabled = false;
+            }
+        });
+    }
     
     // Stop Stream (OAP only)
-    stopStreamBtn.addEventListener('click', function() {
-        if (isStreaming) {
-            // Stop the live stream
-            liveStream.pause();
-            liveStream.src = '';
-            
-            // OAP stream stopped
-            
-            isStreaming = false;
-            updateStreamUI();
-            
-            streamInfo.style.display = 'none';
-            oapControls.style.display = 'none';
-            
-            statusIndicator.style.background = '#ff3333';
-            statusIndicator.style.boxShadow = '0 0 10px #ff3333';
-            statusText.textContent = 'Currently Offline';
-            
-            startStreamBtn.disabled = false;
-            stopStreamBtn.disabled = true;
-            
-            currentListeners = 0;
-            listenerCount.textContent = '0';
-            
-            if (isListening) {
-                isListening = false;
-                joinStreamBtn.disabled = false;
-                leaveStreamBtn.disabled = true;
+    if (stopStreamBtn) {
+        stopStreamBtn.addEventListener('click', function() {
+            if (isStreaming) {
+                // Stop the live stream
+                liveStream.pause();
+                liveStream.src = '';
+                
+                // OAP stream stopped
+                
+                isStreaming = false;
+                updateStreamUI();
+                
+                if (streamInfo) streamInfo.style.display = 'none';
+                if (oapControls) oapControls.style.display = 'none';
+                
+                if (statusIndicator) {
+                    statusIndicator.style.background = '#ff3333';
+                    statusIndicator.style.boxShadow = '0 0 10px #ff3333';
+                }
+                if (statusText) statusText.textContent = 'Currently Offline';
+                
+                if (startStreamBtn) startStreamBtn.disabled = false;
+                stopStreamBtn.disabled = true;
+                
+                currentListeners = 0;
+                if (listenerCount) listenerCount.textContent = '0';
+                
+                if (isListening) {
+                    isListening = false;
+                    if (joinStreamBtn) joinStreamBtn.disabled = false;
+                    if (leaveStreamBtn) leaveStreamBtn.disabled = true;
+                }
             }
-        }
-    });
+        });
+    }
     
     // Join Stream (Listener)
-    joinStreamBtn.addEventListener('click', function() {
-        if (!isListening && isStreaming) {
-            // Connect to OAP live stream
-            liveStream.src = OAP_STREAM_URL;
-            liveStream.play()
-                .then(() => {
-                    isListening = true;
-                    updateStreamUI();
-                    
-                    streamInfo.style.display = 'block';
-                    
-                    joinStreamBtn.disabled = true;
-                    leaveStreamBtn.disabled = false;
-                    
-                    currentListeners++;
-                    updateListenerCount();
-                    
-                    // Connected to OAP live stream
-                })
-                .catch(e => {
-                    console.error("Error connecting to live stream:", e);
-                    if (typeof showError === 'function') {
-                        showError("Unable to connect to the live stream. Please try again.");
-                    } else if (window.notifications) {
-                        window.notifications.error("Unable to connect to the live stream. Please try again.");
-                    }
-                });
-        }
-    });
+    if (joinStreamBtn) {
+        joinStreamBtn.addEventListener('click', function() {
+            if (!isListening && isStreaming) {
+                // Connect to OAP live stream
+                liveStream.src = window.OAP_STREAM_URL || OAP_STREAM_URL;
+                liveStream.play()
+                    .then(() => {
+                        isListening = true;
+                        updateStreamUI();
+                        
+                        if (streamInfo) streamInfo.style.display = 'block';
+                        
+                        joinStreamBtn.disabled = true;
+                        if (leaveStreamBtn) leaveStreamBtn.disabled = false;
+                        
+                        currentListeners++;
+                        updateListenerCount();
+                        
+                        // Connected to OAP live stream
+                    })
+                    .catch(e => {
+                        console.error("Error connecting to live stream:", e);
+                        if (typeof showError === 'function') {
+                            showError("Unable to connect to the live stream. Please try again.");
+                        } else if (window.notifications) {
+                            window.notifications.error("Unable to connect to the live stream. Please try again.");
+                        }
+                    });
+            }
+        });
+    }
     
     // Leave Stream (Listener)
-    leaveStreamBtn.addEventListener('click', function() {
-        if (isListening) {
-            liveStream.pause();
-            isListening = false;
-            updateStreamUI();
-            
-            streamInfo.style.display = 'none';
-            
-            joinStreamBtn.disabled = false;
-            leaveStreamBtn.disabled = true;
-            
-            if (currentListeners > 0) {
-                currentListeners--;
-                updateListenerCount();
+    if (leaveStreamBtn) {
+        leaveStreamBtn.addEventListener('click', function() {
+            if (isListening) {
+                liveStream.pause();
+                isListening = false;
+                updateStreamUI();
+                
+                if (streamInfo) streamInfo.style.display = 'none';
+                
+                if (joinStreamBtn) joinStreamBtn.disabled = false;
+                leaveStreamBtn.disabled = true;
+                
+                if (currentListeners > 0) {
+                    currentListeners--;
+                    updateListenerCount();
+                }
             }
-            
-        }
-    });
+        });
+    }
     
     // Update Stream Info (OAP only)
-    updateStreamBtn.addEventListener('click', function() {
-        const title = streamTitleInput.value.trim();
-        const description = streamDescriptionInput.value.trim();
-        
-        if (title) {
-            streamTitle.textContent = title;
-            streamTitleInput.value = title;
-        }
-        
-        if (description) {
-            streamDescription.textContent = description;
-            streamDescriptionInput.value = description;
-        }
-        
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Stream information updated!',
-                timer: 2000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-                background: 'var(--glass)',
-                color: 'var(--text-primary)',
-                confirmButtonColor: '#c8102e'
-            });
-        } else if (typeof showSuccess === 'function') {
-            showSuccess('Stream information updated!');
-        } else if (window.notifications) {
-            window.notifications.success('Stream information updated!');
-        }
-    });
+    if (updateStreamBtn) {
+        updateStreamBtn.addEventListener('click', function() {
+            const title = streamTitleInput?.value?.trim() || '';
+            const description = streamDescriptionInput?.value?.trim() || '';
+            
+            if (title && streamTitle) {
+                streamTitle.textContent = title;
+                if (streamTitleInput) streamTitleInput.value = title;
+            }
+            
+            if (description && streamDescription) {
+                streamDescription.textContent = description;
+                if (streamDescriptionInput) streamDescriptionInput.value = description;
+            }
+            
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Stream information updated!',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end',
+                    background: 'var(--glass)',
+                    color: 'var(--text-primary)',
+                    confirmButtonColor: '#c8102e'
+                });
+            } else if (typeof showSuccess === 'function') {
+                showSuccess('Stream information updated!');
+            } else if (window.notifications) {
+                window.notifications.success('Stream information updated!');
+            }
+        });
+    }
     
     function updateStreamUI() {
-        listenerCount.textContent = currentListeners;
+        if (listenerCount) {
+            listenerCount.textContent = currentListeners;
+        }
         
         if (userRole === 'oap') {
-            startStreamBtn.disabled = isStreaming;
-            stopStreamBtn.disabled = !isStreaming;
+            if (startStreamBtn) startStreamBtn.disabled = isStreaming;
+            if (stopStreamBtn) stopStreamBtn.disabled = !isStreaming;
         } else {
-            joinStreamBtn.disabled = isListening || !isStreaming;
-            leaveStreamBtn.disabled = !isListening;
+            if (joinStreamBtn) joinStreamBtn.disabled = isListening || !isStreaming;
+            if (leaveStreamBtn) leaveStreamBtn.disabled = !isListening;
         }
     }
     
     function updateListenerCount() {
-        listenerCount.textContent = currentListeners;
+        if (listenerCount) {
+            listenerCount.textContent = currentListeners;
+        }
     }
     
     
@@ -371,29 +414,37 @@ document.addEventListener("DOMContentLoaded", function() {
             const oap = oapData[aopId];
             
             if (oap) {
-                document.getElementById('modalProfileName').textContent = oap.name;
-                document.getElementById('modalProfileShow').textContent = oap.show;
-                document.getElementById('modalProfileSchedule').textContent = oap.schedule;
-                document.getElementById('modalProfileBio').textContent = oap.bio;
-                document.getElementById('modalProfileImage').style.backgroundImage = `url('${oap.image}')`;
+                const modalName = document.getElementById('modalProfileName');
+                const modalShow = document.getElementById('modalProfileShow');
+                const modalSchedule = document.getElementById('modalProfileSchedule');
+                const modalBio = document.getElementById('modalProfileBio');
+                const modalImage = document.getElementById('modalProfileImage');
+                const socialContainer = document.getElementById('modalProfileSocial');
+                
+                if (modalName) modalName.textContent = oap.name;
+                if (modalShow) modalShow.textContent = oap.show;
+                if (modalSchedule) modalSchedule.textContent = oap.schedule;
+                if (modalBio) modalBio.textContent = oap.bio;
+                if (modalImage) modalImage.style.backgroundImage = `url('${oap.image}')`;
                 
                 // Add social media handles
-                const socialContainer = document.getElementById('modalProfileSocial');
-                socialContainer.innerHTML = '';
+                if (socialContainer) {
+                    socialContainer.innerHTML = '';
                 
-                oap.social.forEach(social => {
-                    const socialLink = document.createElement('a');
-                    socialLink.href = social.url;
-                    socialLink.target = '_blank';
-                    socialLink.className = 'social-handle';
-                    socialLink.innerHTML = `
-                        <i class="fab fa-${social.platform}"></i>
-                        <span>${social.handle}</span>
-                    `;
-                    socialContainer.appendChild(socialLink);
-                });
+                    oap.social.forEach(social => {
+                        const socialLink = document.createElement('a');
+                        socialLink.href = social.url;
+                        socialLink.target = '_blank';
+                        socialLink.className = 'social-handle';
+                        socialLink.innerHTML = `
+                            <i class="fab fa-${social.platform}"></i>
+                            <span>${social.handle}</span>
+                        `;
+                        socialContainer.appendChild(socialLink);
+                    });
+                }
                 
-                profileModal.style.display = 'flex';
+                if (profileModal) profileModal.style.display = 'flex';
             }
         });
     });
@@ -405,18 +456,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     commentToggleButtons.forEach((button) => {
         button.addEventListener("click", function () {
-            const commentsSection = this.closest(".post-card").querySelector(".comments-section");
-            commentsSection.style.display = commentsSection.style.display === "block" ? "none" : "block";
+            const postCard = this.closest(".post-card");
+            if (postCard) {
+                const commentsSection = postCard.querySelector(".comments-section");
+                if (commentsSection) {
+                    commentsSection.style.display = commentsSection.style.display === "block" ? "none" : "block";
+                }
+            }
         });
     });
 
     commentSubmitButtons.forEach((button) => {
         button.addEventListener("click", function () {
-            const commentInput = this.parentElement.querySelector(".comment-input");
+            const commentInput = this.parentElement?.querySelector(".comment-input");
             const commentsSection = this.closest(".comments-section");
-            const commentCount = this.closest(".post-card").querySelector(".comment-count");
+            const postCard = this.closest(".post-card");
+            const commentCount = postCard?.querySelector(".comment-count");
             
-            if (commentInput.value.trim() !== "") {
+            if (commentInput && commentInput.value.trim() !== "") {
                 // Create new comment element
                 const newComment = document.createElement("div");
                 newComment.className = "comment";
@@ -433,11 +490,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 `;
                 
                 // Insert before the comment form
-                commentsSection.insertBefore(newComment, commentsSection.querySelector(".comment-form"));
+                const commentForm = commentsSection.querySelector(".comment-form");
+                if (commentForm) {
+                    commentsSection.insertBefore(newComment, commentForm);
+                } else {
+                    commentsSection.appendChild(newComment);
+                }
                 
                 // Update comment count
-                const currentCount = parseInt(commentCount.textContent);
-                commentCount.textContent = currentCount + 1;
+                if (commentCount) {
+                    const currentCount = parseInt(commentCount.textContent) || 0;
+                    commentCount.textContent = currentCount + 1;
+                }
                 
                 // Clear input
                 commentInput.value = "";
@@ -501,31 +565,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Feedback form submission
     const submitBtn = document.querySelector('.submit-btn');
-    submitBtn.addEventListener('click', function() {
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const subject = document.getElementById('subject').value;
-        const message = document.getElementById('message').value;
-        
-        if (name && email && subject && message) {
-            if (typeof showSuccess === 'function') {
-                showSuccess('Thank you for your feedback! We appreciate your input.');
-            } else if (window.notifications) {
-                window.notifications.success('Thank you for your feedback! We appreciate your input.');
-            }
-            // In a real application, you would send this data to a server
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('subject').value = '';
-            document.getElementById('message').value = '';
-        } else {
-            if (typeof showError === 'function') {
-                showError('Please fill in all fields before submitting.');
-            } else if (window.notifications) {
-                window.notifications.error('Please fill in all fields before submitting.');
-            }
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const subject = document.getElementById('subject');
+            const message = document.getElementById('message');
+            
+                if (name && email && subject && message && name.value && email.value && subject.value && message.value) {
+                    if (typeof showSuccess === 'function') {
+                        showSuccess('Thank you for your feedback! We appreciate your input.');
+                    } else if (window.notifications) {
+                        window.notifications.success('Thank you for your feedback! We appreciate your input.');
+                    }
+                    // In a real application, you would send this data to a server
+                    name.value = '';
+                    email.value = '';
+                    subject.value = '';
+                    message.value = '';
+                } else {
+                    if (typeof showError === 'function') {
+                        showError('Please fill in all fields before submitting.');
+                    } else if (window.notifications) {
+                        window.notifications.error('Please fill in all fields before submitting.');
+                    }
+                }
+            });
         }
-    });
 
     // Enhanced Ads Functionality
     // Initialize after DOM is fully ready
@@ -721,13 +787,16 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             
             // Show controls when hovering over video
-            videoContainer.addEventListener("mouseenter", () => {
-                videoContainer.querySelector(".video-controls").style.opacity = "1";
-            });
-            
-            videoContainer.addEventListener("mouseleave", () => {
-                videoContainer.querySelector(".video-controls").style.opacity = "0";
-            });
+            const videoControls = videoContainer.querySelector(".video-controls");
+            if (videoControls) {
+                videoContainer.addEventListener("mouseenter", () => {
+                    videoControls.style.opacity = "1";
+                });
+                
+                videoContainer.addEventListener("mouseleave", () => {
+                    videoControls.style.opacity = "0";
+                });
+            }
         });
     }
 
@@ -853,12 +922,28 @@ document.addEventListener("DOMContentLoaded", function() {
             updateButtonVisibility();
         });
     }
-});
-
+    } // Close initIndexJs function
+    
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initIndexJs);
+    } else {
+        initIndexJs();
+    }
+    
+    // Re-initialize on Livewire navigation (only for elements that might be replaced)
+    document.addEventListener('livewire:navigated', function() {
+        // Re-initialize scroll to top and other page-specific functionality
+        initScrollToTop();
+    });
+})();
 
 // Scroll to Top Functionality
-document.addEventListener("DOMContentLoaded", function() {
+// Scroll to top button handler - with null checks for SPA navigation
+function initScrollToTop() {
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    
+    if (!scrollToTopBtn) return; // Element doesn't exist on this page
     
     // Show or hide the button based on scroll position
     window.addEventListener("scroll", function() {
@@ -876,5 +961,15 @@ document.addEventListener("DOMContentLoaded", function() {
             behavior: "smooth"
         });
     });
-});
+}
+
+// Initialize on DOM ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollToTop);
+} else {
+    initScrollToTop();
+}
+
+// Re-initialize on Livewire navigation
+document.addEventListener('livewire:navigated', initScrollToTop);
 

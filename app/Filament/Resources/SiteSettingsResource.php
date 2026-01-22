@@ -22,6 +22,8 @@ class SiteSettingsResource extends Resource
 
     protected static ?string $navigationLabel = 'Site Settings';
 
+    protected static ?string $navigationGroup = 'Settings';
+
     protected static ?int $navigationSort = 5;
 
     protected static ?string $modelLabel = 'Site Setting';
@@ -67,6 +69,17 @@ class SiteSettingsResource extends Resource
                             ->helperText('Full URL to your TikTok profile'),
                     ])
                     ->columns(1),
+                Forms\Components\Section::make('Contact Information')
+                    ->description('Contact details used across the site, including the floating WhatsApp button')
+                    ->schema([
+                        Forms\Components\TextInput::make('whatsapp_number')
+                            ->label('WhatsApp Number')
+                            ->tel()
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('+234 806 444 4444')
+                            ->helperText('WhatsApp number for the floating button and contact sections. Include country code (e.g., +234)'),
+                    ]),
             ]);
     }
 

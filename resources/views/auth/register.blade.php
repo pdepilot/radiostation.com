@@ -77,63 +77,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="phone" class="form-label">
-                            <i class="fas fa-phone"></i> Phone Number <span class="optional">(Optional)</span>
-                        </label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
-                            class="form-input" 
-                            value="{{ old('phone') }}" 
-                            autocomplete="tel"
-                            placeholder="Enter your phone number">
-                        @error('phone')
-                            <span class="error-message">
-                                <i class="fas fa-exclamation-circle"></i> {{ $message }}
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="state" class="form-label">
-                                <i class="fas fa-map-marker-alt"></i> State <span class="optional">(Optional)</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="state" 
-                                name="state" 
-                                class="form-input" 
-                                value="{{ old('state') }}" 
-                                placeholder="State">
-                            @error('state')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="city" class="form-label">
-                                <i class="fas fa-city"></i> City <span class="optional">(Optional)</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="city" 
-                                name="city" 
-                                class="form-input" 
-                                value="{{ old('city') }}" 
-                                placeholder="City">
-                            @error('city')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="password" class="form-label">
                             <i class="fas fa-lock"></i> Password
                         </label>
@@ -186,6 +129,27 @@
                         <span>Create Account</span>
                     </button>
                 </form>
+
+                {{-- Social Login Divider --}}
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                {{-- Social Login Buttons --}}
+                <div class="social-login">
+                    <a href="{{ route('socialite.redirect', 'google') }}" class="social-btn google">
+                        <i class="fab fa-google"></i>
+                        <span>Continue with Google</span>
+                    </a>
+                    <a href="{{ route('socialite.redirect', 'facebook') }}" class="social-btn facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Continue with Facebook</span>
+                    </a>
+                    <a href="{{ route('socialite.redirect', 'twitter') }}" class="social-btn twitter">
+                        <i class="fab fa-twitter"></i>
+                        <span>Continue with Twitter</span>
+                    </a>
+                </div>
 
                 {{-- Login Link --}}
                 <div class="auth-footer">

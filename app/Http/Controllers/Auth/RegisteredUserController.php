@@ -41,13 +41,15 @@ class RegisteredUserController extends Controller
             'slug' => Str::slug($request->name) . '-' . Str::lower(Str::random(4)),
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'dj',
+            'role' => 'user',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect to intended destination or home page using SPA navigation
+        $intendedUrl = $request->session()->pull('url.intended', route('home', absolute: false));
+        return redirect($intendedUrl, navigate: true);
     }
 }

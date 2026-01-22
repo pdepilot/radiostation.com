@@ -53,7 +53,7 @@
                 
                 <div style="margin-bottom: 30px;">
                     <h2 style="margin-bottom: 10px; color: var(--highlight);">Still have questions?</h2>
-                    <p>If you can't find the answer you're looking for, please <a href="/contact" style="color: var(--accent);">contact us</a> and we'll be happy to help!</p>
+                    <p>If you can't find the answer you're looking for, please <a href="{{ route('contact.index') }}" wire:navigate style="color: var(--accent);">contact us</a> and we'll be happy to help!</p>
                 </div>
             </div>
         </div>

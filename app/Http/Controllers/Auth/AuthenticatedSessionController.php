@@ -28,7 +28,24 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        // Check if MFA is required (only for regular users, admins are blocked from this route)
+        if ($user && $user->hasMfaEnabled()) {
+            if (!$request->session()->get('mfa_verified', false)) {
+                // Store intended destination before redirecting to MFA
+                if (!$request->session()->has('url.intended')) {
+                    $request->session()->put('url.intended', route('home', absolute: false));
+                }
+                return redirect()->route('mfa.verify', navigate: true);
+            }
+        }
+
+        // Get intended URL or default to home page
+        $intendedUrl = $request->session()->pull('url.intended', route('home', absolute: false));
+        
+        // Redirect to intended destination or home page using SPA navigation
+        return redirect($intendedUrl, navigate: true);
     }
 
     /**
@@ -42,6 +59,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // For SPA mode, use navigate: true to preserve audio player state
+        return redirect('/', navigate: true);
     }
 }

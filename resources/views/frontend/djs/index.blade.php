@@ -94,7 +94,7 @@
                     <div class="dj-grid">
                         @foreach($djs as $dj)
                             <div class="dj-card" data-genre="electronic">
-                                <div class="dj-card-image" style="background-image: url('{{ $dj->avatar_url ?? asset('assets/images/face.jpg') }}')">
+                                <div class="dj-card-image" style="background-image: url('{{ $dj->avatar_url ?? asset('assets/images/face.jpg') }}');">
                                     @if($dj->is_featured)
                                         <div class="dj-card-badge badge-live">FEATURED</div>
                                     @elseif($loop->first)
@@ -160,7 +160,7 @@
                 <div class="mixes-section">
                     <div class="section-header">
                         <h2 class="section-title">LATEST MIXES</h2>
-                        <a href="{{ route('shows.index') }}" class="view-all">
+                        <a href="{{ route('shows.index') }}" wire:navigate class="view-all">
                             View All Shows
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -169,7 +169,7 @@
                     <div class="mixes-grid">
                         @foreach($djs->take(6) as $dj)
                             <div class="mix-card">
-                                <div class="mix-image" style="background-image: url('{{ $dj->avatar_url ?? asset('assets/images/face.jpg') }}')">
+                                <div class="mix-image" style="background-image: url('{{ $dj->avatar_url ?? asset('assets/images/face.jpg') }}');">
                                     <div class="mix-overlay">
                                         <div class="play-mix" data-audio="{{ $dj->shows->first()->stream_url ?? route('live') }}">
                                             <i class="fas fa-play"></i>

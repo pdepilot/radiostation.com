@@ -13,9 +13,13 @@
   --light: #f0f0f5;
   --dark: #0f0f11;
   --text-primary: #f0f0f5;
+  --text-secondary: #b0b0c0;
   --nav-bg: rgba(15, 15, 17, 0.95);
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-glow: #d32f4f;
+  --success: #00cc66;
+  --warning: #ffaa00;
   --live-green: #c8102e;
   --live-glow: 0 0 8px rgba(200, 16, 46, 0.4);
 }
@@ -151,17 +155,17 @@ nav a.active {
 /* Hero Section */
 .hero {
   position: relative;
-  padding: 150px 0 60px;
+  padding: 120px 0 50px;
   text-align: center;
   overflow: hidden;
-  min-height: 100vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(180deg,
-      rgba(15, 15, 17, 0.95) 0%,
-      rgba(22, 22, 24, 0.90) 50%,
-      rgba(15, 15, 17, 0.95) 100%),
+      rgba(15, 15, 17, 0.75) 0%,
+      rgba(22, 22, 24, 0.70) 50%,
+      rgba(15, 15, 17, 0.75) 100%),
     url("https://res.cloudinary.com/dl4hjr1p2/image/upload/v1762957221/WhatsApp_Image_2025-11-12_at_11.20.54_77ff1fa8_hbfibv.jpg") center/cover no-repeat;
   background-attachment: fixed;
   width: 100%;
@@ -1025,7 +1029,7 @@ nav a.active {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  z-index: 10000 !important;
+  z-index: 10 !important;
   background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(10px) !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -1938,6 +1942,11 @@ footer {
     padding: 0 15px;
   }
 
+  .hero {
+    min-height: 70vh;
+    padding: 100px 0 40px;
+  }
+
   .hero h2 {
     font-size: 3.5rem;
   }
@@ -1968,6 +1977,14 @@ footer {
   nav a {
     padding: 6px 12px;
     font-size: 0.9rem;
+  }
+}
+
+/* Desktop screens - Reduced hero height */
+@media (min-width: 1025px) {
+  .hero {
+    min-height: 75vh;
+    padding: 120px 0 50px;
   }
 }
 
@@ -2017,9 +2034,9 @@ footer {
   }
 
   .hero {
-    padding: 140px 0 60px;
+    padding: 100px 0 40px;
     overflow: visible;
-    min-height: 80vh;
+    min-height: 65vh;
   }
 
   .hero h2 {
@@ -2173,7 +2190,7 @@ footer {
 
   .hero {
     padding: 120px 0 40px;
-    min-height: 80vh;
+    min-height: 85vh;
   }
 
   .hero h2 {

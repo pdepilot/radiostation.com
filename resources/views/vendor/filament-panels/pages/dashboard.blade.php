@@ -3,14 +3,6 @@
         {{ $this->filtersForm }}
     @endif
 
-    <x-filament-widgets::widgets
-        :columns="$this->getColumns()"
-        :data="
-            [
-                ...(property_exists($this, 'filters') ? ['filters' => $this->filters] : []),
-                ...$this->getWidgetData(),
-            ]
-        "
-        :widgets="$this->getVisibleWidgets()"
-    />
+    {{-- Widgets are automatically rendered by the base page template via getHeaderWidgets() and getFooterWidgets() --}}
+    {{-- No need to manually render widgets here to avoid duplication --}}
 </x-filament-panels::page>

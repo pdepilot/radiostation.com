@@ -16,8 +16,8 @@
     // CONFIGURATION
     // =============================================
     const STREAM_URLS = {
-        main: "https://phoebe.streamerr.co:7567/stream",
-        backup: "https://phoebe.streamerr.co:7572/stream"
+        main: "https://phoebe.streamerr.co:7572/stream",
+        backup: "https://phoebe.streamerr.co:7567/stream"
     };
 
     const STORAGE_KEY = 'darlingfm_audio_state';
@@ -283,8 +283,12 @@
 
         if (expandBtn) {
             expandBtn.addEventListener('click', () => {
-                // Navigate to full player page or expand modal
-                window.location.href = '/live-stream';
+                // Navigate to full player page using SPA navigation
+                if (window.Livewire && window.Livewire.navigate) {
+                    window.Livewire.navigate('/live-stream');
+                } else {
+                    window.location.href = '/live-stream';
+                }
             });
         }
 

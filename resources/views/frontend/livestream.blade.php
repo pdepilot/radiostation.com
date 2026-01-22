@@ -191,7 +191,7 @@
                         <tbody>
                             @foreach($shows as $show)
                                 <tr>
-                                    <td><a href="{{ route('shows.show', $show) }}">{{ $show->title }}</a></td>
+                                    <td><a href="{{ route('shows.show', $show) }}" wire:navigate>{{ $show->title }}</a></td>
                                     <td>{{ $show->dj?->stage_name ?? $show->dj?->name }}</td>
                                     <td>{{ $show->day_of_week }}</td>
                                     <td>{{ $show->start_time }} - {{ $show->end_time }}</td>

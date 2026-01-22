@@ -98,6 +98,27 @@
                     </button>
                 </form>
 
+                {{-- Social Login Divider --}}
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                {{-- Social Login Buttons --}}
+                <div class="social-login">
+                    <a href="{{ route('socialite.redirect', 'google') }}" class="social-btn google">
+                        <i class="fab fa-google"></i>
+                        <span>Continue with Google</span>
+                    </a>
+                    <a href="{{ route('socialite.redirect', 'facebook') }}" class="social-btn facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Continue with Facebook</span>
+                    </a>
+                    <a href="{{ route('socialite.redirect', 'twitter') }}" class="social-btn twitter">
+                        <i class="fab fa-twitter"></i>
+                        <span>Continue with Twitter</span>
+                    </a>
+                </div>
+
                 {{-- Register Link --}}
                 <div class="auth-footer">
                     <p>Don't have an account? 

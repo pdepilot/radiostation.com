@@ -176,6 +176,101 @@ class Show extends Model
     }
 
     /**
+     * Check if this show is currently live based on current day and time
+     */
+    public function isCurrentlyLive(): bool
+    {
+        $now = Carbon::now();
+        $currentDay = strtolower($now->format('l')); // e.g., 'monday', 'tuesday'
+        $currentDayFull = $now->format('l'); // e.g., 'Monday'
+        $currentDayShort = strtolower(substr($currentDayFull, 0, 3)); // e.g., 'mon'
+        $currentTime = $now->format('H:i:s');
+
+        // Check if show is cancelled
+        if ($this->status === 'cancelled') {
+            return false;
+        }
+
+        // Check if show matches current day
+        $dayOfWeek = strtolower($this->day_of_week ?? '');
+        $matchesDay = false;
+
+        // Determine if it's a weekday or weekend
+        $isWeekday = in_array($currentDay, ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']);
+        $isWeekend = in_array($currentDay, ['saturday', 'sunday']);
+
+        // Check if day matches
+        if (empty($dayOfWeek)) {
+            return false; // No day specified
+        }
+
+        // Match exact day name (case-insensitive)
+        if (strtolower($dayOfWeek) === $currentDay) {
+            $matchesDay = true;
+        }
+        // Match day name within string (case-insensitive)
+        elseif (str_contains(strtolower($dayOfWeek), $currentDay)) {
+            $matchesDay = true;
+        }
+        // Match short day name (e.g., "wed" for "wednesday")
+        elseif (str_contains(strtolower($dayOfWeek), $currentDayShort)) {
+            $matchesDay = true;
+        }
+        // Match full day name
+        elseif (str_contains(strtolower($dayOfWeek), strtolower($currentDayFull))) {
+            $matchesDay = true;
+        }
+        // Match "weekdays" if it's a weekday
+        elseif ($isWeekday && (
+            str_contains(strtolower($dayOfWeek), 'weekday') ||
+            str_contains(strtolower($dayOfWeek), 'weekdays') ||
+            str_contains(strtolower($dayOfWeek), 'week days') ||
+            str_contains(strtolower($dayOfWeek), 'week-days')
+        )) {
+            $matchesDay = true;
+        }
+        // Match "weekends" if it's a weekend
+        elseif ($isWeekend && (
+            str_contains(strtolower($dayOfWeek), 'weekend') ||
+            str_contains(strtolower($dayOfWeek), 'weekends') ||
+            str_contains(strtolower($dayOfWeek), 'week ends') ||
+            str_contains(strtolower($dayOfWeek), 'week-ends')
+        )) {
+            $matchesDay = true;
+        }
+
+        if (!$matchesDay) {
+            return false; // Not the right day
+        }
+
+        // Check if times are set
+        if (!$this->start_time || !$this->end_time) {
+            return false;
+        }
+
+        // Get times as strings
+        $startTime = is_string($this->start_time) ? $this->start_time : $this->start_time->format('H:i:s');
+        $endTime = is_string($this->end_time) ? $this->end_time : $this->end_time->format('H:i:s');
+
+        // Handle shows that span midnight (e.g., 15:00 - 05:55 means 3:00 PM to 5:55 AM next day)
+        if ($startTime > $endTime) {
+            // Show spans midnight - end time is on the NEXT day
+            // Active if:
+            // 1. Current time >= start_time: Show started today, running until end_time tomorrow
+            // 2. Current time <= end_time: Show started yesterday, still running until end_time today
+            if ($currentTime >= $startTime) {
+                return true; // Show has started today
+            } elseif ($currentTime <= $endTime) {
+                return true; // Show started yesterday and is still running
+            }
+            return false; // In the dead zone between yesterday's end and today's start
+        } else {
+            // Normal show (same day) - active if current time is between start and end (inclusive)
+            return ($currentTime >= $startTime && $currentTime <= $endTime);
+        }
+    }
+
+    /**
      * Get the full URL for the hero image
      * Use this in frontend views to display images properly
      */
@@ -191,6 +286,11 @@ class Show extends Model
         // If it's already a full URL, return as-is
         if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return $value;
+        }
+
+        // Handle public assets paths (e.g., /assets/images/...)
+        if (str_starts_with($value, '/assets/') || str_starts_with($value, 'assets/')) {
+            return asset(ltrim($value, '/'));
         }
 
         // For storage paths, construct the URL manually

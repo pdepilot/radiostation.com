@@ -99,6 +99,17 @@
         gap: 5px;
     }
 
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+    }
+
     @media (max-width: 768px) {
         .shows-simple-grid {
             grid-template-columns: 1fr;
@@ -106,6 +117,61 @@
         }
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    // Update live status periodically (every 30 seconds)
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateLiveStatus = async () => {
+            try {
+                const response = await fetch('{{ route("api.active-stream") }}');
+                const data = await response.json();
+                
+                // Remove all LIVE badges first
+                const allBadges = document.querySelectorAll('.show-simple-badge');
+                allBadges.forEach(badge => {
+                    if (badge.textContent.includes('LIVE')) {
+                        badge.remove();
+                    }
+                });
+                
+                // Add LIVE badge to the active show if one exists
+                if (data.show && data.show.id) {
+                    const currentActiveShowId = data.show.id;
+                    const activeShowCard = document.querySelector(`[data-show-id="${currentActiveShowId}"]`);
+                    
+                    if (activeShowCard) {
+                        const imageContainer = activeShowCard.querySelector('.show-simple-image');
+                        if (imageContainer) {
+                            // Check if there's already a FEATURED badge
+                            const existingBadge = imageContainer.querySelector('.show-simple-badge');
+                            
+                            // Only add LIVE badge if there's no FEATURED badge, or replace FEATURED with LIVE
+                            if (!existingBadge || existingBadge.textContent.includes('FEATURED')) {
+                                if (existingBadge && existingBadge.textContent.includes('FEATURED')) {
+                                    existingBadge.remove();
+                                }
+                                
+                                const liveBadge = document.createElement('div');
+                                liveBadge.className = 'show-simple-badge';
+                                liveBadge.style.cssText = 'background: var(--accent); color: white;';
+                                liveBadge.innerHTML = '<span style="display: inline-block; width: 8px; height: 8px; background: white; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;"></span>LIVE';
+                                imageContainer.appendChild(liveBadge);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating live status:', error);
+            }
+        };
+        
+        // Update immediately and then every 30 seconds
+        updateLiveStatus();
+        setInterval(updateLiveStatus, 30000);
+    });
+</script>
 @endpush
 
 @section('content')
@@ -123,15 +189,17 @@
         @if($shows->count() > 0)
         <div class="shows-simple-grid">
             @foreach($shows as $show)
-            <a href="{{ route('shows.show', $show) }}" data-modal="show" data-id="{{ $show->id }}" data-slug="{{ $show->slug }}" class="show-simple-card">
+            <a href="{{ route('shows.show', $show) }}" wire:navigate data-modal="show" data-id="{{ $show->id }}" data-show-id="{{ $show->id }}" data-slug="{{ $show->slug }}" class="show-simple-card">
                 @php
                 $imageUrl = $show->hero_image_url;
                 @endphp
                 <div class="show-simple-image" style="background-image: url('{{ $imageUrl }}')">
                     @if($show->is_featured ?? false)
                     <div class="show-simple-badge">FEATURED</div>
-                    @elseif($loop->first)
-                    <div class="show-simple-badge" style="background: #00ff00; color: #000;">LIVE</div>
+                    @elseif(isset($currentActiveShowId) && $show->id === $currentActiveShowId)
+                    <div class="show-simple-badge" style="background: var(--accent); color: white;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: white; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;"></span>LIVE
+                    </div>
                     @endif
                 </div>
                 <div class="show-simple-content">

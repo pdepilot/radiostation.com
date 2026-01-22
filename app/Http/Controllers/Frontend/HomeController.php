@@ -8,6 +8,7 @@ use App\Models\Dj;
 use App\Models\Show;
 use App\Models\LiveStream;
 use App\Models\Sponsor;
+use App\Models\MusicPromotion;
 
 class HomeController extends Controller
 {
@@ -91,6 +92,10 @@ class HomeController extends Controller
             'featuredSponsors' => Sponsor::where('status', 'active')
                                     ->where('is_featured', true)
                                     ->orderBy('order')
+                                    ->get(),
+            'musicPromotions' => MusicPromotion::active()
+                                    ->ordered()
+                                    ->limit(6)
                                     ->get(),
         ]);
     }

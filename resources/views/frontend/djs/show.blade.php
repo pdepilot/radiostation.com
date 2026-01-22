@@ -63,7 +63,7 @@
                     <h2 class="section-title" style="margin-bottom: 30px; font-size: 2rem;">PRESENTERS</h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px;">
                         @foreach($related as $relatedDj)
-                            <a href="{{ route('djs.show', $relatedDj) }}" style="text-decoration: none; color: inherit;">
+                            <a href="{{ route('djs.show', $relatedDj) }}" wire:navigate style="text-decoration: none; color: inherit;">
                                 <div style="background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; border: 1px solid var(--glass-border); text-align: center; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                                     <div style="width: 120px; height: 120px; border-radius: 50%; background-image: url('{{ $relatedDj->avatar_url ?? asset('assets/images/face.jpg') }}'); background-size: cover; background-position: center; margin: 0 auto 15px; border: 3px solid var(--accent);"></div>
                                     <h3 style="color: var(--accent); margin-bottom: 5px; font-size: 1rem;">{{ strtoupper($relatedDj->stage_name ?? $relatedDj->name) }}</h3>

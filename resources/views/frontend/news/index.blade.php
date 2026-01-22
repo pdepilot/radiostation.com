@@ -45,7 +45,7 @@ use Illuminate\Support\Str;
 
     @if(!empty($searchQuery))
     <div style="text-align: center; margin-bottom: 30px;">
-        <a href="{{ route('news.index') }}" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">
+        <a href="{{ route('news.index') }}" wire:navigate style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">
             <i class="fas fa-arrow-left"></i> Back to all news
         </a>
     </div>
@@ -58,7 +58,7 @@ use Illuminate\Support\Str;
 
     <div class="posts-grid">
         @foreach($posts as $post)
-        <a href="{{ route('news.show', $post->slug) }}" data-modal="news" data-id="{{ $post->id }}" data-slug="{{ $post->slug }}" style="text-decoration: none; color: inherit; display: block;">
+        <a href="{{ route('news.show', $post->slug) }}" wire:navigate data-modal="news" data-id="{{ $post->id }}" data-slug="{{ $post->slug }}" style="text-decoration: none; color: inherit; display: block;">
             <div class="post-card" data-post-id="{{ $post->id }}">
                 @php
                 $imageUrl = $post->hero_image ?? asset('assets/images/darling studio.jpg');
@@ -105,7 +105,7 @@ use Illuminate\Support\Str;
             @endphp
 
             @if($startPage > 1)
-            <a href="{{ $posts->url(1) }}" style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">1</a>
+            <a href="{{ $posts->url(1) }}" wire:navigate style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">1</a>
             @if($startPage > 2)
             <span style="padding: 10px 5px; color: var(--text-secondary);">...</span>
             @endif
@@ -115,7 +115,7 @@ use Illuminate\Support\Str;
                 @if($page==$currentPage)
                 <span style="padding: 10px 15px; background: var(--accent); border: 1px solid var(--accent); border-radius: 8px; color: white; font-weight: 600;">{{ $page }}</span>
                 @else
-                <a href="{{ $posts->url($page) }}" style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">{{ $page }}</a>
+                <a href="{{ $posts->url($page) }}" wire:navigate style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">{{ $page }}</a>
                 @endif
                 @endfor
 
@@ -123,7 +123,7 @@ use Illuminate\Support\Str;
                     @if($endPage < $lastPage - 1)
                     <span style="padding: 10px 5px; color: var(--text-secondary);">...</span>
                     @endif
-                    <a href="{{ $posts->url($lastPage) }}" style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">{{ $lastPage }}</a>
+                    <a href="{{ $posts->url($lastPage) }}" wire:navigate style="padding: 10px 15px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--light); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.1)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--glass)'; this.style.borderColor='var(--glass-border)'">{{ $lastPage }}</a>
                     @endif
         </div>
 

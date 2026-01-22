@@ -45,43 +45,76 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Form submission - let it submit normally, show SweetAlert2 on success/error
+  // Form submission - let it submit normally, show unified notification on success/error
   // Check for success/error messages on page load
   document.addEventListener('DOMContentLoaded', function() {
     const successMessage = document.getElementById('success-message');
     const errorMessages = document.getElementById('error-messages');
     
-    if (successMessage && typeof Swal !== 'undefined') {
-      Swal.fire({
-        icon: 'success',
-        title: 'Message Sent!',
-        text: successMessage.textContent.trim(),
-        confirmButtonColor: '#c8102e',
-        background: 'rgba(15, 15, 17, 0.95)',
-        color: '#f0f0f5',
-        backdrop: 'rgba(0,0,0,0.8)',
-        customClass: {
-          popup: 'swal-dark-popup'
+    // Show success message using unified notification system
+    if (successMessage) {
+      const message = successMessage.getAttribute('data-message') || successMessage.textContent.trim();
+      if (message) {
+        if (typeof showSuccess !== 'undefined') {
+          showSuccess(message);
+        } else if (typeof showNotification !== 'undefined') {
+          showNotification(message, 'success');
+        } else if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Message Sent!',
+            text: message,
+            confirmButtonColor: '#c8102e',
+            background: 'rgba(15, 15, 17, 0.95)',
+            color: '#f0f0f5',
+            backdrop: 'rgba(0,0,0,0.8)',
+            customClass: {
+              popup: 'swal-dark-popup'
+            },
+            timer: 4000,
+            timerProgressBar: true
+          });
         }
-      });
+      }
     }
     
-    if (errorMessages && typeof Swal !== 'undefined') {
-      const errorList = errorMessages.querySelector('ul');
-      const errorText = errorList ? Array.from(errorList.querySelectorAll('li')).map(li => li.textContent).join('\n') : errorMessages.textContent;
+    // Show error messages using unified notification system
+    if (errorMessages) {
+      let errorText = '';
+      const errorsData = errorMessages.getAttribute('data-errors');
       
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        html: errorText.replace(/\n/g, '<br>'),
-        confirmButtonColor: '#c8102e',
-        background: 'rgba(15, 15, 17, 0.95)',
-        color: '#f0f0f5',
-        backdrop: 'rgba(0,0,0,0.8)',
-        customClass: {
-          popup: 'swal-dark-popup'
+      if (errorsData) {
+        try {
+          const errors = JSON.parse(errorsData);
+          errorText = Array.isArray(errors) ? errors.join(', ') : errors;
+        } catch (e) {
+          errorText = errorsData;
         }
-      });
+      } else {
+        const errorList = errorMessages.querySelector('ul');
+        errorText = errorList ? Array.from(errorList.querySelectorAll('li')).map(li => li.textContent).join(', ') : errorMessages.textContent;
+      }
+      
+      if (errorText) {
+        if (typeof showError !== 'undefined') {
+          showError(errorText);
+        } else if (typeof showNotification !== 'undefined') {
+          showNotification(errorText, 'error');
+        } else if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: errorText,
+            confirmButtonColor: '#c8102e',
+            background: 'rgba(15, 15, 17, 0.95)',
+            color: '#f0f0f5',
+            backdrop: 'rgba(0,0,0,0.8)',
+            customClass: {
+              popup: 'swal-dark-popup'
+            }
+          });
+        }
+      }
     }
   });
 

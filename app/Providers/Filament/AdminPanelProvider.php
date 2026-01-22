@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile(false) // Disable Filament's default profile page
             ->colors([
                 'primary' => Color::Red,
             ])
@@ -58,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\RequireMfa::class,
             ]);
     }
 
@@ -67,7 +69,7 @@ class AdminPanelProvider extends PanelProvider
 
         FilamentView::registerRenderHook(
             'panels::body.end',
-            fn(): View => view('components.sticky-player')
+            fn(): View => view('components.admin-sticky-player')
         );
 
         FilamentView::registerRenderHook(

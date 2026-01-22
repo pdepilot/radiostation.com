@@ -40,6 +40,6 @@ class ContactController extends Controller
 
         ContactMessage::create($validated);
 
-        return back()->with('status', 'Message received. Someone from Darling FM will reach out shortly.');
+        return back()->with('success', 'Message received! Someone from Darling FM will reach out shortly.');
     }
 }

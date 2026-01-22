@@ -47,7 +47,7 @@
             <h2 class="section-title">UPCOMING EVENTS</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px;">
                 @foreach($upcomingEvents as $event)
-                <a href="{{ route('events.show', $event->slug) }}" data-modal="event" data-id="{{ $event->id }}" data-slug="{{ $event->slug }}" class="event-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; cursor: pointer; text-decoration: none; color: inherit; display: block;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <a href="{{ route('events.show', $event->slug) }}" wire:navigate data-modal="event" data-id="{{ $event->id }}" data-slug="{{ $event->slug }}" class="event-card" style="background: var(--glass); backdrop-filter: blur(15px); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s ease; cursor: pointer; text-decoration: none; color: inherit; display: block;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
                     <div class="event-image" style="height: 250px; background-image: url('{{ $event->hero_image ?? asset('assets/images/studio.jpg') }}'); background-size: cover; background-position: center; position: relative;">
                         @if($event->is_featured)
                         <div style="position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Featured</div>
@@ -82,7 +82,7 @@
                         <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">{{ Str::limit($event->description, 120) }}</p>
                         @endif
                         <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border);">
-                            <a href="{{ route('events.show', $event->slug) }}" style="color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-glow)'" onmouseout="this.style.color='var(--accent)'">
+                            <a href="{{ route('events.show', $event->slug) }}" wire:navigate style="color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-glow)'" onmouseout="this.style.color='var(--accent)'">
                                 View Details <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
                             </a>
                             @if($event->ticket_url)
@@ -131,7 +131,7 @@
                             <i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i>{{ $event->venue }}
                         </p>
                         @endif
-                        <a href="{{ route('events.show', $event->slug) }}" style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 600;">
+                        <a href="{{ route('events.show', $event->slug) }}" wire:navigate style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 600;">
                             View Details <i class="fas fa-arrow-right" style="margin-left: 5px; font-size: 0.7rem;"></i>
                         </a>
                     </div>

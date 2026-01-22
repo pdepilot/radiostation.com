@@ -34,6 +34,7 @@ class ManageSiteSettings extends Page implements HasForms
             'instagram_url' => $settings['instagram_url'] ?? '',
             'youtube_url' => $settings['youtube_url'] ?? '',
             'tiktok_url' => $settings['tiktok_url'] ?? '',
+            'whatsapp_number' => $settings['whatsapp_number'] ?? '+2348064444444',
         ];
 
         $this->form->fill($this->data);
@@ -73,6 +74,17 @@ class ManageSiteSettings extends Page implements HasForms
                             ->helperText('Full URL to your TikTok profile (leave empty to hide icon)'),
                     ])
                     ->columns(1),
+                Forms\Components\Section::make('Contact Information')
+                    ->description('Contact details used across the site, including the floating WhatsApp button')
+                    ->schema([
+                        Forms\Components\TextInput::make('whatsapp_number')
+                            ->label('WhatsApp Number')
+                            ->tel()
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('+234 806 444 4444')
+                            ->helperText('This number is used for the WhatsApp floating button and contact sections. Include country code (e.g., +234)'),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -105,6 +117,7 @@ class ManageSiteSettings extends Page implements HasForms
                 'instagram_url' => $settings['instagram_url'] ?? '',
                 'youtube_url' => $settings['youtube_url'] ?? '',
                 'tiktok_url' => $settings['tiktok_url'] ?? '',
+                'whatsapp_number' => $settings['whatsapp_number'] ?? '+2348064444444',
             ];
             $this->form->fill($this->data);
             

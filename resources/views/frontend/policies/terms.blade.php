@@ -32,7 +32,7 @@
                 <p style="margin-bottom: 15px;">We reserve the right to modify these Terms at any time. Your continued use of the service constitutes acceptance of any changes.</p>
                 
                 <h2 style="margin-top: 40px; margin-bottom: 20px; color: var(--highlight);">7. Contact Us</h2>
-                <p style="margin-bottom: 15px;">For questions about these Terms, please contact us at <a href="/contact" style="color: var(--accent);">contact@darlingfm.ng</a>.</p>
+                <p style="margin-bottom: 15px;">For questions about these Terms, please contact us at <a href="{{ route('contact.index') }}" wire:navigate style="color: var(--accent);">contact@darlingfm.ng</a>.</p>
             </div>
         </div>
     </div>

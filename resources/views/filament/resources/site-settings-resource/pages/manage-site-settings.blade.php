@@ -109,15 +109,15 @@
                 })
                 .then(result => {
                     if (result.success) {
-                        alert('Settings saved successfully!');
-                        window.location.reload();
+                        (window.showSuccess || window.showNotification)('Settings saved successfully!', 'success');
+                        setTimeout(() => window.location.reload(), 1000);
                     } else {
-                        alert('Failed to save: ' + (result.message || 'Unknown error'));
+                        (window.showError || window.showNotification)('Failed to save: ' + (result.message || 'Unknown error'), 'error');
                     }
                 })
                 .catch(error => {
                     console.error('AJAX save error:', error);
-                    alert('Failed to save settings: ' + (error.message || 'Please try again'));
+                    (window.showError || window.showNotification)('Failed to save settings: ' + (error.message || 'Please try again'), 'error');
                 });
             }
             

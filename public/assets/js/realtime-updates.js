@@ -9,7 +9,11 @@
     let lastUpdateTime = Math.floor(Date.now() / 1000);
     let pollInterval = null;
     let isPolling = false;
+    let consecutiveErrors = 0;
+    let backoffDelay = 30000; // Start with 30 seconds
     const POLL_INTERVAL = 30000; // 30 seconds
+    const MAX_BACKOFF = 300000; // Max 5 minutes
+    const BACKOFF_MULTIPLIER = 2;
     
     /**
      * Initialize real-time updates
@@ -38,7 +42,8 @@
         if (isPolling) return;
         
         isPolling = true;
-        pollInterval = setInterval(checkForUpdates, POLL_INTERVAL);
+        // Use current backoff delay (which resets to POLL_INTERVAL on success)
+        pollInterval = setInterval(checkForUpdates, backoffDelay);
         
         // Initial check
         checkForUpdates();
@@ -60,7 +65,9 @@
      */
     async function checkForUpdates() {
         try {
-            const response = await fetch(`/api/realtime/poll?last_update=${lastUpdateTime}`, {
+            // Use relative URL for environment compatibility
+            const pollUrl = `${window.location.origin}/api/realtime/poll?last_update=${lastUpdateTime}`;
+            const response = await fetch(pollUrl, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -69,10 +76,14 @@
             });
             
             if (!response.ok) {
-                throw new Error('Poll request failed');
+                throw new Error(`Poll request failed: ${response.status}`);
             }
             
             const data = await response.json();
+            
+            // Reset error count on success
+            consecutiveErrors = 0;
+            backoffDelay = POLL_INTERVAL;
             
             if (data.has_updates && data.updates.length > 0) {
                 processUpdates(data.updates);
@@ -86,8 +97,22 @@
                 lastUpdateTime = data.current_time;
             }
         } catch (error) {
+            consecutiveErrors++;
             console.error('Real-time update check failed:', error);
-            // Continue polling even on error
+            
+            // Exponential backoff on errors
+            if (consecutiveErrors > 0) {
+                backoffDelay = Math.min(backoffDelay * BACKOFF_MULTIPLIER, MAX_BACKOFF);
+                console.warn(`Real-time polling backing off. Next retry in ${backoffDelay / 1000} seconds`);
+                
+                // Stop current interval and restart with backoff
+                stopPolling();
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        startPolling();
+                    }
+                }, backoffDelay);
+            }
         }
     }
     
@@ -351,12 +376,32 @@
         return div.innerHTML;
     }
     
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
+    // Track if already initialized to prevent multiple instances
+    let isInitialized = false;
+    
+    /**
+     * Initialize real-time updates (only once)
+     */
+    function initializeOnce() {
+        if (isInitialized) return;
+        isInitialized = true;
         init();
     }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeOnce);
+    } else {
+        initializeOnce();
+    }
+    
+    // Re-initialize on Livewire navigation (but only if not already initialized)
+    document.addEventListener('livewire:navigated', function() {
+        // Don't reinitialize if already running - just ensure polling continues
+        if (!isPolling && !document.hidden) {
+            startPolling();
+        }
+    });
     
     // Export for external use
     window.RealtimeUpdates = {

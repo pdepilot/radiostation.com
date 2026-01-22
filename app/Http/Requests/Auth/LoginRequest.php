@@ -41,12 +41,38 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Attempt authentication first to prevent role enumeration
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
+            $exception = ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+            $exception->status = 422;
+            throw $exception;
+        }
+
+        // Check if the authenticated user is an admin
+        // Admin users should use Filament admin panel at /admin for login
+        // This frontend login route is only for regular users
+        $user = Auth::user();
+        if ($user && $user->isAdmin()) {
+            // Log out the admin user immediately
+            Auth::logout();
+            
+            // Invalidate the session
+            $this->session()->invalidate();
+            $this->session()->regenerateToken();
+            
+            // Hit rate limiter to prevent brute force
+            RateLimiter::hit($this->throttleKey());
+            
+            // Return generic error message (same as failed login to prevent role enumeration)
+            $exception = ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+            $exception->status = 422;
+            throw $exception;
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -67,12 +93,14 @@ class LoginRequest extends FormRequest
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
-        throw ValidationException::withMessages([
+        $exception = ValidationException::withMessages([
             'email' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
         ]);
+        $exception->status = 422;
+        throw $exception;
     }
 
     /**
