@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./images/REAL_LOGO-removebg-preview.png" />
+    <title>Darling FM - DJs Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #1a1a1a;
+            --accent: #ff0000;
+            --accent-glow: #ff3333;
+            --highlight: #ffffff;
+            --light: #f5f5f5;
+            --dark: #0a0a0a;
+            --nav-bg: rgba(0, 0, 0, 0.95);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+            --live-green: #00ff00;
+            --live-glow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+            --success: #00cc66;
+            --warning: #ffaa00;
+            --info: #0099ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--light);
+            font-family: "Exo 2", sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: radial-gradient(ellipse at center, var(--secondary) 0%, var(--primary) 70%);
+            min-height: 100vh;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .mobile-header img {
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px var(--accent));
+        }
+
+        .mobile-header h2 {
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.1rem;
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--highlight);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px var(--accent));
+        }
+
+        .sidebar-header h2 {
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(255, 0, 0, 0.1);
+            border-left-color: var(--accent);
+            color: var(--highlight);
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-label {
+            padding: 15px 20px 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 98;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header h1 {
+            font-family: "Orbitron", sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Page Actions */
+        .page-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        /* DJs Stats */
+        .djs-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255, 255, 255, 0.05));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .icon-total {
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--accent);
+        }
+
+        .icon-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: var(--live-green);
+        }
+
+        .icon-online {
+            background: rgba(0, 153, 255, 0.2);
+            color: var(--info);
+        }
+
+        .icon-popular {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning);
+        }
+
+        .stat-info h3 {
+            font-size: 0.8rem;
+            color: var(--light);
+            opacity: 0.8;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-change {
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .change-positive {
+            color: var(--success);
+        }
+
+        .change-negative {
+            color: var(--accent);
+        }
+
+        /* DJs Grid */
+        .djs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dj-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dj-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .dj-header {
+            position: relative;
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .dj-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s;
+        }
+
+        .dj-card:hover .dj-image {
+            transform: scale(1.05);
+        }
+
+        .dj-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-live {
+            background: var(--live-green);
+            color: var(--dark);
+            box-shadow: var(--live-glow);
+        }
+
+        .status-online {
+            background: var(--info);
+            color: var(--dark);
+        }
+
+        .status-offline {
+            background: var(--glass);
+            color: var(--light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .dj-content {
+            padding: 20px;
+        }
+
+        .dj-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--highlight);
+        }
+
+        .dj-role {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .dj-shows {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .dj-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dj-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-edit {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+        }
+
+        .btn-edit:hover {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-manage {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+        }
+
+        .btn-manage:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Top Performers */
+        .top-performers {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h3 {
+            font-size: 1.3rem;
+            color: var(--highlight);
+        }
+
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .performers-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .performer-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .performer-item:hover {
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .performer-rank {
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .performer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin-right: 15px;
+            border: 2px solid var(--accent);
+        }
+
+        .performer-details {
+            flex: 1;
+        }
+
+        .performer-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .performer-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .performer-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--accent);
+        }
+
+        .action-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .action-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Media Queries */
+        @media (max-width: 1200px) {
+            .djs-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-header {
+                display: flex;
+            }
+            
+            .hamburger-menu {
+                display: flex;
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            .page-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .djs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .djs-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .djs-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .dj-card, .top-performers, .action-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="hamburger-menu" id="hamburgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <img src="./images/lo.png" alt="Darling FM Logo">
+        <h2>DARLING FM ADMIN</h2>
+    </div>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="./images/lo.png" alt="Darling FM Logo">
+                <h2>DARLING FM ADMIN</h2>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-label">Main</li>
+                <li><a href="admin-dash.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="admin-livestream.html"><i class="fas fa-broadcast-tower"></i> <span>Live Stream</span></a></li>
+                <li><a href="admin-shows.html"><i class="fas fa-music"></i> <span>Shows</span></a></li>
+                <li><a href="admin-djs.html" class="active"><i class="fas fa-user"></i> <span>DJs</span></a></li>
+                <li><a href="admin-feedback.html" class="active"><i class="fas fa-comment-alt"></i> <span>Feedback</span></a></li>
+                
+                <li class="menu-label">Content</li>
+                <li><a href="admin-podcast.html"><i class="fas fa-podcast"></i> <span>Podcasts</span></a></li>
+                <li><a href="admin-playlist.html"><i class="fas fa-play-circle"></i> <span>Playlists</span></a></li>
+                <li><a href="admin-news.html"><i class="fas fa-newspaper"></i> <span>News</span></a></li>
+                
+                <li class="menu-label">Analytics</li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> <span>Statistics</span></a></li>
+                <li><a href="#"><i class="fas fa-users"></i> <span>Audience</span></a></li>
+                <li><a href="#"><i class="fas fa-money-bill-wave"></i> <span>Revenue</span></a></li>
+                
+                <li class="menu-label">Settings</li>
+                <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                <li><a href="#"><i class="fas fa-user-shield"></i> <span>Admins</span></a></li>
+                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>DJs Management</h1>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7;">Talent Manager</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Actions -->
+            <div class="page-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search DJs...">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-sort"></i> Sort
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add DJ
+                    </button>
+                </div>
+            </div>
+            
+            <!-- DJs Stats -->
+            <div class="djs-stats">
+                <div class="stat-card">
+                    <div class="stat-icon icon-total">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total DJs</h3>
+                        <div class="stat-value">18</div>
+                        <div class="stat-change change-positive">
+                            <i class="fas fa-arrow-up"></i> 2 new this month
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-active">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Active Now</h3>
+                        <div class="stat-value">6</div>
+                        <div class="stat-change change-positive">
+                            <i class="fas fa-check"></i> On air
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-online">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Online</h3>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change change-positive">
+                            <i class="fas fa-wifi"></i> Available
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-popular">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Top Rated</h3>
+                        <div class="stat-value">DJ Alex</div>
+                        <div class="stat-change change-positive">
+                            <i class="fas fa-star"></i> 4.9/5 rating
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DJs Grid -->
+            <div class="djs-grid">
+                <!-- DJ 1 -->
+                <div class="dj-card">
+                    <div class="dj-header">
+                        <div class="dj-image" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="dj-status status-live">Live</div>
+                    </div>
+                    <div class="dj-content">
+                        <div class="dj-name">DJ Alex</div>
+                        <div class="dj-role">
+                            <i class="fas fa-microphone"></i>
+                            <span>Morning Show Host</span>
+                        </div>
+                        <div class="dj-shows">
+                            <i class="fas fa-broadcast-tower"></i>
+                            <span>Morning Show, Weekend Mix</span>
+                        </div>
+                        <div class="dj-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.9/5</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">142</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">98%</div>
+                                <div class="stat-label">Attendance</div>
+                            </div>
+                        </div>
+                        <div class="dj-actions">
+                            <button class="action-btn btn-edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn btn-manage">
+                                <i class="fas fa-calendar"></i> Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DJ 2 -->
+                <div class="dj-card">
+                    <div class="dj-header">
+                        <div class="dj-image" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="dj-status status-online">Online</div>
+                    </div>
+                    <div class="dj-content">
+                        <div class="dj-name">Sarah Miles</div>
+                        <div class="dj-role">
+                            <i class="fas fa-microphone"></i>
+                            <span>Afternoon Host</span>
+                        </div>
+                        <div class="dj-shows">
+                            <i class="fas fa-broadcast-tower"></i>
+                            <span>Afternoon Drive, Chart Countdown</span>
+                        </div>
+                        <div class="dj-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.7/5</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">118</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">95%</div>
+                                <div class="stat-label">Attendance</div>
+                            </div>
+                        </div>
+                        <div class="dj-actions">
+                            <button class="action-btn btn-edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn btn-manage">
+                                <i class="fas fa-calendar"></i> Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DJ 3 -->
+                <div class="dj-card">
+                    <div class="dj-header">
+                        <div class="dj-image" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="dj-status status-offline">Offline</div>
+                    </div>
+                    <div class="dj-content">
+                        <div class="dj-name">Lena Cruz</div>
+                        <div class="dj-role">
+                            <i class="fas fa-microphone"></i>
+                            <span>Night Host</span>
+                        </div>
+                        <div class="dj-shows">
+                            <i class="fas fa-broadcast-tower"></i>
+                            <span>Night Beats, Electronic Hour</span>
+                        </div>
+                        <div class="dj-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.8/5</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">96</div>
+                                <div class="stat-label">Shows</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">92%</div>
+                                <div class="stat-label">Attendance</div>
+                            </div>
+                        </div>
+                        <div class="dj-actions">
+                            <button class="action-btn btn-edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn btn-manage">
+                                <i class="fas fa-calendar"></i> Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top Performers -->
+            <div class="top-performers">
+                <div class="section-header">
+                    <h3>Top Performers</h3>
+                    <a href="#" class="view-all">View All DJs</a>
+                </div>
+                <div class="performers-list">
+                    <div class="performer-item">
+                        <div class="performer-rank">1</div>
+                        <div class="performer-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="performer-details">
+                            <div class="performer-name">DJ Alex</div>
+                            <div class="performer-role">Morning Show Host</div>
+                            <div class="performer-meta">
+                                <span><i class="fas fa-star"></i> 4.9/5 Rating</span>
+                                <span><i class="fas fa-headphones"></i> 4.2K Avg Listeners</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="performer-item">
+                        <div class="performer-rank">2</div>
+                        <div class="performer-avatar" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="performer-details">
+                            <div class="performer-name">Lena Cruz</div>
+                            <div class="performer-role">Night Host</div>
+                            <div class="performer-meta">
+                                <span><i class="fas fa-star"></i> 4.8/5 Rating</span>
+                                <span><i class="fas fa-headphones"></i> 5.1K Avg Listeners</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="performer-item">
+                        <div class="performer-rank">3</div>
+                        <div class="performer-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80')"></div>
+                        <div class="performer-details">
+                            <div class="performer-name">Sarah Miles</div>
+                            <div class="performer-role">Afternoon Host</div>
+                            <div class="performer-meta">
+                                <span><i class="fas fa-star"></i> 4.7/5 Rating</span>
+                                <span><i class="fas fa-headphones"></i> 3.8K Avg Listeners</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Add New DJ</h3>
+                    <p>Register new talent to the platform</p>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Schedule Management</h3>
+                    <p>Manage DJ schedules and rotations</p>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Performance Analytics</h3>
+                    <p>View DJ performance metrics</p>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>Payroll</h3>
+                    <p>Manage payments and contracts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            // Toggle sidebar on hamburger click
+            hamburgerMenu.addEventListener('click', function() {
+                this.classList.toggle('active');
+                sidebar.classList.toggle('active');
+                sidebarOverlay.classList.toggle('active');
+            });
+            
+            // Close sidebar when overlay is clicked
+            sidebarOverlay.addEventListener('click', function() {
+                hamburgerMenu.classList.remove('active');
+                sidebar.classList.remove('active');
+                this.classList.remove('active');
+            });
+            
+            // DJ card interactions
+            const djCards = document.querySelectorAll('.dj-card');
+            djCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.dj-actions')) {
+                        const djName = this.querySelector('.dj-name').textContent;
+                        alert(`Opening DJ profile: ${djName}`);
+                    }
+                });
+            });
+            
+            // Action buttons
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const action = this.textContent.trim();
+                    const djName = this.closest('.dj-card').querySelector('.dj-name').textContent;
+                    alert(`${action} for ${djName}`);
+                });
+            });
+            
+            // New DJ button
+            const newDjBtn = document.querySelector('.btn-primary');
+            newDjBtn.addEventListener('click', function() {
+                alert('Opening new DJ registration form...');
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const djCards = document.querySelectorAll('.dj-card');
+                
+                djCards.forEach(card => {
+                    const name = card.querySelector('.dj-name').textContent.toLowerCase();
+                    const role = card.querySelector('.dj-role span').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || role.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Quick action cards
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const action = this.querySelector('h3').textContent;
+                    alert(`Opening: ${action}`);
+                });
+            });
+            
+            // Simulate real-time status updates
+            setInterval(() => {
+                // Randomly update DJ statuses
+                const statusIndicators = document.querySelectorAll('.dj-status');
+                statusIndicators.forEach(indicator => {
+                    if (Math.random() > 0.7) {
+                        const statuses = ['status-live', 'status-online', 'status-offline'];
+                        const currentStatus = indicator.className.split(' ')[1];
+                        let newStatus;
+                        
+                        do {
+                            newStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                        } while (newStatus === currentStatus);
+                        
+                        indicator.className = `dj-status ${newStatus}`;
+                        indicator.textContent = newStatus.replace('status-', '').toUpperCase();
+                    }
+                });
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
